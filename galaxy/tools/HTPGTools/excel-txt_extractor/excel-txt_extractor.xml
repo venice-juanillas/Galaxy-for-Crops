@@ -1,0 +1,54 @@
+<tool id="excel-txt_extractor" 
+      name="Extract txt files from Excel workbook " 
+      version="1.0.0">
+
+        <requirements>
+                <requirement type="package" version="3.5.0">python</requirement>
+                <requirement type="package" version="1.1.0">xlrd</requirement>
+        </requirements>
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Wrong input dataset" />
+	</stdio>
+        <command interpreter="python">
+	   $__tool_directory__/excel-txt_extractor.py $excel_workbook $sheet1 $sheet2 $sheet3
+	</command>
+	<inputs>
+		<param name="excel_workbook" type="data" format="xlsx"  help=" Select an excel file" />	
+	</inputs>
+
+	<outputs>
+		<data name="sheet1" format="tabular" label="Worksheet1_file.txt"/>
+		<data name="sheet2" format="tabular" label="Worksheet2_file.txt"/>
+		<data name="sheet3" format="tabular" label="Worksheet3_file.txt"/>
+	</outputs>
+        <tests>
+		<test>
+			<param name="excel_workbook" value="standard_input_file_format.xlsx" />
+			<output name="sheet1" file="Worksheet1_file.txt" />
+			<output name="sheet2" file="Worksheet2_file.txt" />
+			<output name="sheet3" file="Worksheet3_file.txt" />
+		</test>
+	</tests>
+	<help>
+	    What this tool does:
+
+	    	It  generates single txt files extracted from first 3 worksheets in an excel file.
+
+	</help>
+ <citations>
+        <citation type="bibtex">
+@misc{githubgithub.com,
+  author = {Milcah, Kigoni},
+  year = {2018},
+  title = {m.kigoni@cgiar.org},
+  publisher = {GitHub},
+  journal = {Gihub repository},
+  url = {https://galaxyproject.org/support/},
+}</citation>
+    </citations>
+
+</tool>
+
+

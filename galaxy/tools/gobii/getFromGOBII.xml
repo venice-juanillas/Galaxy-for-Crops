@@ -1,0 +1,68 @@
+<tool id="get_from_gobii" name="GOBII Extractor" version="0.0.1">
+	<description>Get genotype data</description>
+	<!-- 
+	<environmental_variables>
+		<environmental_variable name="token">$authtoken</environmental_variable>
+	</environmental_variables>
+	<code file="tool_form_utils.py"/>
+	-->
+	<stdio>
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:" level="fatal" description="Bad input dataset" />
+		<!-- Catching fatal_oom allows the job runner to potentially resubmit to a resource with more
+		 memory if Galaxy is configured to do this. -->
+		<exit_code range="2" level="fatal_oom" description="Dataset not found for the search critieria." />
+	</stdio>
+	<command><![CDATA[
+		sh $__tool_directory__/run_extract.sh $login.url $login.uname $login.pword '$__tool_data_path__/gdm.loc' '$__tool_directory__/test-data/out.txt' $dataset
+		&& cp $__tool_directory__/test-data/out.txt $output
+	]]>
+	</command>
+	<inputs>
+		<section name="login" title="Log-in options" expanded="false">
+		<param name="url" type="text" size="10" value="http://hackathon.gobii.org:8081/gobii-dev/" label="URL:"/>
+		<param name="uname" type="text" size="10" value="vjuanillas" label="Username"/>
+		<param name="pword" type="text" size="10" value="Sc0tl4nd" label="Password" refresh_on_change="true" help="Must mask password.">
+		</param>
+		<param name="token" type="text" size="10" value="" label="Auth Token" refresh_on_change="true"/>
+		</section>
+		<param name="study" type="select" label="Study name" refresh_on_change="true">
+			<options from_file="gdm.loc">
+				<validator type="no_options" message="No options available."> </validator>
+				<column name="name" index="3"/>
+				<column name="value" index="2"/>
+				<filter type="unique_value" name="study_name" column="3"/>
+        			<filter type="sort_by" name="sorted_name" column="3"/>
+			</options>
+			<validator type="no_options" message="No options. Cannot connect to data source."></validator>
+		</param>
+		
+		<param name="dataset" type="select" label="Dataset" refresh_on_change="true">
+			 <options from_file="gdm.loc">
+				<validator type="no_options" message="No options available."> </validator>
+				<column name="name" index="1"/>
+				<column name="value" index="0"/>
+				<!-- <filter type="param_value" ref="study" key="" name="ds_name" column="1"/> -->
+        			<filter type="sort_by" name="sorted_ds" column="1"/> 
+			</options>
+		</param>
+		<section name="adv" title="Advanced options" expanded="false">
+			<param name="sample_names" type="select" multiple="true" label="Sample Names">
+			</param>
+			<param name="marker_names" type="select" multiple="true" label="Marker Names">
+			</param>
+			<param name="dataset_names" type="select" multiple="true" label="Dataset Names">
+			</param>
+		</section>
+		<!--<param name="format" type="select" label="Format" refresh_on_change="true">
+			<option value="csv" selected="true">csv</option>
+			<option value="flapjack">Flapjack</option>
+			<option value="hapmap">Hapmap</option>
+		</param>-->
+	</inputs>
+	<outputs>
+		<data name="output" format="tabular" label="GOBII output"/>
+		<!-- <data name="table" format="tabular" label="Variant Set" hidden="true"/> -->
+	</outputs>
+	
+</tool> 

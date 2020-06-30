@@ -1,0 +1,83 @@
+<tool id="PrepareCrossValidation" name="Prepare Cross-validation" version="1.0">
+  <description>datasets</description>
+  <command interpreter="perl "><![CDATA[
+$__tool_directory__/PrepareCrossValidation.pl
+--matrix $input
+--pheno $galaxy_phenotypes_file
+--sample_name_vector_column_index $galaxy_sample_name_vector_column_index
+#if str($columns.columns) == "manual":
+    --first_phenotype_vector_column_index $columns.galaxy_first_phenotype_vector_column_index
+    --last_phenotype_vector_column_index $columns.galaxy_last_phenotype_vector_column_index
+#else if str($columns.columns) == "automatic":
+    --first_phenotype_vector_column_index 2
+    --last_phenotype_vector_column_index 1
+#end if
+#set key_variables = "none"
+#for $index, $item in enumerate($galaxy_repeat_key_variable)
+  #if $key_variables == "none":
+    #set key_variables = str($item.galaxy_key_variable)
+  #else:
+    #set key_variables = $key_variables + "," + str($item.galaxy_key_variable)
+  #end if
+#end for
+--grouping $key_variables
+>>$logfile 2>&1
+]]></command>
+  <inputs>
+    <param name="galaxy_phenotypes_file" 
+           type="data" 
+           format="tabular" 
+           label="Input Phenotype File" 
+           help="(required) The file containing phenotypes and sample names (phenoypes for samples to be predicted should be entered as NA)" />
+    <param name="galaxy_sample_name_vector_column_index"
+           type="data_column"
+           data_ref="galaxy_phenotypes_file"
+           use_header_names="true" 
+           label="Column Header Containing the Sample Names" 
+           help="(required) The column header in the phenotype file containing the sample names (NAs allowed)" 
+           value="1" />
+    <conditional name="columns">
+       <param name = "columns" type="select" label="Column headers for phenotypes">
+          <option value="manual">Manual selection of column headers</option>
+          <option value="automatic">Phenotypes are provided from 2nd to last column</option>
+       </param>
+       <when value="manual">
+          <param name="galaxy_first_phenotype_vector_column_index" 
+           type="data_column"
+           data_ref="galaxy_phenotypes_file"
+           use_header_names="true" 
+           label="Column Header Containing the First Phenotype" 
+           help="(required) The column header in the phenotype file containing the first phenotype"
+           value="3" />
+          <param name="galaxy_last_phenotype_vector_column_index" 
+           type="data_column"
+           data_ref="galaxy_phenotypes_file"
+           use_header_names="true" 
+           label="Column Header Containing the Last Phenotype" 
+           help="(required) The column header in the phenotype file containing the last phenotype"
+           value="3" />
+        </when>
+    </conditional>
+    <repeat name="galaxy_repeat_key_variable" title="Grouping Factor" >
+      <param name="galaxy_key_variable"
+             type="data_column"
+             data_ref="galaxy_phenotypes_file"
+             use_header_names="true"
+             label="Column Header for a Grouping Factor in the Phenotype File"
+             help="Select a column header for the grouping factor" />
+    </repeat>
+
+      <param name="input" type="data" format="tabular" label="Genotyping file in hapmap format with numerical values" />
+  </inputs>
+  <outputs>
+    <collection type="list" name="phenotypeFiles" label="collection of phenotypes">
+                <discover_datasets pattern="(?P&lt;designation&gt;.+)\.pheno\.txt" ext="tabular"/>
+    </collection>
+    <collection type="list" name="genotypeFiles" label="collection of genotypes">
+                <discover_datasets pattern="(?P&lt;designation&gt;.+)\.geno\.txt" ext="tabular"/>
+    </collection>
+    <data name="logfile" format="txt" label="Logfile" />
+  </outputs>
+  <help>
+  </help>
+</tool>

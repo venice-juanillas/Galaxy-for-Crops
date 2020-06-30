@@ -1,0 +1,7 @@
+germplasm_name	number_of_plants	germplasm_pedigree	germplasm_type	germplasm_par1	germplasm_par1_type	germplasm_par2	germplasm_par2_type	dnasample_sample_group	dnasample_sample_group_cycle	Submergence	Submergence	Drought
+XBL-167	191	KR 104*2/SIKA	BC1F1	KR 104	DP	SIKA	RP	xbl-2018-P3				
+RRN	173	KR104*2/Mwea-7b	BC1F1	KR 104	DP	Mwea-7b	RP	RRN-2018-P1				
+ACN-1	195	KIRY-B-SUB*2/Mwea-7b	BC1F1	KIRY-B-SUB	DP	Mwea-7b	RP	ACN-2018-P6				
+SUBI-5c	225	AFRI-h5-d/DIRA	F1	AFRI-h5-d	DP	DIRA	RP	SUBI-2018-P3				
+YGS	308	KIRY-B-SUB*2/DIRA	F1	KIRY-B-SUB	DP	DIRA	RP	YGS-2018-P1				
+BRIA-2	222	Mwea-7b/KIRY-B-SUB//AFRI-h5-d	F1	AFRI-h5-d	DP	Mwea-7b	RP	BRIA-2018-P2				

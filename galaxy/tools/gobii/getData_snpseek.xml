@@ -1,0 +1,14 @@
+<tool id="get_tokens_from_snpseek" name="SNP-seek" version="0.0.1">
+	<description>Get Data</description>
+	<command><![CDATA[
+		python3 $__tool_directory__/test.py > $output
+	]]>
+	</command>
+	<inputs>
+		<param name="url" type="text" size="10" value="http://snp-seek.irri.org/variety" label="URL:"/>
+	</inputs>
+	<outputs>
+		<data name="output" format="tabular" label="GOBII output"/>
+	</outputs>
+	
+</tool> 

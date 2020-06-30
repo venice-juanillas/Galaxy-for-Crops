@@ -1,0 +1,59 @@
+<tool id="fitLM" name="Fit L M" version="1.0">
+  <description>fitLM</description>
+  <command interpreter="Rscript --vanilla">fitLM.R
+       #if str($Markers).strip() != "":
+          --Markers="$Markers"
+       #end if
+       #if str($Pheno).strip() != "":
+          --Pheno="$Pheno"
+       #end if
+       #if str($model).strip() != "":
+          --model="$model"
+       #end if
+       #if str($nIter).strip() != "":
+          --nIter="$nIter"
+       #end if
+       #if str($burnin).strip() != "":
+          --burnin="$burnin"
+       #end if
+       #if str($predictions).strip() != "":
+          --predictions="$predictions"
+       #end if
+       #if str($plots).strip() != "":
+          --plots="$plots"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="Markers" format="data" type="data" help="a csv file with markers already coded for additive or&#10;dominance effects, NAs not allowed. Individuals are in rows&#10;and markers in columns. The first column should have the GID&#10;of the individuals." label="[required] Markers">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="Pheno" format="data" type="data" help="a csv with 2 columns. The first column should have the GID of&#10;the indivduals and the second one the observed phenotypes." label="[required] Pheno">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="true" name="model" type="select" help="model to fit, it can be BRR, BL, BayesA, BayesB." label="Model" force_select="FALSE">
+      <validator type="empty_field" message="This field is required."/>
+      <option value="BRR">BRR</option>
+      <option value="BL">BL</option>
+      <option value="BayesA">BayesA</option>
+      <option value="BayesB">BayesB</option>
+    </param>
+    <param optional="false" name="nIter" type="integer" value="" help="number of iterations for the Gibbs sampler." min="1000" max="50000" label="[required] N Iter">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="burnin" type="integer" value="" help="burnin for the Gibbs sampler." min="500" max="25000" label="[required] Burnin">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="csv" name="predictions" label="predictions.csv"/>
+    <data format="pdf" name="plots" label="summary_plots.pdf"/>
+  </outputs>
+  <help>
+**Description**
+
+Fits a linear model.
+</help>
+</tool>

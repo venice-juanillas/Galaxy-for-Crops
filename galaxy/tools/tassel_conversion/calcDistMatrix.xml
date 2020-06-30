@@ -1,0 +1,151 @@
+<tool id="tassel-calc-dist-matrix" name="Calculate Distance Matrix" version="5.2.42" force_history_refresh="True">
+        <description>from Genotype Data </description>
+	<requirements>
+		<requirement type="package" version="5.2.42">TASSEL</requirement>
+	</requirements>
+        <command><![CDATA[
+                #set id = $distanceMat.dataset_id
+                mkdir -p $__tool_directory__/out/ &&
+                perl $__tool_directory__/run_pipeline.pl
+                #if str($geno_type.geno_source)=="hapmap"
+                        -h $hapmapGeno
+                #else if str($geno_type.geno_source)=="vcf"
+                        -vcf $vcfGeno
+                #else if str($geno_type.geno_source)=="plink"
+                        -plink
+                        -ped $plinkPed
+                        -map $plinkMap
+                 #else if str($geno_type.geno_source)=="flapjack"
+                        -flapjack
+                        -geno $flapjackGeno
+                        -map $flapjackMap
+                #end if
+                -sortPositions
+                -distanceMatrix
+                -export $__tool_directory__/out/out$id > $distanceMatLog
+                && mv $__tool_directory__/out/out$id".txt" $distanceMat
+                && rm -rf  $__tool_directory__/out/
+        ]]>
+        </command>
+
+        <inputs>
+                 <conditional name="geno_type">
+                        <param name="geno_source" type="select" label="Genotype Data Format type">
+                                <option value="flapjack">Flapjack (.geno and .map) </option>
+                                <option value="plink">Plink (.ped and .map)</option>
+                                <option value="vcf">VCF</option>
+                                <option value="hapmap" selected="true">Hapmap</option>
+                        </param>
+
+                        <when value="flapjack">
+                                <param name="flapjackGeno" type="data" format="tabular" label="Genotype file"/>
+                                <param name="flapjackMap" type="data" format="tabular" label="Map file"/>
+			 </when>
+                        <when value="plink">
+                                <param name="plinkPed" type="data" format="tabular" label="Ped file"/>
+                                <param name="plinkMap" type="data" format="tabular" label="Map file"/>
+                        </when>
+                        <when value="vcf">
+                                <param name="vcfGeno" type="data" format="tabular" label="VCF file"/>
+                        </when>
+                        <when value="hapmap">
+                                <param name="hapmapGeno" type="data" format="tabular" label="Hapmap file"/>
+                        </when>
+                </conditional>
+        </inputs>
+
+        <outputs>
+                <data name="distanceMat" format="tabular" label="Distance Matrix"/>
+                <data name="distanceMatLog" format="txt" hidden="true" label="Log File: Calculate Distance Matrix"/>
+<!--            For debugging purposes, unhide from history by removing hidden tag
+                <data name="kinshipLog" format="txt" label="Log File: Calculate Kinship"/> -->
+        </outputs>
+
+        <tests>
+	</tests>
+
+        <stdio>
+                <exit_code range="2"   level="fatal"   description="Out of Memory" />
+                <exit_code range="3:5" level="warning" description="Low disk space" />
+                <exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+        </stdio>
+
+        <help>
+
+.. class:: infomark
+
+**Calculate Distance Matrix using TASSEL**
+
+-----
+
+**What this tool does**
+
+This tool generates a distance matrix from the genotype data provided.
+
+-----
+
+**Input**
+
+**Genotype Data**:
+This tool takes genotype data in Hapmap, VCF, Flapjack(.geno, .map) or Plink(.ped, .map) file format.
+
+- Hapmap format::
+
+        rs#     alleles chrom   pos     strand  assembly#       center  protLSID
+        assayLSID       panel   QCcode  sample1 sample2 sample3
+        270512992       A/G     9       40442   +       NA      NA      NA      NA      NA      NA      A       G       G
+        270515323       C/T     9       42773   +       NA      NA      NA      NA      NA      NA      C       C       C
+        270515818       G/A     9       43268   +       NA      NA      NA      NA      NA      NA      G       G       G
+        270516493       G/A     9       43943   +       NA      NA      NA      NA      NA      NA      G       G       G
+        270517705       A/G     9       45155   +       NA      NA      NA      NA      NA      NA      A       A       A
+        270521099       A/G     9       48549   +       NA      NA      NA      NA      NA      NA      A       A       A
+        270521753       G/A     9       49203   +       NA      NA      NA      NA      NA      NA      G       N       G
+        270523562       A/T     9       51012   +       NA      NA      NA      NA      NA      NA      A       N       N
+        270538155       T/C     9       65605   +       NA      NA      NA      NA      NA      NA      T       T       N
+        270538734       C/T     9       66184   +       NA      NA      NA      NA      NA      NA      C       Y       C
+        270538772       C/T     9       66222   +       NA      NA      NA      NA      NA      NA      C       C       C
+
+- VCF format::
+
+        .. image:: vcf_format_sampleImage.png
+
+- Plink format::
+
+        - .ped file (fields/column: Family ID, Sample ID, Paternal ID, Maternal ID, Sex [1=male; 2=female; other=unknown], Phenotype, Genotypes)
+
+        -9      sample1 -9      -9      -9      -9      C       C       C       C
+       C       T       A       G       G       G       A       A
+        -9      sample2 -9      -9      -9      -9      C       C       C       C
+       T       T       G       G       G       G       A       A
+        -9      sample3 -9      -9      -9      -9      C       C       C       C
+       T       T       G       G       G       G       A       A
+
+
+        - .map file (fields/column: Chromosome, Marker ID, Genetic Distance, Physical position)
+
+        9       270510387       -9      37837
+        9       270510414       -9      37864
+        9       270510415       -9      37865
+        9       270510433       -9      37883
+        9       270510477       -9      37927
+        9       270510522       -9      37972
+        9       270510679       -9      38129
+        9       270510784       -9      38234
+        9       270510820       -9      38270
+        9       270510848       -9      38298
+        9       270510857       -9      38307
+        9       270510892       -9      38342
+        9       270510938       -9      38388
+        9       270511015       -9      38465
+        9       270511089       -9      38539
+        9       270511099       -9      38549
+        9       270511181       -9      38631
+
+
+-----
+
+For more information, see: https://bitbucket.org/tasseladmin/tassel-5-source/wiki/UserManual/DistanceMatrix
+
+        </help>
+</tool>
+

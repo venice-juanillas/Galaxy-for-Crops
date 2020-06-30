@@ -1,0 +1,60 @@
+<tool id="makeNPUTEinput" 
+      name="makeNPUTEinputmatrix" 
+      version="1.0.0">
+    <description>Creat NPUTE input matrix from HapMap file.</description>
+    <command interpreter="perl"><![CDATA[
+    $__tool_directory__/makeNPUTEinput.pl $inputHMP $outputGEN
+    ]]>
+    </command>
+  
+    <inputs>
+    <param name="inputHMP" type="data" format="txt" label="Hapmap file" help="Hapmap file must be a tab(\t) delimited file with recommended fields." />
+    </inputs>
+    <outputs>
+    <data name="outputGEN" format="csv" label="NPUTE.input.csv"/>
+    </outputs>
+
+    <stdio>
+    <exit_code range="2"   level="fatal"   description="Out of Memory" />
+    <exit_code range="3:5" level="warning" description="Low disk space" />
+    <exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+    </stdio>
+
+    <tests>
+    <test>
+        <param name="inputHMP" type="data" value="test.hmp.txt"/>
+        <output name="outputGEN" type="csv" value="test.npute_input.csv"/>
+    </test>
+    </tests>
+
+    <help>
+
+**makeNPUTEinpute.pl** - Converts single nucleotide (IUPAC) HAPMAP file to NPUTE input matrix file.
+
+**Exammple File formats**
+    
+**input.hmp.txt** ::
+
+    rs#         alleles chrom   pos     strand  assembly#   center  protLSID    assayLSID   panelLSID   QCcode  GT1 GT2 GT3 GT4 GT5
+    S1_6370     T/C     1       6370    +       NA  NA  NA  NA  NA  NA  N   N   T   N   N
+    S1_8210     T/G     1       8210    +       NA  NA  NA  NA  NA  NA  T   N   N   N   N
+    S1_8376     A/G     1       8376    +       NA  NA  NA  NA  NA  NA  A   A   A   A   N
+    S1_9889     A/G/-   1       9889    +       NA  NA  NA  NA  NA  NA  N   N   N   A   N
+    S1_9899     T/C     1       9899    +       NA  NA  NA  NA  NA  NA  N   N   N   T   N
+    S1_9914     A/G     1       9914    +       NA  NA  NA  NA  NA  NA  N   N   N   A   N
+    S1_10045    G/C/-   1       10045   +       NA  NA  NA  NA  NA  NA  C   N   N   N   N
+
+----
+
+**output.csv** ::
+
+    ?,?,T,?,?
+    T,?,?,?,?
+    A,A,A,A,?
+    ?,?,?,A,?
+    ?,?,?,T,?
+    ?,?,?,A,?
+    C,?,?,?,?
+
+    </help>
+</tool>

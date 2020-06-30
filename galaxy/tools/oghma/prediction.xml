@@ -1,0 +1,46 @@
+<tool id="prediction" name="prediction" version="1.0.0">
+  <description>use machine learning model to predict phenotype from genotype</description>
+  <command interpreter="Rscript">
+	  prediction.R $config &gt; ${output1}
+  </command>
+  
+  <inputs>
+	<param name="genotype" type="data"
+		  label="genotype data" help="genotype must be a .rda file 
+		  containing a R dataframe/matrix called /encoded/ " 
+	/>
+	
+	<param name="model" type="data"
+		label="classifier model" help="model created by one of the classifier tool of the OGHMA suite. Represented as a .rda file, containing a dataframe called /model/" 
+	/>
+		  
+	<!-- deprecated
+	<param name="name" type="text"
+			label="names" help=" prefixe given to all results of the evaluation in the output folder (see -o option) to distinguish them" 
+	/>
+
+	
+	<param name="outputPath" type="data"
+			label="path to the output folds" help= " a path to a FOLDER where the results will be writen" 
+	/> -->
+  </inputs>
+  
+   <configfiles>
+    <configfile name="config">
+## Desc: this file is sourced in encode wrapper script
+##  as means to pass all galaxy params to R
+"${genotype}" -> genotype
+"${model}" -> model
+"${output1}" -> out
+
+    </configfile>
+</configfiles>
+  
+<outputs>
+	<data format="tabular" name = "output1" label="classifier prediction" />
+</outputs>
+  
+  <help>
+	  Use model designed by any clasifier tool from the OGHMA suite to predict the phenotype of a dataset provided as input. results are stored in a folder under a .rda file
+  </help>
+</tool>

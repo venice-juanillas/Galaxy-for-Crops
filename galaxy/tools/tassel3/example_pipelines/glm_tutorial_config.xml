@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TasselPipeline>
+    <fork1>
+        <h>../TASSELTutorialData/data/mdp_genotype.hmp.txt</h>
+        <filterAlign>
+            <filterAlignMinFreq>0.05</filterAlignMinFreq>
+        </filterAlign>
+    </fork1>
+    <fork2>
+        <r>../TASSELTutorialData/data/mdp_traits.txt</r>
+    </fork2>
+    <fork3>
+        <r>../TASSELTutorialData/data/mdp_population_structure.txt</r>
+        <excludeLastTrait/>
+    </fork3>
+    <combine5>
+        <input1/>
+        <input2/>
+        <input3/>
+        <intersect/>
+        <glm/>
+        <export>glm_output_tutorial</export>
+    </combine5>
+    <runfork1/>
+    <runfork2/>
+    <runfork3/>
+</TasselPipeline>

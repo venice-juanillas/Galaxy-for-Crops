@@ -1,0 +1,115 @@
+<tool id="sampleSNPs_1" name="sample SNPs" version="0.1.0" >
+  <description>Take a random sample of SNPs from a file</description>
+
+  <stdio>
+   <regex match="WARNING"
+        source="stderr"
+        level="warning"
+        description="file type warning"/>
+  </stdio>
+
+  <command><![CDATA[
+        rm -rf $__tool_directory__/tmpSampleSNPs 2> /dev/null &&
+        mkdir $__tool_directory__/tmpSampleSNPs &&
+        #if str($fileType.fileTypeSelector) == "VCF"
+        	ln -sfn $inputFile $__tool_directory__/tmpSampleSNPs/input.vcf &&
+        	$__tool_directory__/sampleSNPs -i $__tool_directory__/tmpSampleSNPs/input.vcf -t $fileType.fileTypeSelector -s $numberOfSamples &&
+        	mv $__tool_directory__/tmpSampleSNPs/input_s${numberOfSamples}.vcf $outputFile_vcf  &&
+        #elif str($fileType.fileTypeSelector) == "HMP"
+        	ln -sfn $inputFile $__tool_directory__/tmpSampleSNPs/input.hmp.txt &&
+        	$__tool_directory__/sampleSNPs -i $__tool_directory__/tmpSampleSNPs/input.hmp.txt -t $fileType.fileTypeSelector -s $numberOfSamples &&
+        	mv $__tool_directory__/tmpSampleSNPs/input_s${numberOfSamples}.hmp.txt $outputFile_hmp  &&
+        #elif str($fileType.fileTypeSelector) == "BED"
+        	## This is a hack to remove the EOL byte (0x0A) that GALAXY adds after uploading the .bed file
+        	perl -pi -e 'chomp if eof' $inputFile_bed &&
+        	ln -sfn $inputFile_bed $__tool_directory__/tmpSampleSNPs/input.bed &&
+        	ln -sfn $inputFile_bim $__tool_directory__/tmpSampleSNPs/input.bim &&
+        	ln -sfn $inputFile_fam $__tool_directory__/tmpSampleSNPs/input.fam &&
+        	$__tool_directory__/sampleSNPs -i $__tool_directory__/tmpSampleSNPs/input -t $fileType.fileTypeSelector -s $numberOfSamples &&
+        	mv $__tool_directory__/tmpSampleSNPs/input_s${numberOfSamples}.bed $outputFile_bed  &&
+        	mv $__tool_directory__/tmpSampleSNPs/input_s${numberOfSamples}.bim $outputFile_bim  &&
+        	mv $__tool_directory__/tmpSampleSNPs/input_s${numberOfSamples}.fam $outputFile_fam  &&
+        #elif str($fileType.fileTypeSelector) == "TPED"
+        	ln -sfn $inputFile_tped $__tool_directory__/tmpSampleSNPs/input.tped &&
+        	ln -sfn $inputFile_tfam $__tool_directory__/tmpSampleSNPs/input.tfam &&
+        	$__tool_directory__/sampleSNPs -i $__tool_directory__/tmpSampleSNPs/input -t $fileType.fileTypeSelector -s $numberOfSamples &&
+        	mv $__tool_directory__/tmpSampleSNPs/input_s${numberOfSamples}.tped $outputFile_tped  &&
+        	mv $__tool_directory__/tmpSampleSNPs/input_s${numberOfSamples}.tfam $outputFile_tfam  &&
+        #end if
+       
+		rm -rf $__tool_directory__/tmpSampleSNPs
+        
+  ]]></command>
+    
+  <inputs>
+    <conditional name="fileType">
+    	<param name="fileTypeSelector" type="select" label="SNP file format">
+        	<option value="VCF"> VCF </option>
+        	<option value="HMP"> HMP </option>
+        	<option value="BED"> plink .bed (compressed) </option>
+        	<option value="TPED"> plink .tped (uncompressed) </option>
+    	</param>
+		<when value="VCF">
+			<param format="vcf" name="inputFile" type="data" label="VCF Source file"/>
+		</when>
+		<when value="HMP">
+			<param format="tabular" name="inputFile" type="data" label="HapMap Source file"/>
+		</when>
+		<when value="BED">
+			<param format="bed" name="inputFile_bed" type="data" label="Binary genotype (.bed) source file"/>
+			<param format="tabular" name="inputFile_bim" type="data" label="Genetic map (.bim) source file"/>
+			<param format="tabular" name="inputFile_fam" type="data" label="Family (.fam) source file"/>
+		</when>
+		<when value="TPED">
+			<param format="tabular" name="inputFile_tped" type="data" label="Uncompressed (.tped) source file"/>
+			<param format="tabular" name="inputFile_tfam" type="data" label="Transposed family (.tfam) source file"/>
+		</when>
+    </conditional>
+    <param name="numberOfSamples" type="integer" label="Number of SNPs to pick" value="10"/>
+  </inputs>
+
+  <outputs>
+	<data format="vcf" name="outputFile_vcf" >
+		<filter> fileType['fileTypeSelector'] == 'VCF' </filter>
+	</data>
+	<data format="hmp" name="outputFile_hmp">
+		<filter> fileType['fileTypeSelector'] == 'HMP' </filter>
+	</data>	
+ 	<data format="bed" name="outputFile_bed">
+		<filter> fileType['fileTypeSelector'] == 'BED' </filter>
+	</data>	
+ 	<data format="tabular" name="outputFile_bim">
+		<filter> fileType['fileTypeSelector'] == 'BED' </filter>
+	</data>	
+ 	<data format="tabular" name="outputFile_fam">
+		<filter> fileType['fileTypeSelector'] == 'BED' </filter>
+	</data>	
+ 	<data format="tabular" name="outputFile_tped">
+		<filter> fileType['fileTypeSelector'] == 'TPED' </filter>
+	</data>	
+	<data format="tabular" name="outputFile_tfam">
+		<filter> fileType['fileTypeSelector'] == 'TPED' </filter>
+	</data>
+ </outputs>
+
+  <tests>
+    <test>
+      <param name="inputFile" value="sample.vcf"/>
+      <param name="fileType.fileTypeSelector" value="VCF"/>
+      <param name="numberOfSamples" value="500"/>
+      <output name="outputFile_vcf" file="sample_s500.vcf">
+        <assert_contents>
+                <has_text_matching expression="^##"/>
+        </assert_contents>
+      </output>
+   </test>
+  </tests>
+
+
+	<help>
+		Random ordered sampling of SNPs from files
+	</help>
+	<citations>
+		<citation type="doi"> 10.1101/220871 </citation>
+	</citations>
+</tool>

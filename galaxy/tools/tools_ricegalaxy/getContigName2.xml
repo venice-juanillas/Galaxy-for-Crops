@@ -1,0 +1,82 @@
+<tool id="get-cont-name2" name="Get-contig-names" version="v.01">
+  <description> Extract contig / scaffold / chromosome / gene names from representative rice genomes</description>
+   <command><![CDATA[
+        #if str($ref.source) == "history":
+                mkdir index_dir &&
+                ln -s  $ref.index index_dir/genome.fa &&
+                grep ">" index_dir/genome.fa | cut -f1 -d' '|sed 's/>//' > $output &&
+                rm -rf index_dir
+        #else:
+                grep ">" '$ref.index.fields.path' | cut -f1 -d' '|sed 's/>//' > $output2
+ 
+        #end if
+   ]]>
+   </command>
+
+  <inputs>
+        <conditional name="ref">
+                <param name="source" type="select" label="Select a reference genome/gene from your history or use a built-in genome database?" help="Built-in rice genomes for indica, temperate and tropical japonicas, and aus ">
+                        <option value="idxcon">Use a built-in genome (chromosome/scaffold scale)</option>
+                        <option value="idxgen">Use a built-in gene database</option>
+                        <option value="history">Use a multiFASTA from the history</option>
+                </param>
+                <when value="idxcon">
+                        <param name="index" type="select" label="Select rice genome assembly" help="These are chromosome-scale assemblies">
+                                <options from_data_table="all_fasta">
+                                        <filter type="sort_by" column="2"/>
+                                        <validator type="no_options" message="No indexes are available for the selected input dataset"/>
+                                </options>
+                        </param>
+                </when>
+                <when value="idxgen">
+                        <param name="index" type="select" label="Select rice gene assembly" help="IThese are gene-scale assemblies">
+                                <options from_data_table="srma_indexes">
+                                        <filter type="sort_by" column="2"/>
+                                        <validator type="no_options" message="No indexes are available for the selected input dataset"/>
+                                </options>
+                        </param>
+                </when>
+                <when value="history">
+                        <param name="index" type="data" format="fasta" label="Select multi-FASTA data from history" />
+                </when>
+        </conditional>
+
+  </inputs>
+
+
+  <outputs>
+    <data format="tabular" name="output2" label="${tool.name} on [${ref.index}]  " >
+               <filter>ref['source'] != 'history' </filter>
+               <actions>
+                    <action name="column_names" type="metadata" default="seq_name" />
+               </actions>
+    </data>
+    <data format="tabular" name="output"  >
+               <filter>ref['source'] == 'history' </filter>
+               <actions>
+                    <action name="column_names" type="metadata" default="seq_name" />
+               </actions>
+    </data>
+    <!-- <data format="txt" name="output" />  -->
+  </outputs>
+
+
+  <tests>
+  </tests>
+
+  <help>
+
+.. class:: infomark
+
+**Get-contig-names - what it does**
+
+This tool extracts the names of all contigs/scaffolds/chromosomes/genes in the multi-FASTA published rice genomes (Nipponbare 1.0 japonica reference, MSU RGAP7 Nipponbare annotation, N22 - aus, IR64 - indica, and Azucena - trop japonica (13 rice genomes publication ...). 
+
+The scaffold / chromosome / gene sequence name spelling is important. This tool makes sure you get the correct sequence names in your genome of choice.
+
+Linux tools grep, cut, and sed were used to extract contig names from the multi FASTA file.
+
+
+
+   </help>
+</tool>

@@ -1,0 +1,39 @@
+<tool id="plink_vcf2bed" name="Convert VCF" version="0.1.0">
+  <description>to BED (plink)</description>
+  <requirements>
+    <requirement type="package" version="1.9">plink</requirement>
+  </requirements>
+
+  <command><![CDATA[
+    rm -rf $__tool_directory__/output.bed 2>/dev/null && 
+    rm -rf $__tool_directory__/output.bim 2>/dev/null && 
+    rm -rf $__tool_directory__/output.fam 2>/dev/null &&
+    $__tool_directory__/plink_vcf2bed.sh ${input} $__tool_directory__/output &&
+    ln -sfn $__tool_directory__/output.bed ${output_bed} 2>/dev/null &&
+    ln -sfn $__tool_directory__/output.bim ${output_bim} 2>/dev/null &&
+    ln -sfn $__tool_directory__/output.fam ${output_fam} 2>/dev/null
+  ]]></command>
+  
+  
+  <inputs>
+    <param format="vcf" name="input" type="data" label="Input VCF file"/>
+  </inputs>
+  
+  <outputs>
+    <data format="bed" name="output_bed" label="bed output"/>
+    <data format="tabular" name="output_bim" label="bim output"/>
+    <data format="tabular" name="output_fam" label="fam output"/>
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="input" value="input.vcf"/>
+      <output name="output_bed" file="output.bed"/>
+    </test>
+  </tests>
+
+  <help>
+    Convert VCF to BED (plink)
+  </help>
+
+</tool>

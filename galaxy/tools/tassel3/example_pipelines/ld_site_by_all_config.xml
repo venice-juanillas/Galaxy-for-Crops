@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TasselPipeline>
+    <fork1>
+        <h>/Users/terry/users/sara/PZESNP55K_maize282_AGPv2_chr8_20100513.hmp.txt</h>
+        <ld>
+            <ldType>SiteByAll</ldType>
+            <ldTestSite>3</ldTestSite>
+        </ld>
+        <ldd>
+            png
+            <ldplotsize>500</ldplotsize>
+            <o>sara_ld.png</o>
+        </ldd>
+    </fork1>
+    <runfork1/>
+</TasselPipeline>

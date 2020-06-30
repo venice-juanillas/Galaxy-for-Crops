@@ -1,0 +1,73 @@
+<tool id="plink_pca" name="Principal Component Analysis" version="0.1.0">
+    <requirements>
+      <requirement type="package" version="1.90b4">plink</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+	#set id = $pedFile.dataset_id
+         mkdir -p $__tool_directory__/out$id/ &&
+         cp $pedFile $__tool_directory__/out$id/input.ped &&
+         cp $mapFile $__tool_directory__/out$id/input.map &&
+	 plink --file $__tool_directory__/out$id/input --make-rel square --pca $pcnum --out $__tool_directory__/out$id/output && 
+	 cp  $__tool_directory__/out$id/output.eigenval $eigenvalues &&
+	 cp  $__tool_directory__/out$id/output.eigenvec $eigenvectors &&
+	 cp  $__tool_directory__/out$id/output.rel $relationship_matrix &&
+	 cp  $__tool_directory__/out$id/output.rel.id $lines_id &&
+	 cp  $__tool_directory__/out$id/output.log $log &&
+	 rm -rf  $__tool_directory__/out$id/
+    ]]></command>
+    <inputs>
+	 <param name="pedFile" type="data" format="tabular" label="Genotype file (.ped)" help=".ped file."/>
+        <param name="mapFile" type="data" format="tabular" label="Genotype file (.map)" help=".map file"/>
+         <param name="pcnum" type="integer" size="4" value="5" label="Max num of top PCs" help="gets the top N pcs"/>
+    </inputs>
+    <outputs>
+	<data name="eigenvalues" format="tabular" label="Eigen Values"/>
+	<data name="eigenvectors" format="tabular" label="Eigen vectors"/>
+	<data name="relationship_matrix" format="tabular" label="Relationship Matrix"/>
+        <data name="lines_id" format="tabular" label="Lines id"/>
+        <data name="log" format="text" label="Log File"/>
+    </outputs>
+    <tests>
+     <test>
+        <param name="pedFile" value="input.ped" />
+        <param name="mapFile" value="input.map"/>
+        <output name="relationship_matrix" file="relationship_output"  compare="sim_size" >
+        </output>
+     </test>
+   </tests>
+    <help><![CDATA[
+.. class:: infomark
+
+**Principal Component Analysis using Plink** 
+
+.. class:: infomark 
+
+**Provided by EiB platform and GOBii**
+
+.. class:: infomark
+
+**Galaxy integration** Venice Margarette Juanillas (IRRI)
+
+.. class:: infomark
+
+**Galaxy Integration contributors**  Xuecai Zhang (CIMMYT), Dmytro Chebotarov (IRRI)
+
+.. class:: infomark
+
+**Support** For any questions about this tool, please send an e-mail to V.Juanillas@irri.org
+
+-----
+
+**What this tool does**
+
+PLINK 1.9 provides two dimension reduction routines: --pca, for principal components analysis (PCA) based on the variance-standardized relationship matrix, and --mds-plot, for multidimensional scaling (MDS) based on raw Hamming distances. Top principal components are generally used as covariates in association analysis regressions to help correct for population stratification, while MDS coordinates help with visualizing genetic distances.    
+
+By default, --pca extracts the top 20 principal components of the variance-standardized relationship matrix; you can change the number by passing a numeric parameter. Eigenvectors are written to plink.eigenvec, and top eigenvalues are written to plink.eigenval. The 'header' modifier adds a header line to the .eigenvec file(s), and the 'tabs' modifier makes the .eigenvec file(s) tab- instead of space-delimited. You can request variant weights with the 'var-wts' modifier, and dump the matrix by using --pca in combination with --make-rel/--make-grm-gz/--make-grm-bin.
+
+For more information, visit: https://www.cog-genomics.org/plink/1.9/strat
+
+    ]]></help>
+<citations>
+         <citation type="doi">10.1186/s13742-015-0047-8</citation> 
+  </citations> 
+</tool>

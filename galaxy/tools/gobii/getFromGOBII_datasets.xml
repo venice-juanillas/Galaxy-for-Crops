@@ -1,0 +1,18 @@
+<tool id="get_from_gobii_datasets" name="GOBII Extract" version="0.0.1">
+	<description>datasets</description>
+	<command>curl $url > $output</command>
+	<code file="tool_form_utils.py"/>
+	<inputs>
+		<param name="authtoken" type="text" size="10" value="X-Authentication-Token" label="Authentication Token"/>
+		<param name="project" type="select" label="Project/Study" refresh_on_change="true">
+			<option>
+		</param>
+		<param name="dataset" type="select" label="Datasets" refresh_on_change="true">
+		
+		</param>
+	</inputs>
+	<outputs>
+		<data name="output" format="tabular" label="GOBII output"/>
+	</outputs>
+	
+</tool> 

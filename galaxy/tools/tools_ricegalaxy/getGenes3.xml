@@ -1,0 +1,96 @@
+<tool id="get.genesv3" name="Get-genes-by-region(s)-IDs" version="v.0.20">
+  <description> Retrieve list of genes within specified region of rice genomes</description>
+   <command detect_errors="exit_code"><![CDATA[
+          #if str($reference.source) == "type":
+			    mkdir index_dir &&
+                ln -s  $__tool_directory__/data/'$table' index_dir/tmp_table &&
+                tabix -s 1 -b 2 -e 3 index_dir/tmp_table &&
+                tabix index_dir/tmp_table $reference.region > '$outFile' &&
+                rm -rf index_dir
+
+          #else:
+                mkdir index_dir &&
+                ln -s  $__tool_directory__/data/'$table' index_dir/tmp_table &&
+                tabix -s 1 -b 2 -e 3 index_dir/tmp_table &&
+                xargs tabix index_dir/tmp_table < '$rgnList' > '$outFile2' &&
+                rm -rf index_dir
+          #end if  
+
+    ]]></command>
+
+
+  <inputs>
+    <param name="table" type="select" help="The info is derived from gene annotation efforts independent of the genome assembly (from GFF or other info sources).">
+      <label>Reference genome to get genes..</label>
+        <!-- <option value="tabix_Cs10_20190829_cds.gz">Cannabis sativa Cs10 cds-protein 20190829 genome annot</option> -->
+	<option value="tabix_rgap7_canonical_loc.gz" selected="true">Oryza sativa Nipponbare canonical genes RGAP7 annotation</option>		
+    </param>
+   <conditional name="reference">
+	   	   <param name="source" type="select" label="Type in a region directly (chr:start-end), OR use regions list from history?" help="You can either type the region directly to search, or use multiple regions in a file from history.">
+					<option value="type" selected="true">Directly type-in region </option>
+					<option value="history">Use a list of regions from the history</option>
+    		</param>
+            <when value="type">
+				<param name="region" type="text" label ="Search region " help="Directly type in your region (the chromosome/contig name SHOULD BE PRESENT in the genome) to list the genes (example in Nipponbare: Chr1:1-500000)."> 
+				</param>
+			</when>
+            <when value="history">
+                <param name="rgnList" type="data" format='txt' label ="Select genome region list" help="The chromosome/contig name SHOULD BE PRESENT in your target, and the region correctly formatted! See help section." /> 
+            </when>
+   </conditional>
+ 
+
+  </inputs>
+
+
+  <outputs>
+    <!-- <data format="tabular" name="outFile" label="Genes list for selected region in ${table.value_label}" /> -->
+	 
+    <data format="tabular" name="outFile" label="${tool.name} : ${reference.region} in ${table.value_label} " >
+               <filter>reference['source'] == 'type' </filter>
+               <actions>
+                    <action name="column_names" type="metadata" default="contig,start,end,strand,geneID,meta..." />
+               </actions>
+    </data>
+    <data format="tabular" name="outFile2" label="${tool.name} : ${on_string} in ${table.value_label} "  >
+               <filter>reference['source'] == 'history' </filter>
+               <actions>
+                    <action name="column_names" type="metadata" default="contig,start,end,strand,geneID,meta..." />
+               </actions>
+    </data>
+
+  </outputs>
+
+
+  <tests>
+  </tests>
+
+  <help>
+
+.. class:: infomark
+
+**Get-genes- what it does**
+
+Retrieves gene list in selected region from genome of choice::
+
+          Nipponbare
+          N22 v2
+          Azucena
+          IR64
+          ...
+          Example for a directly typed region using macadamia : Chr1:1-500000
+          Example regions format for B. juncea (regions listed in a file. Format is chr:from-to, one per line, following Samtools faidx format )
+              Chr1:1-100000
+              Chr2:1-500000
+        
+**IMPORTANT:** The chromosome name in your region / region list should **MATCH** the chromosome name in the genome. USE **Get-contig-names** tool to extract the chromosome names of your target genome.
+
+More genomes to come. Get-genes uses Tabix_ program and Samtools_ region format.
+
+.. _Tabix: http://www.htslib.org/doc/tabix.html
+.. _Samtools: http://www.htslib.org/doc/samtools-faidx.html
+
+   </help>
+
+
+</tool>

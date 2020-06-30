@@ -1,0 +1,30 @@
+<tool id="bglr:samplematching" name="Genotype-Phenotype Matching" version="1.0.016">
+	<description>genotype and phenotype files</description>
+	<command><![CDATA[
+		perl $__tool_directory__/validate_v2.pl $genotypeFile $phenotypeFile $gid_colNum $key_variables $phenotype_row_start $output
+	]]>
+	</command>
+  
+	<inputs>
+		<param name="genotypeFile" type="data" format="tabular" label="Genotype data file(hapmap)" help="Genotype data file in hapmap format." />
+		<param name="phenotypeFile" type="data" format="csv" label="Phenotype data file" help="Phenotype data file must be a .csv" />
+		<param name="gid_colNum" type="integer" size="10" value="4" label="Column number for GID in Phenotype File" help="(integer) Select column number which contains the GID" />
+		<param name="phenotype_row_start" type="integer" size="10" value="2" label="Row start number for observations in Phenotype File" help="(integer) Select row number where observations start." />
+		<param name="key_variables" type="text" size="10" value="3,4" label="Column number for the Key Variables in Phenotype File" help="(integer). Input single number for one key variable (example: 3 for column 3). Input comma-separated values if multiple variables(1,4,10 for columns 1, 4 and 10)" />
+	</inputs>
+
+	<outputs>
+		<data name="output" format="csv" label="Output"/>
+	</outputs>
+
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+	
+	<help>
+	</help>
+
+</tool>
+

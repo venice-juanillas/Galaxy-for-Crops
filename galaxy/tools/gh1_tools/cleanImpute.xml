@@ -1,0 +1,61 @@
+<tool id="cleanImpute" name="Clean Impute" version="1.0">
+  <description>cleanImpute</description>
+  <requirements>
+
+  </requirements>
+  <command interpreter="Rscript --vanilla">cleanImpute.R
+       #if str($fileIn).strip() != "":
+          --fileIn="$fileIn"
+       #end if
+       #if str($IDsFile).strip() != "":
+          --IDsFile="$IDsFile"
+       #end if
+       #if str($mapFile).strip() != "":
+          --mapFile="$mapFile"
+       #end if
+       #if str($thresholdNA).strip() != "":
+          --thresholdNA="$thresholdNA"
+       #end if
+       #if str($thresholdMAF).strip() != "":
+          --thresholdMAF="$thresholdMAF"
+       #end if
+       #if str($outputFile1).strip() != "":
+          --outputFile1="$outputFile1"
+       #end if
+       #if str($outputFile2).strip() != "":
+          --outputFile2="$outputFile2"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="fileIn" format="data" type="data" help="A binary file with markers coded as 0, 1, 2, NA." label="[required] File In">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="IDsFile" format="data" type="data" help="A text file with the IDs of individuals." label="[required] I Ds File">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="mapFile" format="data" type="data" help="" label="[required] Map File">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="thresholdNA" type="float" value="" help="threshold for missing values, a proportion, e.g. 0.15." min="0" max="1" label="[required] Threshold N A">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="thresholdMAF" type="float" value="" help="threshold for Minor Allele Frequency, e.g. 0.05." min="0" max="1" label="[required] Threshold M A F">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="rdata" name="outputFile1" label="X.rdata"/>
+    <data format="pdf" name="outputFile2" label="summary.pdf"/>
+  </outputs>
+  <help>
+**Description**
+
+Reads a binary file with GBS information already coded in
+0,1,2,NA, remove markers with a given proportion of missing values
+and imputes the remaining using a naive method using observed
+allelic frequencies.
+</help>
+</tool>

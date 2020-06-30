@@ -1,0 +1,332 @@
+<tool id="GEBV_Prediction" name="GEBV" version="1.5.0">
+  <description>calculator</description>
+  <requirements>
+     <requirement type="package" version="1.0.8">r-bglr</requirement> 
+     <requirement type="package" version="1.20.2">r-getopt</requirement>
+  </requirements>
+  <command interpreter="/home/galaxy/data/R/R-3.5.1/bin/Rscript --vanilla"><![CDATA[
+gebv_prediction_wrapper2.R 
+
+--input_phenotypes_file $galaxy_phenotypes_file
+
+--sample_name_vector_column_index $galaxy_sample_name_vector_column_index
+#if str($columns.columns) == "manual":
+    --first_phenotype_vector_column_index $columns.galaxy_first_phenotype_vector_column_index
+    --last_phenotype_vector_column_index $columns.galaxy_last_phenotype_vector_column_index
+#else if str($columns.columns) == "automatic":
+    --first_phenotype_vector_column_index 2
+    --last_phenotype_vector_column_index 1
+#end if
+--response_type "$galaxy_response_type_conditional.galaxy_response_type"
+
+#if str($galaxy_lower_bound_vector_column_index) == "":
+  --lower_bound_vector_column_index NULL 
+#else:
+  --lower_bound_vector_column_index $galaxy_lower_bound_vector_column_index
+#end if
+
+#if str($galaxy_upper_bound_vector_column_index) == "":
+  --upper_bound_vector_column_index NULL 
+#else:
+  --upper_bound_vector_column_index $galaxy_upper_bound_vector_column_index
+#end if
+
+#set eta = ",".join( [ str( ",".join( [ str($item.input), str($item.model) ] ) ) for $index, $item in enumerate( $galaxy_repeat_eta ) ] )
+--eta "${eta}"
+
+--incidence_matrix_needs_transposition $galaxy_incidence_matrix_needs_transposition
+
+#if str($galaxy_weights_vector_column_index) == "":
+  --weights_vector_column_index NULL 
+#else:
+  --weights_vector_column_index $galaxy_weights_vector_column_index
+#end if
+
+--number_of_iterations $galaxy_number_of_iterations
+
+--burnin $galaxy_burnin
+
+--thinning $galaxy_thinning 
+
+--saveat "$galaxy_saveat" 
+
+#if $galaxy_s0 == "":
+  --s0 NULL 
+#else:
+  --s0 "$galaxy_s0"
+#end if
+
+--df0 $galaxy_df0 
+
+--r2 $galaxy_r2 
+
+--verbose "$galaxy_verbose" 
+
+--rmexistingfiles "$galaxy_rmexistingfiles" 
+
+#if str($galaxy_groups_vector_column_index) == "":
+  --groups_vector_column_index NULL 
+#else:
+  --groups_vector_column_index $galaxy_groups_vector_column_index
+#end if
+
+#if $galaxy_cross_validation.do_randomization == "k-fold":
+   --kfold $galaxy_cross_validation.kfold
+   --p_out NULL 
+   --nrandom $galaxy_cross_validation.n_randomizations
+   #if $galaxy_cross_validation.getname == "TRUE":
+      --name ${galaxy_phenotypes_file.name}
+   #else if $galaxy_cross_validation.getname == "FALSE":
+      --name NULL
+   #end if
+#else if $galaxy_cross_validation.do_randomization == "leave-p-out":
+   --kfold NULL
+   --p_out $galaxy_cross_validation.p_out
+   --nrandom $galaxy_cross_validation.n_randomizations
+   --name NULL
+#else:
+   --kfold NULL
+   --p_out NULL
+   --nrandom NULL
+   --name NULL
+#end if
+
+--output_file $galaxy_output_file
+>>$logfile 2>&1
+]]></command>
+  <inputs>
+    <param name="galaxy_phenotypes_file" 
+           type="data" 
+           format="tabular" 
+           label="Input phenotype File" 
+           help="(required) The file containing phenotypes and sample names (phenoypes for samples to be predicted should be entered as NA)" />
+    <param name="galaxy_sample_name_vector_column_index"
+           type="data_column"
+           data_ref="galaxy_phenotypes_file"
+           use_header_names="true" 
+           label="Column Header Containing the Sample Names" 
+           help="(required) The column header in the phenotype file containing the sample names (NAs allowed)" 
+           value="1" />
+    <conditional name="columns">
+       <param name = "columns" type="select" label="Column headers for phenotypes">
+          <option value="manual">Manual selection of column headers</option>
+          <option value="automatic">Phenotypes are provided from 2nd to last column</option>
+       </param>
+       <when value="manual">
+          <param name="galaxy_first_phenotype_vector_column_index" 
+           type="data_column"
+           data_ref="galaxy_phenotypes_file"
+           use_header_names="true" 
+           label="Column Header Containing the First Phenotype" 
+           help="(required) The column header in the phenotype file containing the first phenotype"
+           value="3" />
+          <param name="galaxy_last_phenotype_vector_column_index" 
+           type="data_column"
+           data_ref="galaxy_phenotypes_file"
+           use_header_names="true" 
+           label="Column Header Containing the Last Phenotype" 
+           help="(required) The column header in the phenotype file containing the last phenotype"
+           value="3" />
+        </when>
+    </conditional>
+    <conditional name="galaxy_response_type_conditional">
+      <param name="galaxy_response_type" 
+             type="select" 
+             multiple="false" 
+             label="Response Type" 
+             help="(required, string) Admits values gaussian or ordinal">
+        <option value="gaussian" 
+                selected="true">gaussian</option>
+        <option value="ordinal">ordinal</option>
+      </param>
+    </conditional>
+    <param name="galaxy_lower_bound_vector_column_index" 
+           type="integer" 
+           label="Lower Bound Vector (a) Column" 
+           help="(default to NULL, integer) Only required for censored outcomes" 
+           optional="true" />
+    <param name="galaxy_upper_bound_vector_column_index" 
+           type="integer" 
+           label="Upper Bound Vector (b) Column" 
+           help="(default to NULL, integer) Only required for censored outcomes" 
+           optional="true" />
+    <repeat name="galaxy_repeat_eta" title="Incidence Matrix and Model" >
+      <param name="input" 
+             type="data" 
+             format="tabular" 
+             label="Matrix File" />
+      <param name="model" 
+             type="select" 
+             label="Model">
+        <option value="BRR">Bayesian Ridge Regression</option>
+        <option value="BayesA"
+                selected="true">BayesA</option>
+        <option value="BayesB">BayesB</option>
+        <option value="BayesC">BayesC</option>
+        <option value="BL">Bayesian Lasso</option>
+      </param>
+    </repeat>
+    <param name="galaxy_incidence_matrix_needs_transposition"
+           type="boolean"
+           checked="true"
+           truevalue="TRUE"
+           falsevalue="FALSE"
+           label="Needs Transposition"
+           help="(required, logical) If checked on then the incidence matrix(es) will be transposed before being processed" />
+    <param name="galaxy_weights_vector_column_index" 
+           type="integer" 
+           label="Weights Vector Column" 
+           help="(default to NULL, integer) A vector of weights" 
+           optional="true" />
+    <param name="galaxy_number_of_iterations" 
+           type="integer" 
+           value="1500" 
+           label="Number of Iterations" 
+           help="(required, integer)" />
+    <param name="galaxy_burnin" 
+           type="integer" 
+           value="500" 
+           label="Burn-In" 
+           help="(required, integer)" />
+    <param name="galaxy_thinning" 
+           type="integer" 
+           value="5" 
+           label="Thinning" 
+           help="(required, integer)" />
+    <param name="galaxy_saveat" 
+           type="text" 
+           value="" 
+           label="SaveAt" 
+           help="(optional, string) This may include a path and a pre-fix that will be added to the name of the files that are saved as the program runs" />
+    <param name="galaxy_s0" 
+           type="text" 
+           value="" 
+           label="S0" 
+           help="(optional, numeric) The scale parameter for the scaled inverse-chi squared prior assigned to the residual variance, only used with Gaussian outcomes" />
+    <param name="galaxy_df0" 
+           type="float" 
+           value="5.0" 
+           label="df0" 
+           help="(required, numeric) The default value" />
+    <param name="galaxy_r2" 
+           type="float" 
+           value="0.5" 
+           min="0.0001" 
+           max="0.9999" 
+           label="R2" 
+           help="(required, numeric, R2 between 0 and 1, not inclusive) The proportion of variance that one expects, a priori, to be explained by the regression" />
+    <param name="galaxy_verbose" 
+           type="boolean" 
+           checked="true" 
+           truevalue="TRUE" 
+           falsevalue="FALSE" 
+           label="Verbose" 
+           help="(required, logical) If TRUE the iteration history is printed" />
+    <param name="galaxy_rmexistingfiles" 
+           type="boolean" 
+           checked="true" 
+           truevalue="TRUE" 
+           falsevalue="FALSE" 
+           label="Rm Existing Files" 
+           help="(required, logical) If TRUE removes existing output files from previous runs" />
+    <param name="galaxy_groups_vector_column_index" 
+           type="integer" 
+           label="Groups Vector Column" 
+           help="(default to NULL, integer) A vector of the same length of y that associates observations with groups. Only used with Gaussian outcomes" 
+           optional="true" />
+    <conditional name="galaxy_cross_validation">
+      <param name="do_randomization" 
+             type="select" 
+             label="Cross Validation" 
+             help="(default to No Cross Validation) A string that specifies what Cross Validation method to use" >
+        <option value="no_cross_validation">No Cross Validation</option>
+        <option value="k-fold">K-Fold Cross Validation</option>
+        <option value="leave-p-out">Leave-p-out (LPO)</option>
+      </param>
+      <when value="k-fold">
+        <param name="kfold" 
+               type="integer" 
+               size="10" 
+               value="5" 
+               label="Number of Folds" 
+               help="(default to 5) An integer that specifies the number of splits to make on the dataset" />
+        <param name="n_randomizations" 
+               type="integer" 
+               size="10" 
+               value="10" 
+               label="Number of Randomizations"
+               help="(default to 10) An integer that specifies how many times N will be randomized" />
+         <param name="getname" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Get name of input" />
+      </when>
+      <when value="leave-p-out">
+        <param name="p_out" 
+               type="integer" 
+               size="10" 
+               value="1" 
+               label="p" 
+               help="(default to 1) An integer that specifies how many samples (p) to remove from the complete set, where p > 1. If p=1, then the method is Leave-One-Out (LOO)" />
+        <param name="n_randomizations"
+               type="integer"
+               size="10"
+               value="1"
+               label="Number of Randomizations"
+               help="(default to 1) An integer that specifies how many times N will be randomized" />
+
+      </when>
+    </conditional>
+  </inputs>
+  <outputs>
+    <data name="galaxy_output_file"
+    	  format="tabular"
+          label="GEBV output data" />
+    <data name="logfile" format="txt" label="Logfile" />
+  </outputs>
+<tests>
+  <test>
+<param name="galaxy_phenotypes_file" value="pheno_input.txt" />
+<conditional name="columns">
+<param name = "columns" value="automatic"/>
+</conditional> 
+<param name="input" value="geno_input.txt" />
+<output name="galaxy_output_file" file="output.txt"  compare="sim_size" >
+<assert_contents> 
+   	<has_n_columns n="17" />
+</assert_contents>
+</output>
+  </test>
+  </tests>
+
+  <help>
+.. class:: infomark
+
+**GEBV calculator** (within group)
+
+.. class:: infomark 
+
+**Provided by EiB platform and GOBii**
+
+.. class:: infomark
+
+**Authors** Angel Villahoz-Baleta (Cornell Univ)
+
+.. class:: infomark
+
+**Galaxy Integration contributors**  Paulino Perez, Kelly Robbins (Cornell Univ), Angel Villahoz-Baleta (Cornell Univ), Star Yanxin Gao (Cornell Univ)
+
+.. class:: infomark
+
+**Support** For any questions about this tool, please send an e-mail to av484@cornell.edu
+
+-----
+
+**What it does**
+
+This tool calculates GEBV (Genomic breeding value estimator) using the BGLR R package.
+
+BGLR: Bayesian generalized linear regression. R package version. http://R-Forge.R-project.org/projects/bglr/
+
+  </help>
+<citations>
+         <citation type="doi">10.1534/genetics.114.164442</citation> 
+  </citations> 
+</tool>

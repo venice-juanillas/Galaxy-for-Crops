@@ -1,0 +1,70 @@
+<tool id="naive_impute" name="Naive imputation" version="0.1.0">
+    <description>
+	 using population mean or mode
+    </description>
+    <requirements>
+        <requirement type="package" version="1.3.2">r-optparse</requirement> 
+    </requirements> 
+    <command interpreter="bash">
+	./naive_impute.sh $inputFile $outFile $method $colStart
+    </command>
+    <inputs>
+	<param name="inputFile" type="data" format="tabular" label="Encoded Genotype data" help="(required)File must be tab-delimited. This tool expects that the allele data have been encoded/transformed to numeric. See Encode tool." />
+	<param name="method" type="select" label="Select imputation method to use" help="(Default: Mean)This uses simple population imputate methods. Select from mean or mode" >
+		<option value="mean"> Mean </option>
+		<option value="mode" selected="true"> Mode </option>
+	</param>
+	<param name="colStart" type="integer" size="4" value="1" label="Column start" help="(required)specify which column the allele data starts." />
+    </inputs>
+    <outputs>
+	<data name="outFile" format="tabular" label="Imputed Data"/>
+    </outputs>
+<tests>
+  <test>
+<param name="inputFile" value="input.hmp.txt" />
+<param name="method" value="mean" />
+<param name="colStart" value="12" /> 
+<output name="outFile" file="output.hmp.txt"  compare="sim_size" >
+</output>
+</test>
+</tests>
+
+    <help><![CDATA[
+.. class:: infomark
+
+**Naive imputation** Simple Imputation using population mean or mode
+
+.. class:: infomark 
+
+**Galaxy integration** Provided by EiB platform and GOBii and Venice Margarette Juanillas (IRRI)
+
+.. class:: infomark 
+
+**Support** For any questions about this tool, please send an e-mail to u.rosyara@cgiar.org
+
+-----
+
+**What it does**
+
+This tool does simple imputation on missing genotype data using mean(mean substitution) or mode.
+
+-----
+
+**Input File:**
+
+This tool expects that the genotype data file has been encoded or transformed from allele to numeric. See Encode tool.
+
+**Output File:**
+
+This tool outputs a hapmap file.
+
+When using mean method, the missing values/alleles in the hapmap are imputed with the mean of the observed values. On the other hand, if mode  method is used, the numeric missing values are imputed with the median value.
+
+-----
+
+References: 
+
++ https://www.r-bloggers.com/example-2014-5-simple-mean-imputation
++ https://cran.r-project.org/web/packages/imputeMissings/imputeMissings.pdf   
+    ]]></help>
+</tool>

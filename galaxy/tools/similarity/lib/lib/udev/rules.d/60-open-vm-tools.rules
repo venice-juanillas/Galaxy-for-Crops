@@ -1,0 +1,15 @@
+# VMware SCSI devices Timeout adjustment
+#
+# Modify the timeout value for VMware SCSI devices so that
+# in the event of a failover, we don't time out.
+# See Bug 271286 for more information.
+
+ACTION=="add|change", SUBSYSTEMS=="scsi", ATTRS{vendor}=="VMware  " , ATTRS{model}=="Virtual disk    ",   RUN+="/bin/sh -c 'echo 180 >/sys$DEVPATH/device/timeout'"
+
+
+# VMWare Virtual Sockets permissions
+#
+# after loading the vsock module, a block device /dev/vsock will be created with permission 0600
+# This rule changes permission to 0666 to allow users access to the virtual sockets
+
+KERNEL=="vsock", MODE="0666"

@@ -1,0 +1,23 @@
+<tool id="sample-id-generator" name="Sample ID Generator" version="0.1.0">
+    <requirements>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+	mkdir -p $__tool_directory__/out/ &&
+	cp $__tool_directory__/HTPG_Sample_File.xlsx $__tool_directory__/out/HTPG_Sample_File.xlsx &&
+	cp $__tool_directory__/Intertek_Order_Form.xlsx $__tool_directory__/out/Intertek_Order_Form.xlsx &&
+    	python $__tool_directory__/sample-id-generator.py --samplefile=$__tool_directory__/out/HTPG_Sample_File.xlsx --orderfile=$__tool_directory__/out/Intertek_Order_Form.xlsx --samplecount=$sampleCount &&
+	mv $__tool_directory__/out/HTPG_Sample_File.xlsx $sampleFile &&
+	mv $__tool_directory__/out/Intertek_Order_Form.xlsx $orderFile &&
+	rm -rf $__tool_directory__/out/
+    ]]></command>
+    <inputs>
+	<param name="sampleCount" type="integer" value="5" size="4" label="Sample Count"/>
+    </inputs>
+    <outputs>
+	<data name="sampleFile" format="xlsx" label="Sample File"/>
+	<data name="orderFile" format="xlsx" label="Order File" />
+    </outputs>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>

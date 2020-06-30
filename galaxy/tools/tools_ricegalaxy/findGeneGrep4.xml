@@ -1,0 +1,107 @@
+<tool id="findby.annot.genev4" name="Find-gene-by-terms" version="v.0.3.0">
+  <description> Find gene(s) using a single or list of text terms/phrases</description>
+   <command detect_errors="exit_code"><![CDATA[
+          #if str($reference.source) != "history":
+              grep $casesensitive $wordmat -s "$reference.term"  $__tool_directory__/data/'$table' > '$output2' ||true
+          #else:
+              grep $casesensitive $wordmat -s -f '$reference.terms'  $__tool_directory__/data/'$table' > '$output' ||true
+          #end if  
+
+    ]]></command>
+
+  <inputs>
+    <param name="table" type="select" help="The info is obtained from gene annotations for several rice genomes (from GFF or other info sources).">
+      <label>Which genome do you wish to search?</label>
+        <option value="fg_rgap7_canonical_loc_msu7" selected="true">O. sativa Nipponbare cDNA RGAP7 annotation</option>
+        <option value="fg_ogro_rgap7_20200521">O. sativa Nipponbare canonical genes OGRO annotation 2020-05</option>
+        <!-- <option value="fg_Cs10_20190829_cds_sort.txt">C. sativa Cs10 CDS-Protein annot (NCBI 20190829)</option>
+        <option value="fg_ann_PK-ORF_GO-via-TAIR10_detailed.txt">C. sativa Purple Kush rep transcript ORF GO (SCPS)</option>
+        <option value="fg_ann_PK-GOSlim_viaAgriGO_detailed.txt">C. sativa Purple Kush rep transcript ORF GOSlim (from AgriGO)</option>
+	-->
+    </param>
+
+   <conditional name="reference">
+	   	   <param name="source" type="select" label="Type in term(s) directly, OR use terms list from history?" help="You can either type the term(s) directly to search, or use multiple terms in a file from history. Search includes partial matches.">
+					<option value="type" selected="true">Directly type-in term/phrase </option>
+					<option value="history">Use a list of terms/phrases from the history</option>
+    		</param>
+            <when value="type">
+				<param name="term" type="text" label ="Search term " help="Directly type in your search term/phrase to find the genes (example: seed storage).">
+				</param>            
+			</when>
+            <when value="history">
+                <param name="terms" type="data" format="txt" label="Select list of terms to search (search is OR operation)" help="UPLOAD a list file with the terms to search, 1 search term per line only, NO BLANKS!" />
+            </when>
+   </conditional>
+   <param name="casesensitive" type="select" label="Case-sensitive search or not?" help="Upper/lower case distinction enforced or not?">
+			<option value="-i" selected="true">Case-insensitive </option>
+			<option value="">Case-sensitive (upper/lower case matters)</option>
+	</param>
+   <param name="wordmat" type="select" label="Whole word or partial match search?" help="Match only whole words enforced or not?">
+			<option value="" selected="true">Partial match </option>
+			<option value="-w">Whole word match only</option>
+	</param>
+
+
+  </inputs>
+
+
+  <outputs>
+     <!-- 
+	 <data format="tabular" name="output" label="Gene(s) found: ${table.value_label}" >
+               <actions>
+                    <action name="column_names" type="metadata" default="contig,start,end,strand,geneID,meta..." />
+               </actions>
+     </data> 
+	 -->
+
+
+    <data format="tabular" name="output2" label="${tool.name} : ${reference.term} in ${table.value_label} " >
+               <filter>reference['source'] == 'type' </filter>
+               <actions>
+                    <action name="column_names" type="metadata" default="contig(geneID),start(GO_ID),end(GO_namespace),strand(desc),geneID(null),meta..." />
+               </actions>
+    </data>
+    <data format="tabular" name="output" label="${tool.name} : ${on_string} in ${table.value_label} "  >
+               <filter>reference['source'] == 'history' </filter>
+               <actions>
+                    <action name="column_names" type="metadata" default="contig(geneID),start(GO_ID),end(GO_namespace),strand(desc),geneID(null),meta..." />
+               </actions>
+    </data>
+
+
+  </outputs>
+
+
+  <tests>
+  </tests>
+
+  <help>
+
+.. class:: infomark
+
+**Find-gene rice - what it does**
+
+Retrieves list of genes that match the search terms (either directly typed in, or from a list), using the annotation description for the selected rice genomes::
+
+          Nipponbare (temperate japonica)
+          Azucena (tropical japonica)
+          N22 (aus)
+          IR64 (indica)
+           ...
+
+Multiple search terms are prepared as list (1 search term per line, NO BLANKS) and uploaded to Galaxy using Get Data, see sample list below::
+
+          auxin
+          flowering
+          seed storage
+
+BLANK line(s) are treated as SEARCH ANYTHING by the tool!
+
+More genomes to come.
+
+
+
+
+   </help>
+</tool>

@@ -1,0 +1,34 @@
+<tool id="VCF_To_HapMap" name="VCF to HapMap" version="0.1.0">
+  <description>conversion by Tassel5</description>
+  <command><![CDATA[
+/opt/TASSEL5/run_pipeline.pl
+
+-Xmx5g
+
+-fork1
+
+-vcf $galaxy_vcf_file
+
+-export output
+
+-exportType Hapmap 
+
+-runfork1
+]]></command>
+  <inputs>
+    <param name="galaxy_vcf_file"
+           type="data" 
+           format="vcf"
+           label="VCF File" 
+           help="The VCF file containing the input data to be converted" />
+  </inputs>
+  <outputs>
+    <data name="galaxy_output_data"
+          type="data" 
+          format="txt"
+          label="Hapmap Output Data Converted From VCF Input Data"
+          from_work_dir="output.hmp.txt" />	
+  </outputs>
+  <help>
+  </help>
+</tool>

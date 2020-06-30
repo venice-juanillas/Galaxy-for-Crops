@@ -1,0 +1,78 @@
+<tool id="NPUTE" 
+  name="NPUTE" 
+  version="1.0">
+  <description>Numerical Imputation</description>
+  <command interpreter="python"><![CDATA[
+NPUTE.py 
+
+#if $run.run_type == "1": 
+  -m 1 -r $run.range_start:$run.range_end -i $run.input_file -o $npute_out
+#end if
+
+#if $run.run_type == "0":
+  -m 0 -w $run.window_size -i $run.input_file -o $npute_out
+#end if
+
+]]></command>
+  <inputs>
+    <conditional name="run">
+      <param name="run_type" type="select" label="Select the process to run. (recommended to test for window size and run imputation)">
+        <option value="1">Test</option>
+        <option value="0" selected="true">Impute</option>
+      </param>
+      <when value="1">
+        <param name="range_start" type="integer" value="5" lable="Window size range start" />
+        <param name="range_end" type="integer" value="30" lable="Window size range end"/>
+        <param name="input_file" type="data" format="csv" lable="Input genotype matrix" help="The CSV file converted from IUPAC hapmap using the tool makeNPUTEinput. "/>
+      </when>
+      <when value="0">
+        <param name="window_size" type="integer" value="12" lable="A positive integer for the window size" />
+        <param name="input_file" type="data" format="csv" lable="Input genotype matrix" help="The CSV file converted from IUPAC hapmap using the tool makeNPUTEinput. "/>
+      </when>
+      </conditional>
+  </inputs>
+  <outputs>
+    <data name="npute_out" label="NPUTE_imputed_output.csv" format="csv" />
+  </outputs>
+  <stdio>
+    <exit_code range="2"   level="fatal"   description="Out of Memory" />
+    <exit_code range="3:5" level="warning" description="Low disk space" />
+    <exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+  </stdio>
+  <help>
+
+.. class:: infomark
+
+We recommend that you use NPUTE by first testing a large range of windows and using that with the highest estimated accuracy to do the actual imputation.  In this tutorial, we will guide you through the process of imputing the included sample data (sample_data.csv).
+
+
+**Testing** ::
+
+  python NPUTE.py -m 1 -r 5:30 -i sample_data.csv -o out.csv
+
+ 
+After 5-15 minutes, the process will be completed and the output will be stored in out.csv. Please use the window size which has highest estimated accuracy in the next step (Imputation).
+
+----
+
+**Imputation** :: 
+
+  python NPUTE.py -m 0 -w 12 -i sample_data.csv -o imputed_data_w12.csv
+
+The unknowns will be imputed and all of the data will be written to imputed_data_w12.csv with imputed values in lower case.
+
+----
+
+**CONTACT** ::
+
+  If you have any questions or comments, please feel free to conact us at ajr@unc.edu or mcmillan@cs.unc.edu.
+
+.. class:: infomark
+
+This tool was wrapped for galaxy under the EiD exercise
+
+  </help>
+  <citations>
+    <citations type="doi">10.1093/bioinformatics/btm220</citations>
+  </citations>  
+</tool>

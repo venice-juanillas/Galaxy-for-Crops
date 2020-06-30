@@ -1,0 +1,55 @@
+<tool id="purity_beta" name="Purity (beta)" version="0.1.0">
+  <description>supports VCF file format</description>
+  <command><![CDATA[
+    #set id = $output.dataset_id
+	mkdir $__tool_directory__/tmp$id &&
+    cp $input $__tool_directory__/tmp$id/input.vcf &&
+	java -jar $__tool_directory__/purity_180206.jar $markers $population $threshold $__tool_directory__/tmp$id/input.vcf $__tool_directory__/tmp$id/output &&
+    cp $__tool_directory__/tmp$id/output.hmp.txt $output_hapmap &&
+	cp $__tool_directory__/tmp$id/output $output &&
+	rm -rf $__tool_directory__/tmp$id
+  ]]></command>
+
+  <inputs>
+    <param format="vcf" name="input" type="data" label="Source file"/>
+    <param name="markers" type="integer" label="No. of markers to select" value="10"/>
+    <param name="population" type="integer" label="Number of solutions to consider" value="100"/>
+    <param name="threshold" type="float" label="Distance cut-off bet. duplicated genotype (0 = exact match)" value="0.05" />
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" />
+    <data format="tabular" name="output_hapmap" />
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="input" value="test.hmp.txt"/>
+      <param name="markers" value="10"/>
+      <param name="population" value="100"/>
+      <param name="threshold" value="0.05"/>
+      <output name="output" file="test.out.txt">
+            <assert_contents>
+                   <has_line line="Site&#009;Name&#009;Chromosome&#009;Position&#009;VARIANT" />
+            </assert_contents>
+      </output>
+      <output name="output_hapmap" file="test.out.hmp.txt">
+            <assert_contents>
+                   <has_text_matching expression="^rs" />
+            </assert_contents>
+      </output>
+    </test>
+  </tests>
+
+  <stdio>
+    <regex match="log4j:WARN"
+           source="stderr"
+           level="warning"
+           description="Logging error"/>
+  </stdio>
+
+
+  <help>
+Select a subset of informative markers from a HapMap file.
+  </help>
+
+</tool>

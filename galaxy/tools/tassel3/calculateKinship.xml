@@ -1,0 +1,16 @@
+<tool id="tassel-compute-kinship" name="Compute Kinship" version="1.0.0">
+	<command interpreter="perl">
+		run_pipeline_kinship.pl -fork1 -flapjack -geno $flapjackGeno -map $flapjackMap -filterAlign -filterAlignMinFreq 0.05 -ck -export $output -runfork1
+	</command>
+	<inputs>
+		<param name="flapjackGeno" type="data" format="tabular" label="Genotype file"/>
+		<param name="flapjackMap" type="data" format="tabular" label="Map file"/>
+	</inputs>
+	
+	<outputs>
+		<data name="output" label="Kinship Matrix of ${flapjackGeno.name}">
+			<discover_datasets pattern="(?P&lt;designation&gt;.+)\.dat.txt" ext="txt" visible="true"/>
+		</data>
+	</outputs>
+
+</tool>

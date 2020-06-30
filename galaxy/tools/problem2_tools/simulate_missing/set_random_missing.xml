@@ -1,0 +1,32 @@
+<tool id="set_random_missing_calls" name="Change calls to missing" version="1.0.0">
+	<description>calls with a given rate.</description>
+  <command interpreter="bash"><![CDATA[
+  set_random_missing.sh  $infile $missRate $outGzFile
+
+	]]></command>
+	<inputs>
+		<param name="infile" 
+			type="data"
+			format="vcf"
+			label="Input VCF file"
+		        help="(required) The VCF genotype file"/>
+  <param name="missRate"
+				 type="float"
+				 value="0.3"
+				 label="Missing call probability"
+				 help="(required, numeric) The probability to replace a call by a missing call." />
+	</inputs>
+	<outputs>
+	  <data name="outGzFile" format="vcf"
+		label="VCF with simulated missing"
+		/>
+	</outputs>
+	<help>
+	**Description**
+        The tool will go through each call in the VCF file and replace it to missing with a given probability.
+
+	**Usage**
+	Provide name of file, probability of missing call
+	</help>
+</tool>
+

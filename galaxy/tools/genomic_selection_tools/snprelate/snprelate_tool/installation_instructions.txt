@@ -1,0 +1,7 @@
+Open a R session as root and execute the four following R command lines to get the new Galaxy tool working fine:
+
+if (!requireNamespace("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install()
+BiocManager::install("gdsfmt")
+BiocManager::install("SNPRelate")

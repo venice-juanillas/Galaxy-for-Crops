@@ -1,0 +1,33 @@
+<tool id="bglr:validate" name="Validate" version="1.0.016">
+	<description>genotype and phenotype files</description>
+	<command interpreter="perl">
+		bglr_validate.pl $genoEncodedFile $phenoFile $namesCol $traitsCol $output1 $output2 $output3 $output4 $output5 $output6 
+	</command>
+  
+	<inputs>
+		<param name="genoEncodedFile" type="data" format="csv" label="Genotype data file" help="Genotype data file must be a .csv and has been encoded. Tip: Use Encode." />
+		<param name="phenoFile" type="data" format="csv" label="Phenotype data file" help="Phenotype data file must be a .csv" />
+		<param name="namesCol" type="text" size="10" value="1" label="Column number of Line names in Phenotype File" help="(integer)" />
+		<param name="traitsCol" type="text" size="10" value="2" label="Column number of Response in Phenotype File" help="(integer)" />
+	</inputs>
+
+	<outputs>
+		<data name="output1" format="csv" label="Training: Phenotype file for lines with genotypes"/>
+		<data name="output2" format="csv" label="Training (specific to BGLR): Phenotype file of lines with or without genotypes included. "/>
+		<data name="output3" format="csv" label="Prediction: Phenotype file for lines with or without genotypes."/>
+		<data name="output4" format="csv" label="Training: Genotype Data for lines with phenotypes"/>
+		<data name="output5" format="csv" label="Training (specific to BGLR): Genotype data for lines with or without phenotyoes included."/>
+		<data name="output6" format="csv" label="Prediction: Genotype data for lines without phenotypes."/>
+	</outputs>
+
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+	
+	<help>
+	</help>
+
+</tool>
+

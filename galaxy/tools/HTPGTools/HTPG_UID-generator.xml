@@ -1,0 +1,85 @@
+<tool id="Intertek-OrderForm_HTPG-SampleFile_Generator" 
+      name=" Intertek Order form and HTPG Sample File generator" 
+      version="1.0.0">
+    <description>This scripts generates an Intertek Order form and HTPG Sample file both with assigned Unique IDs</description>	
+
+       <stdio>
+                <exit_code range="2"   level="fatal"   description="Out of Memory" />
+                <exit_code range="3:5" level="warning" description="Low disk space" />
+                <exit_code range="6:"  level="fatal"   description="Wrong input dataset" />
+        </stdio>
+
+        <command interpreter="python"><![CDATA[
+                ./sample-id-generator.py --samplecount=$number_of_samples $HTPG_sample_file $intertek_order_form
+                ]]>
+        </command>
+
+        <inputs>
+                <param name="number_of_samples" type="text" label="Number of Samples" help="Insert Number of Samples" />
+        </inputs>
+
+        <outputs>
+				<data name="HTPG_sample_file" format="xlsx" label="HTPG_Sample_File.xlsx" />
+				<data name="intertek_order_form" format="xlsx" label="Intertek_Order_Form.xlsx" />
+        </outputs>
+		
+		<tests>
+			<test>
+				<param name="samplefile" value="HTPG_sample_file.xlsx" />
+				<param name="orderfile" value="order-file.xlsx" />
+				<param name="number_of_samples" value="100" />
+				<output name= "HTPG_sample_file" file="HTPG_sample_File.xlsx" />
+				<output name= "intertek_order_form" file="Intertek_Order_Form.xlsx" /> 
+						
+			</test>
+		</tests>
+
+    <help><![CDATA[
+        
+This script generates unique IDs for indicated number of samples, and adds them to the HTPG Sample (metadata) template file and the Sample list in the Intertek Order form
+
+Quick usage: python sample-id-generator.py --samplefile=/path/to/samplefile.xlsx --orderfile=/path/to/orderfile.xlsx --samplecount=50
+
+Full usage: sample-id-generator.py [-h] [--samplefile SAMPLEFILE]
+                              [--orderfile ORDERFILE]
+                              [--samplecount SAMPLECOUNT]
+                              [--sampleidchars SAMPLEIDCHARS] [--debug DEBUG]
+                              [--samplefile_sampleid_start_cell SAMPLEFILE_SAMPLEID_START_CELL]
+                              [--samplefile_sampleid_worksheet SAMPLEFILE_SAMPLEID_WORKSHEET]
+                              [--orderfile_sampleid_start_cell ORDERFILE_SAMPLEID_START_CELL]
+                              [--orderfile_sampleid_worksheet ORDERFILE_SAMPLEID_WORKSHEET
+
+Optional arguments:
+  -h, --help            show this help message and exit
+  --samplefile SAMPLEFILE
+                        path to sample file
+  --orderfile ORDERFILE
+                        path to order file
+  --samplecount SAMPLECOUNT
+                        number of sample IDs to generate
+  --sampleidchars SAMPLEIDCHARS
+                        Number/length of sampleID characters
+  --debug DEBUG         Enable/Disable Debug
+  --samplefile_sampleid_start_cell SAMPLEFILE_SAMPLEID_START_CELL
+                        Samplefile SampleID start cell
+  --samplefile_sampleid_worksheet SAMPLEFILE_SAMPLEID_WORKSHEET
+                        Samplefile SampleID worksheet name
+  --orderfile_sampleid_start_cell ORDERFILE_SAMPLEID_START_CELL
+                        Orderfile SampleID start cell
+  --orderfile_sampleid_worksheet ORDERFILE_SAMPLEID_WORKSHEET
+                        Orderfile SampleID worksheet name
+    ]]></help>
+
+ <citations>
+        <citation type="bibtex">
+@misc{githubgithub.com,
+  author = {LastTODO, FirstTODO},
+  year = {TODO},
+  title = {github.com},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com},
+}</citation>
+    </citations>
+
+</tool>

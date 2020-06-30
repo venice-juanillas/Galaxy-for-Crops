@@ -1,0 +1,64 @@
+<tool id="get-cont-name" name="Get-contig-names" version="v.01">
+  <description> Extract contig or scaffold or chromosome names from rice genomes (draft and reference)</description>
+   <command interpreter = "perl"><![CDATA[
+	#if str($reference.source) != "indexed":
+                mkdir index_dir &&
+                ln -s  $reference.own_file index_dir/genome.fa &&
+                /usr/bin/samtools faidx index_dir/genome.fa && 
+		getContigName.pl index_dir/genome.fa $output &&
+		set reference_name='$reference.own_file.value_label' &&
+		rm -rf index_dir
+	#else:
+		getContigName.pl '$reference.index.fields.path' $output &&
+		set reference_name='$reference.index.fields.name'
+	#end if
+   ]]>
+   </command>
+
+  <inputs>
+	<conditional name="reference">
+        	<param name="source" type="select" label="Will you select a reference genome from your history or use a built-in index?" help="Built-ins were indexed using default options.">
+                	<option value="indexed">Use a built-in genome index</option>
+                        <option value="history">Use a genome from the history and build index</option>
+                </param>
+                <when value="indexed">
+                        <param name="index" type="select" label="Select reference genome" help="If your genome of interest is not listed, contact the Galaxy team">
+                                <options from_data_table="all_fasta">
+                                        <filter type="sort_by" column="2"/>
+                                        <validator type="no_options" message="No indexes are available for the selected input dataset"/>
+                                </options>
+                        </param>
+                </when>
+                <when value="history">
+                        <param name="own_file" type="data" format="fasta" label="Select reference genome" />
+                </when>
+        </conditional>
+
+  </inputs>
+ 
+
+  <outputs>
+    <data format="tabular" name="output" label="Scaffold names" />
+  </outputs>
+
+
+  <tests>
+  </tests>
+
+  <help>
+
+.. class:: infomark 
+
+**Get-contig-names - what it does**
+
+This tool extracts the names of all contigs/scaffolds/chromosomes in the multi-FASTA published ref and draft genomes (Nipponbare 1.0 japonica reference, MSU6 Nipponbare, DJ123 - aus, IR64 - indica: Schatz et al, 2014 and Kasalath - aus: Sakai et al 2014). 
+
+The scaffold / chromosome name spelling is important. This tool makes sure you get the correct contig names in your genome of choice.
+
+Grep_ was used to extract contig names from the genome FASTA file...
+
+.. _Grep: http://www.gnu.org/savannah-checkouts/gnu/grep/manual/grep.html
+
+    
+   </help>
+</tool>

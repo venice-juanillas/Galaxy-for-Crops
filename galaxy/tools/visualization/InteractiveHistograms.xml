@@ -1,0 +1,21 @@
+<tool id="highcharts_histogram" name="Highcharts Bar Charts" version="1.0.0">
+  <description> displays values from columns of a tabular file</description>
+  <command interpreter="bash">
+./InteractiveHistograms.sh $galaxy_tabular_file $out $column_id
+</command>
+  <inputs>
+    <param name="galaxy_tabular_file" type="data" format="tab,csv,tabular" label="Tabular or CSV file" help="Must be tabular or CSV" />
+    <param name="column_id" type="data_column" data_ref="galaxy_tabular_file" use_header_names="true" label="Which column to be used for naming the columns." help="Displayed when the user hovers over a column" value="1" />
+  </inputs>
+  <outputs>
+    <data name="out" format="html" label="Interactive Bar Chart" />
+  </outputs> 
+  <help>
+**What it does**
+
+This tool draws Highcharts-based interactive barcharts using user-defined columns.
+https://www.highcharts.com/
+
+
+  </help>
+</tool>

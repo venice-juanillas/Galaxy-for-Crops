@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# vlan-network-interface - configure a network bridge
+#
+# This service checks whether a physical network device that has been added
+# has VLAN defined in /etc/network/interfaces that should be brought up
+set -e
+
+if [ -z "$INTERFACE" ]; then
+    echo "missing \$INTERFACE" >&2
+    exit 1
+fi
+
+if ! which ifquery >/dev/null; then
+    exit 0
+fi
+
+if [ ! -x /etc/network/if-pre-up.d/vlan ]; then
+    exit 0
+fi
+
+mkdir -p /run/network
+for IFACE in $(ifquery --list --allow auto); do
+    IF_VLAN_RAW_DEVICE=$(ifquery $IFACE | sed -n -e's/^vlan[_-]raw[_-]device: //p')
+
+    # Now that the environment is ready, call the pre-up script to create the vlan
+    export IFACE IF_VLAN_RAW_DEVICE
+
+    # Create the VLANs related to the interface
+    if [ "$IF_VLAN_RAW_DEVICE" = "$INTERFACE" ] || \
+        echo $IFACE | grep -q $INTERFACE; then
+            /etc/network/if-pre-up.d/vlan
+    fi
+done

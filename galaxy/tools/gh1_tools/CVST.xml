@@ -1,0 +1,33 @@
+<tool id="CVST" name="C V S T" version="1.0">
+  <description>CVST</description>
+  <command interpreter="Rscript --vanilla">CVST.R
+       #if str($EXFILE).strip() != "":
+          --EXFILE="$EXFILE"
+       #end if
+       #if str($OutCV).strip() != "":
+          --OutCV="$OutCV"
+       #end if
+       #if str($OutPlot).strip() != "":
+          --OutPlot="$OutPlot"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="EXFILE" format="csv" type="data" help="The input is an CSV format file with two columns, observed&#10;and predicted value in this order.&#10;&#10;OutCV:" label="[required] E X F I L E">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="csv" name="OutCV" label="CVSt.csv"/>
+    <data format="pdf" name="OutPlot" label="Plot.pdf"/>
+  </outputs>
+  <help>
+**Description**
+
+Given a set of observed and predicted values the function
+calculates some statistics to compare predicted and observed
+values.
+</help>
+</tool>

@@ -1,0 +1,11 @@
+marker_name	dnarunname_Deb_FQ_codom_10	dnarunname_Deb_FQ_codom_9	dnarunname_Deb_FQ_codom_8	dnarunname_Deb_FQ_codom_7	dnarunname_Deb_FQ_codom_6	dnarunname_Deb_FQ_codom_5	dnarunname_Deb_FQ_codom_4	dnarunname_Deb_FQ_codom_3	dnarunname_Deb_FQ_codom_2	dnarunname_Deb_FQ_codom_1
+Deb_FQ_codom_m1	N	1	0	0	0	0	0	0	0	0
+Deb_FQ_codom_m2	2	2	2	2	2	2	2	2	2	2
+Deb_FQ_codom_m3	2	2	2	2	2	2	2	2	2	2
+Deb_FQ_codom_m4	N	1	2	2	2	2	N	2	2	2
+Deb_FQ_codom_m5	2	1	2	N	2	0	N	2	2	2
+Deb_FQ_codom_m6	2	1	2	2	2	2	N	2	0	2
+Deb_FQ_codom_m7	2	1	2	2	2	2	N	2	2	2
+Deb_FQ_codom_m8	0	1	0	0	0	0	0	0	0	0
+Deb_FQ_codom_m9	0	1	0	0	0	2	2	0	2	0
+Deb_FQ_codom_m10	0	2	0	0	0	0	0	0	0	2

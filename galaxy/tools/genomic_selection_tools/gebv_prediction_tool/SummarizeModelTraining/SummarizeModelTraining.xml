@@ -1,0 +1,54 @@
+<tool id="SummarizeModelTraining" name="Merge multiple GEBV results" version="1.0">
+  <description></description>
+  <command interpreter="perl "><![CDATA[
+$__tool_directory__/SummarizeModelTraining.pl
+--correlations 
+#set $booklist = str("")
+#for $b in $correlations:
+  #set $booklist += str($b) + ','
+#end for
+$booklist
+--type $type
+--out $output
+>>$logfile 2>&1
+]]></command>
+  <inputs>
+    <param name="correlations" type="data_collection" label= "Collection of output files provided by GEBV"/>
+    <param name="type" type="select" multiple="false" label="Type of results to summarize">
+                        <option value="correlations" selected="true">K-fold Correlations</option>
+                        <option value="predictions">Predictions</option>
+     </param>
+  </inputs>
+  <outputs>
+    <data name="output" format="tabular" label="Summary" />
+    <data name="logfile" format="txt" label="Logfile" />
+  </outputs>
+<help>
+.. class:: infomark
+
+**Merge GEBV results**
+
+.. class:: infomark
+
+**Provided by EiB platform and GOBii**
+
+.. class:: infomark
+
+**Authors** Alexis Dereeper
+
+.. class:: infomark
+
+**Galaxy Integration contributors**  Alexis Dereeper
+
+.. class:: infomark
+
+**Support** For any questions about this tool, please send an e-mail to alexis.dereeper@ird.fr
+
+-----
+
+**What it does**
+
+This tool merges in a single file the data contained in a collection of outputs obtained from GEBV calculator (can be either for GEBV prediction or for K-fold model training)
+
+  </help>
+</tool>

@@ -1,0 +1,55 @@
+<tool id="SplitDatasetsByGrouping" name="Split datasets by grouping factor" version="1.0">
+  <description></description>
+  <command interpreter="perl "><![CDATA[
+$__tool_directory__/SplitDatasetsByGroupingFactor.pl
+--matrix $input
+--pheno $galaxy_phenotypes_file
+>>$logfile 2>&1
+]]></command>
+  <inputs>
+    <param name="galaxy_phenotypes_file" 
+           type="data" 
+           format="tabular" 
+           label="Input Phenotype File" 
+           help="(required) The file containing phenotypes and sample names (phenoypes for samples to be predicted should be entered as NA)" />
+    <param name="input" type="data" format="tabular" label="Genotyping file in hapmap format with numerical values" />
+    <!--<param name"grouping" type="data" format="tabular" label="Grouping file" />-->
+  </inputs>
+  <outputs>
+    <collection type="list" name="phenotypeFiles" label="collection of phenotypes">
+                <discover_datasets pattern="(?P&lt;designation&gt;.+)\.pheno\.txt" ext="tabular"/>
+    </collection>
+    <collection type="list" name="genotypeFiles" label="collection of genotypes">
+                <discover_datasets pattern="(?P&lt;designation&gt;.+)\.geno\.txt" ext="tabular"/>
+    </collection>
+    <data name="logfile" format="txt" label="Logfile" />
+  </outputs>
+  <help>
+.. class:: infomark
+
+**Split datasets by grouping**
+
+.. class:: infomark
+
+**Provided by EiB platform and GOBii**
+
+.. class:: infomark
+
+**Authors** Alexis Dereeper
+
+.. class:: infomark
+
+**Galaxy Integration contributors**  Alexis Dereeper
+
+.. class:: infomark
+
+**Support** For any questions about this tool, please send an e-mail to alexis.dereeper@ird.fr
+
+-----
+
+**What it does**
+
+This tool splits outputs from Sample matching by grouping factor values. It generates 2 collections of datasets (phenotypes and genotypes) to be computed separately by GEBV.
+
+  </help>
+</tool>

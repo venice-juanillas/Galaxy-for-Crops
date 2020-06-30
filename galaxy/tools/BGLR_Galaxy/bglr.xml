@@ -1,0 +1,284 @@
+<tool id="Bayessian_Generalized_Linear_Regression" name="Bayesian Generalized Linear Regression" version="1.0.5">
+  <description>calculator</description>
+  <command interpreter="Rscript --vanilla"><![CDATA[
+bglr_wrapper.R 
+
+--csv_file '$galaxy_csv_file'
+
+--name_vector_column '$galaxy_name_vector_column'
+
+--data_vector_column '$galaxy_data_vector_column'
+
+#set eta = ','.join( [ str( ','.join( [ str($item.input), str($item.model) ] ) ) for $index, $item in enumerate( $galaxy_repeat_eta ) ] )
+--eta "${eta}"
+
+--response_type '$galaxy_response_type_conditional.galaxy_response_type'
+
+#if str($galaxy_lower_bound_vector_column) == "":
+  --lower_bound_vector_column NULL 
+#else:
+  --lower_bound_vector_column '$galaxy_lower_bound_vector_column'
+#end if
+
+#if str($galaxy_upper_bound_vector_column) == "":
+  --upper_bound_vector_column NULL 
+#else:
+  --upper_bound_vector_column '$galaxy_upper_bound_vector_column' 
+#end if
+
+#if str($galaxy_weights_vector_column) == "":
+  --weights_vector_column NULL 
+#else:
+  --weights_vector_column '$galaxy_weights_vector_column' 
+#end if
+
+--number_of_iterations '$galaxy_number_of_iterations' 
+
+--burnin '$galaxy_burnin' 
+
+--thinning '$galaxy_thinning' 
+
+--saveat "$galaxy_saveat" 
+
+#if $galaxy_s0 == "":
+  --s0 NULL 
+#else:
+  --s0 '$galaxy_s0' 
+#end if
+
+--df0 '$galaxy_df0' 
+
+--r2 '$galaxy_r2' 
+
+--verbose '$galaxy_verbose' 
+
+--rmexistingfiles '$galaxy_rmexistingfiles' 
+
+#if str($galaxy_groups_vector_column) == "":
+  --groups_vector_column NULL 
+#else:
+  --groups_vector_column '$galaxy_groups_vector_column'
+#end if
+
+#if $galaxy_cross_validation.do_randomization == "k-fold":
+   --nrandom '$galaxy_cross_validation.n_randomizations'
+   --kfold $galaxy_cross_validation.kfold
+   --p_out NULL	
+#else if $galaxy_cross_validation.do_randomization == "leave-p-out":
+   --nrandom '$galaxy_cross_validation.n_randomizations'
+   --p_out '$galaxy_cross_validation.p_out'
+   --kfold NULL
+#else:
+   --p_out NULL
+   --nrandom NULL
+   --kfold NULL
+#end if
+
+--png_file_path $galaxy_png
+
+--pdf_file_path $galaxy_pdf
+
+--csv_file_path $galaxy_csv
+
+]]></command>
+  <inputs>
+    <param name="galaxy_csv_file" 
+           type="data" 
+           format="csv" 
+           label="Input Phenotype File" 
+           help="(required) The CSV file containing phenotypes and sample names (phenoypes for samples to be predicted should be entered as NA)" />
+   <param name="galaxy_name_vector_column"
+           type="integer" 
+           value="1" 
+           label="Column Containing Sample Names" 
+           help="(required, integer) The column in the input file containing line names (NAs allowed)" />
+    <param name="galaxy_data_vector_column" 
+           type="integer" 
+           value="2" 
+           label="Column Containing Phenotype" 
+           help="(required, integer) The data-vector (NAs allowed)" />
+    <repeat name="galaxy_repeat_eta" title="Incidence Matrix and Model" >
+      <param name="input" 
+             type="data" 
+             format="csv" 
+             label="Matrix File" />
+      <param name="model" 
+             type="select" 
+             label="Model">
+        <option value="FIXED">Fixed</option>
+        <option value="BRR">Bayesian Ridge Regression</option>
+        <option value="BayesA">BayesA</option>
+        <option value="BayesB">BayesB</option>
+        <option value="BayesC">BayesC</option>
+        <option value="BL">Bayesian Lasso</option>
+        <option value="RKHS">RKHS</option>
+      </param>
+    </repeat>
+<!--  <conditional name="advanced_parameters">
+	<param name="adv_param" type="select" label="Advance Parameters">
+		<option value="hide" selected="true"> Hide</option>
+		<option value="show"> Show</option>
+	</param>
+	<when value="hide"/>
+	<when value="show">-->
+	    <conditional nmeame="galaxy_response_type_conditional">
+	      <param name="galaxy_response_type" 
+		     type="select" 
+		     multiple="false" 
+		     label="Response Type" 
+		     help="(required, string) Admits values gaussian or ordinal">
+		<option value="gaussian" 
+		        selected="true">gaussian</option>
+		<option value="ordinal">ordinal</option>
+	      </param>
+    	    </conditional>
+	    <param name="galaxy_lower_bound_vector_column" 
+		   type="integer" 
+		   label="Lower Bound Vector (a) Column" 
+		   help="(default to NULL, integer) Only required for censored outcomes" 
+		   optional="true" />
+	    <param name="galaxy_upper_bound_vector_column" 
+		   type="integer" 
+		   label="Upper Bound Vector (b) Column" 
+		   help="(default to NULL, integer) Only required for censored outcomes" 
+		   optional="true" />
+	    <param name="galaxy_weights_vector_column" 
+		   type="integer" 
+		   label="Weights Vector Column" 
+		   help="(default to NULL, integer) A vector of weights" 
+		   optional="true" />
+	    <param name="galaxy_number_of_iterations" 
+		   type="integer" 
+		   value="1500" 
+		   label="Number of Iterations" 
+		   help="(required, integer)" />
+	    <param name="galaxy_burnin" 
+		   type="integer" 
+		   value="500" 
+		   label="Burn-In" 
+		   help="(required, integer)" />
+	    <param name="galaxy_thinning" 
+		   type="integer" 
+		   value="5" 
+		   label="Thinning" 
+		   help="(required, integer)" />
+	    <param name="galaxy_saveat" 
+		   type="text" 
+		   value="" 
+		   label="SaveAt" 
+		   help="(optional, string) This may include a path and a pre-fix that will be added to the name of the files that are saved as the program runs" />
+	    <param name="galaxy_s0" 
+		   type="text" 
+		   value="" 
+		   label="S0" 
+		   help="(optional, numeric) The scale parameter for the scaled inverse-chi squared prior assigned to the residual variance, only used with Gaussian outcomes" />
+	    <param name="galaxy_df0" 
+		   type="float" 
+		   value="5.0" 
+		   label="df0" 
+		   help="(required, numeric) The default value" />
+	    <param name="galaxy_r2" 
+		   type="float" 
+		   value="0.5" 
+		   min="0.0001" 
+		   max="0.9999" 
+		   label="R2" 
+		   help="(required, numeric, R2 between 0 and 1, not inclusive) The proportion of variance that one expects, a priori, to be explained by the regression" />
+	    <param name="galaxy_verbose" 
+		   type="boolean" 
+		   checked="true" 
+		   truevalue="TRUE" 
+		   falsevalue="FALSE" 
+		   label="Verbose" 
+		   help="(required, logical) If TRUE the iteration history is printed" />
+	    <param name="galaxy_rmexistingfiles" 
+		   type="boolean" 
+		   checked="true" 
+		   truevalue="TRUE" 
+		   falsevalue="FALSE" 
+		   label="Rm Existing Files" 
+		   help="(required, logical) If TRUE removes existing output files from previous runs" />
+	    <param name="galaxy_groups_vector_column" 
+		   type="integer" 
+		   label="Groups Vector Column" 
+		   help="(default to NULL, integer) A vector of the same length of y that associates observations with groups. Only used with Gaussian outcomes" 
+		   optional="true" />
+        
+ <!--       </when>
+    </conditional> -->
+
+    <conditional name="galaxy_cross_validation">
+	    <param name="do_randomization" 
+		   type="select" 
+		   label="Cross Validation" 
+		   help="(Default: No cross validation) A string that specifies what Cross Validation method to use." >
+			<option value="no_cross_validation"> No Cross Validation</option>
+			<option value="k-fold"> K Fold Cross Validation</option>
+			<option value="leave-p-out"> Leave-p-out (LPO)</option>
+	    </param>
+	    <when value="k-fold">
+		<param name="kfold" 
+		type="text" 
+		size="10" 
+		value="5" 
+		label="Specify number of folds to use for cross validation." 
+		help="(Default: 5) An integer that specifies the number of split to make on the dataset" />
+
+		<param name="n_randomizations" 
+		type="text" 
+		size="10" 
+		value="10" 
+		label="Specify number of randomization." 
+		help="(Default: 10) An integer that species how many times N will be randomized" />
+	    </when>		    
+	    <when value="leave-p-out">
+		<param name="p_out" 
+		type="text" 
+		size="10" 
+		value="1" 
+		label="Specify p." 
+		help="(Default: 1) An integer that specifies how many samples (p) to remove from the complete set, where p > 1.  If p=1, then method is Leave-One-Out (LOO)." />
+
+		<param name="n_randomizations"
+                type="text"
+                size="10"
+                value="1"
+                label="Specify number of randomization."
+                help="(Default: 1) An integer that species how many times N will be randomized" />
+	    </when>
+    </conditional>
+  </inputs>
+  <outputs>
+    <data name="galaxy_png" 
+          format="png" />
+    <data name="galaxy_pdf" 
+          format="pdf" />
+    <data name="galaxy_csv"
+    	  format="csv" />	
+  </outputs>
+  <help>
+**Description**
+
+The BGLR (‘Bayesian Generalized Linear Regression’) function fits various types of parametric and semi-parametric Bayesian regressions to continuos (censored or not), binary and ordinal outcomes.
+
+**Usage**
+
+BGLR(y, response_type = "gaussian", a = NULL, b = NULL, ETA = NULL, weights = NULL, nIter = 1500, burnIn = 500, thin = 5, saveAt = "", S0 = NULL, df0 = 5, R2 = 0.5, verbose = TRUE, rmExistingFiles = TRUE, groups = NULL)
+
+**Arguments**
+
+- y (numeric, n) the data-vector (NAs allowed)
+- response_type (string) admits values "gaussian" or "ordinal". The Gaussian outcome may be censored or not (see below). If response_type="gaussian", y should be coercible to numeric. If response_type="ordinal", y should be coercible to character, and the order of the outcomes is determined based on the alphanumeric order (0,1,2,..,a,b..). For ordinal traits the probit link is used
+- a,b (numeric, n) only requiered for censored outcomes, a and b are vectors specifying lower and upper bounds for censored observations, respectively. The default value, for non-censored and ordinal outcomes, is NULL
+- ETA (list) This is a two-level list used to specify the regression function (or linear predictor). By default the linear predictor (the conditional expectation function in case of Gaussian outcomes) includes only an intercept. Regression on covariates and other types of random effects are specified in this two-level list. For instance: ETA=list(list(X=W, model="FIXED"), list(X=Z,model="BL"), list(K=G,model="RKHS")), specifies that the linear predictor should include: an intercept (included by default) plus a linear regression on W with regression coefficients treated as fixed effects (i.e., flat prior), plus regression on Z, with regression coefficients modeled as in the Bayesian Lasso of Park and Casella (2008) plus and a random effect with co-variance structure G. For linear regressions the following options are implemented: FIXED (Flat prior), BRR (Gaussian prior), BayesA (scaled-t prior), BL (Double-Exponential prior), BayesB (two component mixture prior with a point of mass at zero and a sclaed-t slab), BayesC (two component mixture prior with a point of mass at zero and a Gaussian slab). In linear regressions X can be the incidence matrix for effects or a formula (e.g. ~factor(sex) + age) in which case the incidence matrix is created internally using the model.matrix function of R. For Gaussian processes (RKHS) a co-variance matrix (K) must be provided. Further details about the models implemented in BGLR see the vignettes in the package or http://genomics.cimmyt.org/BGLR-extdoc.pdf
+- weights (numeric, n) a vector of weights, may be NULL. If weights is not NULL, the residual variance of each data-point is set to be proportional to the inverse of the squared-weight. Only used with Gaussian outcomes
+- nIter, burnIn, thin (integer) the number of iterations, burn-in, and thinning
+- saveAt (string) this may include a path and a pre-fix that will be added to the name of the files that are saved as the program runs
+- S0, df0 (numeric) The scale parameter for the scaled inverse-chi squared prior assigned to the residual variance, only used with Gaussian outcomes. In the parameterization of the scaled-inverse chi square in BGLR the expected values is S0/(df0-2). The default value for the df parameter is 5. If the scale is not specified a value is calculated so that the prior mode of the residual variance equals var(y)*R2 (see below). For further details see the vignettes in the package or http://genomics.cimmyt.org/BGLR-extdoc.pdf
+- R2 (numeric, R2 between 0 and 1, not inclusive) The proportion of variance that one expects, a priori, to be explained by the regression. Only used if the hyper-parameters are not specified; if that is the case, internaly, hyper-paramters are set so that the prior modes are consistent with the variance partition specified by R2 and the prior distribution is relatively flat at the mode. For further details see the vignettes in the package or http://genomics.cimmyt.org/BGLR-extdoc.pdf
+- verbose (logical) if TRUE the iteration history is printed, default TRUE
+- rmExistingFiles (logical) if TRUE removes existing output files from previous runs, default TRUE
+- groups (factor) a vector of the same length of y that associates observations with groups, each group will have an associated variance component for the error term
+
+  </help>
+</tool>

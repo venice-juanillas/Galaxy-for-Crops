@@ -1,0 +1,68 @@
+<tool id="HTPG_uid_generator" 
+      name=" Get Intertek Order form and HTPG Sample File " 
+      version="1.0.0">
+
+    <stdio>
+                <exit_code range="2"   level="fatal"   description="Out of Memory" />
+                <exit_code range="3:5" level="warning" description="Low disk space" />
+                <exit_code range="6:"  level="fatal"   description="Wrong input dataset" />
+    </stdio>
+
+    <command detect_errors="exit_code"><![CDATA[
+	mkdir -p $__tool_directory__/out/ &&
+	cp $__tool_directory__/HTPG_Sample_File.xlsx $__tool_directory__/out/HTPG_Sample_File.xlsx &&
+	cp $__tool_directory__/Intertek_Order_Form.xlsx $__tool_directory__/out/Intertek_Order_Form.xlsx &&
+    	python $__tool_directory__/sample-id-generator.py --samplefile=$__tool_directory__/out/HTPG_Sample_File.xlsx --orderfile=$__tool_directory__/out/Intertek_Order_Form.xlsx --samplecount=$sampleCount &&
+	mv $__tool_directory__/out/HTPG_Sample_File.xlsx $sampleFile &&
+	mv $__tool_directory__/out/Intertek_Order_Form.xlsx $orderFile &&
+	rm -rf $__tool_directory__/out/
+    ]]></command>
+   
+    <inputs>
+	<param name="sampleCount" type="integer" value="5" size="4" label="Sample Count" help="Number of Genotyping Samples"/>
+    </inputs>
+   
+    <outputs>
+	<data name="sampleFile" format="xlsx" label="HTPG_Sample_File"/>
+	<data name="orderFile" format="xlsx" label="Intertek_Order_Form" />
+    </outputs>
+
+    <tests>
+            <test>
+                   <param name="sampleCount" value="100" />
+                   <output name= "sampleFile" file="HTPG_sample_File.xlsx" />
+                   <output name= "orderFile" file="Intertek_Order_Form.xlsx" />
+            </test>
+     </tests>
+
+   <help><![CDATA[
+
+	What the tool does:
+
+             It will generate unique IDs for indicated number of samples, and add them to the HTPG Sample (metadata) file and the Intertek Order form
+
+
+	Required input: 
+	
+	    Total number of genotyping samples
+
+
+	Tip: 
+	
+	    It's advisable to get few extra UIDs e.g 10 incase they might be needed.
+
+    ]]></help>
+
+    <citations>
+        <citation type="bibtex">
+@misc{githubgithub.com,
+  author = {LastTODO, FirstTODO},
+  year = {TODO},
+  title = {github.com},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com},
+  }</citation>
+    </citations>
+
+</tool>

@@ -1,0 +1,58 @@
+<tool id="kmeans_clustering" name="Hierarchical K-Means Clustering" version="0.1.0">
+    <requirements>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    	/home/galaxy/data/R/R-3.5.1/bin/Rscript --vanilla $__tool_directory__/kmeans_v3.R -f $inputFile -a $algorithm -n $nstart -k $clusters -i $numIter -c $clusterFile -g $graphFile
+    ]]></command>
+    <inputs>
+	<param name="inputFile" type="data" format="tabular" label="Encoded Data [x]" help="(tab file) Dataset should be encoded using the Encode tool."/>
+	<param name="algorithm" type="select" label="Algorithm [km.algorithm]" help="the algorithm to be used for kmeans">
+                <option value="Hartigan-Wong">Hartigan-Wong</option>
+                <option value="Lloyd">Lloyd</option>
+                <option value="Forgy">Forgy</option>
+                <option value="MacQueen">MacQueen</option>
+	</param>
+	 <param name="clusters" type="integer" value="3" label="Number of clusters [k]" help="(integer) the number of clusters to be generated"/>
+	 <param name="nstart" type="integer" value="3" label="Random N as centers" help="(integer) either the number of clusters, say k, or a set of initial (distinct) cluster centres. If a number, a random set of (distinct) rows in x is chosen as the initial centers."/>
+	 <param name="numIter" type="integer" value="10" label="Maximum Number of Iterations for kmeans" help="(integer) the maximum number of iterations allowed for k-means"/>
+    </inputs>
+    <outputs>
+    	<data name="clusterFile" format="tabular" label="Cluster Membership File for ${inputFile.name}"/>
+    	<data name="graphFile" format="pdf" label="Cluster Plot for ${inputFile.name}" />
+    </outputs>
+    <help><![CDATA[
+	
+.. class:: infomark
+Hierarchical K-means Clustering
+-----
+
+**What this tool does**
+This tool uses the hybrid approach by combining the hierarchical clustering and the k-means methods.
+kmeans(x, centers, iter.max = 10, nstart = 1,algorithm = c("Hartigan-Wong", "Lloyd", "Forgy","MacQueen"), trace=FALSE)
+
+-x	numeric matrix of data, or an object that can be coerced to such a matrix (such as a numeric vector or a data frame with all numeric columns).
+-centers	 either the number of clusters, say k, or a set of initial (distinct) cluster centres. If a number, a random set of (distinct) rows in x is chosen as the initial centres.
+-iter.max	the maximum number of iterations allowed.
+-nstart	if centers is a number, how many random sets should be chosen?
+-algorithm	character: may be abbreviated. Note that "Lloyd" and "Forgy" are alternative names for one algorithm.
+
+-----
+**Input File:** Encoded Genotype File
+The matrix contains the samples in the columns and the markers in the rows.
+=======  ========= ========= ========= ========= =========
+Name      sample1   sample2   sample3   sample4   sample5
+=======  ========= ========= ========= ========= =========
+marker1	     2	       2         0         2         2
+marker2      2         2         0         1         0
+marker3      0	       0         0         2         2
+marker4      0         2         1         1         1
+marker5      1         2         0         0         2
+marker6      2         1         0         1         2
+=======  ========= ========= ========= ========= =========
+-----
+**Output File:** 
+-----
+**Author:** Umesh Rosyara (CIMMYT)
+    
+    ]]></help>
+</tool>

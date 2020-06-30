@@ -1,0 +1,28 @@
+<tool id="tassel-compute-glm-2" name="Compute GLM" version="1.0.0" force_history_refresh="True">
+	<description>bash script </description>
+	<command interpreter="bash">
+		runTASSEL.sh flapjack $flapjackGeno $trait $popStruct $filterMinFreq $glmPermutation $glmMaxP $flapjackMap $glm_output1>> $glm_log 
+	</command>
+
+	<inputs>
+		<param name="flapjackGeno" type="data" format="tabular" label="Genotype file"/>
+		<param name="flapjackMap" type="data" format="tabular" label="Map file"/>
+		<param name="trait" type="data" format="tabular" label="Phenotype file"/>
+		<param name="popStruct" type="data" format="tabular" label="Population structure file"/>
+		<param name="filterMinFreq" type="text" size="10" value="0.05" label="Filter SNPs with Minimum Frequency"/>
+		<param name="glmPermutation" type="text" size="10" value="1000" label="Number of Permutations"/>
+		<param name="glmMaxP" type="text" size="10" value="1e-3" label="Maximum P-value"/>
+	</inputs>
+	
+	<outputs>
+		<data name="glm_output1" format="tabular" label="GLM Result of dataset: ${trait.name} on ${flapjackGeno.name}"/>
+		<data name="glm_output2" format="tabular" label="GLM Result of dataset: ${trait.name} on ${flapjackGeno.name}" hidden="True"/>
+		<data name="glm_log" format="txt" label="Log of GLM of dataset: ${trait.name} on ${flapjackGeno.name}"/>
+	</outputs>
+
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+</tool>

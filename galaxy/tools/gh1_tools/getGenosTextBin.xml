@@ -1,0 +1,59 @@
+<tool id="getGenosTextBin" name="Get Genos Text Bin" version="1.0">
+  <description>getGenosTextBin</description>
+  <command interpreter="Rscript --vanilla">getGenosTextBin.R
+       #if str($fileIn).strip() != "":
+          --fileIn="$fileIn"
+       #end if
+       #if str($skip).strip() != "":
+          --skip="$skip"
+       #end if
+       #if str($nrows).strip() != "":
+          --nrows="$nrows"
+       #end if
+       #if str($fileOut1).strip() != "":
+          --fileOut1="$fileOut1"
+       #end if
+       #if str($fileOut2).strip() != "":
+          --fileOut2="$fileOut2"
+       #end if
+       #if str($fileOut3).strip() != "":
+          --fileOut3="$fileOut3"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="fileIn" format="data" type="data" help="The name of the input file. It should be a text file." label="[required] File In">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="skip" type="integer" value="" help="The number of columns with Metadata." label="[required] Skip">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="nrows" type="integer" value="" help="The number of rows in the file, including the header." label="[required] Nrows">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="txt" name="fileOut1" label="map.txt"/>
+    <data format="txt" name="fileOut2" label="IDs.txt"/>
+    <data format="bigbed" name="fileOut3" label="genosText.bigbed"/>
+  </outputs>
+  <help>
+**Description**
+
+A function that takes a GBS file with individuals in columns and
+markers in rows, extracts Metadata (map and the IDS of the
+individuals) and writes a binary file with the genotypic
+information in a Binary file that you can read and index very fast
+in order to recode markers, impute, etc.
+
+
+**Details**
+
+GBS stands for Genotyping By Sequencing. Data are stored in Hapmap
+file format. Hapmat is a text based file format for storing
+sequence data. The information for a series of SNPs and the
+germplasm are stored in one file.
+</help>
+</tool>

@@ -1,0 +1,57 @@
+<tool id="Impute Validataion" name="Impute Validation" version="0.0.1">
+  <description>File Input</description>
+  <command interpreter="Rscript --vanilla"><![CDATA[
+imputeValidation_wrapper.R 
+
+--ground_vcf_gz_file '$groundTruthData_vcf_gz_file'
+
+--test_vcf_gz_file '$testData_vcf_gz_file'
+
+--input_vcf_gz_file '$imputedData_vcf_gz_file'
+
+--csv_file_path $galaxy_csv
+
+--out_file_path $galaxy_csv2
+
+]]></command>
+  <inputs>
+    <param name="groundTruthData_vcf_gz_file" 
+           type="data" 
+           format="vcf" 
+           label="Grounded Truth Data File" 
+           help="(required) The VCF file of the ground truth)" />
+    <param name="testData_vcf_gz_file" 
+           type="data" 
+           format="vcf" 
+           label="Test Data File" 
+           help="(required) The VCF file of the test data)" />
+    <param name="imputedData_vcf_gz_file" 
+           type="data" 
+           format="vcf" 
+           label="Imputed Data File" 
+           help="(required) The VCF file of the imputed data)" />
+
+  </inputs>
+  <outputs>
+    <data name="galaxy_csv" label="Per sample evaluation"
+           format="csv" />
+    <data name="galaxy_csv2" label="Imputation evaluation summary"
+           format="csv" />
+  </outputs>
+  <help>
+**Description**
+
+Determine the count of correctly and wrongly classifed.
+
+**Usage**
+
+imputeValidataion(groundDataPath, testDataPath, imputedDataPath)
+
+**Arguments**
+
+- groundDataPath
+- testDataPath
+- imputedDataPath
+
+  </help>
+</tool>

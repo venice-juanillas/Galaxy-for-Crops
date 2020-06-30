@@ -1,0 +1,65 @@
+<tool id="tassel-plink2vcf" name="Convert Plink to VCF" version="5.2.42">
+	<description> genotype format </description>
+	<requirements>
+		<requirement type="package" version="5.2.42">tassel5</requirement>
+	</requirements>
+	<command><![CDATA[
+		#set id = $pedFile.dataset_id
+                mkdir -p  $__tool_directory__/out$id/ &&
+		perl $__tool_directory__/run_pipeline.pl -Xmx4G -fork1 PlinkLoadPlugin -pedFile $pedFile -mapFile $mapFile -sortPositions true -endPlugin -export $__tool_directory__/out$id/output.vcf -exportType VCF -runfork1 &&
+		mv $__tool_directory__/out$id/output.vcf $out &&
+                rm -rf  $__tool_directory__/out$id/
+	]]>
+	</command>
+	
+	<inputs>
+		<param name="pedFile" type="data" format="tabular" label="Plink .ped File"/>
+		<param name="mapFile" type="data" format="tabular" label="Plink .map File"/>
+	</inputs>
+
+	<outputs>
+		<data name="out" format="vcf"  label="VCF File: ${pedFile.name}"/>
+	</outputs>
+        <stdio>
+                <exit_code range="2"   level="fatal"   description="Out of Memory" />
+                <exit_code range="3:5" level="warning" description="Low disk space" />
+                <exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+        </stdio>
+        <help>
+.. class:: infomark
+
+**Convert Plink Text Files to VCF**
+
+-----
+
+**Description**
+
+This tool converts Plink text files to VCF.
+
+-----
+
+**Plink Text files**
+
+- .ped (PLINK/MERLIN/Haploview text pedigree + genotype table) : Original standard text format for sample pedigree information and genotype calls.
+
+- .map (PLINK text fileset variant information file) : Variant information file accompanying a .ped text pedigree + genotype table.
+
+**Variant Call Format (VCF)**
+
+- .vcf (1000 Genomes Project text Variant Call Format) : Variant information + sample ID + genotype call text file. Loaded with --vcf, and produced by '--recode vcf' (or vcf-fid/vcf-iid). Do not use PLINK for general-purpose VCF handling: all information in VCF files which cannot be represented by the PLINK 1 binary format is ignored.
+
+This tool uses TASSEL5 for conversion.
+
+	</help>
+	<citations>
+        <!-- Example of annotating a citation using a BibTex entry. -->
+                <citation type="bibtex">@ARTICLE{Bradbury07tassel-software,
+                author = {Bradbury PJ, Zhang Z, Kroon DE, Casstevens TM, Ramdoss Y, Buckler ES},
+                title = {TASSEL: Software for association mapping of complex traits in diverse samples},
+                journal = {Bioinformatics},
+                year = {2007},
+                volume = {23},
+		pages = {2633-2635}
+                }</citation>
+        </citations>
+</tool>

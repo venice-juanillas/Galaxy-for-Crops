@@ -1,0 +1,89 @@
+<tool id="ConvertPhenotypingFileForGEBV1" name="Convert BLUP output" version="1.0">
+	<description> to be compatible with GEBV</description>
+	<requirements>
+		<requirement type="binary">perl</requirement>
+	</requirements>
+	<command interpreter="bash">./ConvertPhenotypingFileForGEBV1.sh $input $output $type
+    </command>
+	<inputs>
+		<param format="tabular" name="input" type="data" label="Input phenotyping file" help="Phenotyping file must be obtained from Blup calculator"/>
+		<param name="type" type="select" multiple="false" label="Get BLUE or BLUP">
+			<option value="blue" selected="true">BLUE</option>
+			<option value="blup">BLUP</option>
+		</param>
+	</inputs>
+	<outputs>
+		<data format="tabular" name="output" label="${tool.name} on ${on_string}"/>
+	</outputs>
+        <tests> 
+           <test> 
+              <param name="input" value="input" /> 
+              <output name="output" file="output"  compare="sim_size" > 
+              </output> 
+           </test> 
+        </tests> 
+
+	<help>
+	
+.. class:: infomark  
+
+**Convert BLUP output** to be compatible with GEBV 
+
+.. class:: infomark 
+
+**Provided by EiB platform and GOBii** 
+
+.. class:: infomark 
+
+**Galaxy Integration**  Alexis Dereeper 
+
+.. class:: infomark 
+
+**Support** For any questions about this tool, please send an e-mail to alexis.dereeper@ird.fr 
+  
+----- 
+
+**What it does** 
+
+This tool converts the output from BLUP calculator when choosing the option "Summarized by" into a compatible input file for GEBV prediction tool.
+
+-----
+
+**Input:**
+
+
+- Example Input File from Blup calculator:
+
+        +-----------+---------+----------+---------+--------+-------------------+----------+
+        |  Sample   | season  | GY_blue  | GY_blup | GY_PEV | GY_pevReliability | GY_means |
+        +===========+=========+==========+=========+========+===================+==========+
+        | 270039    | off     | 2.47     | 2.682   | 0.004  | 0.045	        | 2.47     |
+        +-----------+---------+----------+---------+--------+-------------------+----------+
+        | 270040    | off     | 2.765    | 2.695   | 0.004  | 0.045             | 2.765    |
+        +-----------+---------+----------+---------+--------+-------------------+----------+
+        | 270041    | off     | 2.475    | 2.682   | 0.004  | 0.045             | 2.475    |
+        +-----------+---------+----------+---------+--------+-------------------+----------+
+        | 270039    | main    | 6.715    | 6.936   | 0.072  | 0.298             | 6.715    |
+        +-----------+---------+----------+---------+--------+-------------------+----------+
+        | 270040    | main    | 5.959    | 6.709   | 0.072  | 0.298             | 5.959    |
+        +-----------+---------+----------+---------+--------+-------------------+----------+
+        | 270041    | main    | 6.925    | 6.999   | 0.072  | 0.298             | 6.925    |
+        +-----------+---------+----------+---------+--------+-------------------+----------+
+
+
+**Output:**
+
+- Example output File:
+
+
+        +-----------+--------------+---------------+-------------+---------------+
+        |  Sample   | off_GY_blue  | off_GY_blup   | main_GY_blue| main_GY_blup  |
+        +===========+==============+===============+=============+===============+
+        | 270039    | 2.47         | 2.682         | 6.715       | 6.936         |
+        +-----------+--------------+---------------+-------------+---------------+
+        | 270040    | 2.765        | 2.695         | 5.959       | 6.709         |
+        +-----------+--------------+---------------+-------------+---------------+
+
+
+	</help>
+</tool>

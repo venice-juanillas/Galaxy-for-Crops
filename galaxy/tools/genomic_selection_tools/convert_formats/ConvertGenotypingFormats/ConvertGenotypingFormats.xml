@@ -1,0 +1,81 @@
+<tool id="ConvertGenotypingFormats" name="Convert genotyping data" version="1.0">
+	<description> converts various genotyping formats</description>
+	<requirements>
+		<requirement type="binary">perl</requirement>
+	</requirements>
+	<command interpreter="bash">./ConvertGenotypingFormats.sh $input $output $format $keep
+    </command>
+	<inputs>
+		<param format="vcf,txt,tabular" name="input" type="data" label="Input genotyping file" help="Genotyping file must contain the samples in the columns and the markers in the rows. It can be in VCF, hapmap, hapmap with IUPAC"/>
+		<param name="format" type="select" label="Format for output file">
+			<option value="hapmap" selected="true">Hapmap</option>
+			<option value="hapmap_iupac">Hapmap with IUPAC</option>
+			<option value="hapmap_numeric">Hapmap with numerical values</option>
+			<option value="numeric">Tabulated file with numerical values only</option>
+			<option value="csv">CSV file with numerical values only</option>
+			<option value="vcf">VCF</option>
+			<option value="flapjack">Flapjack (transposed)</option>
+			<option value="transposed_csv">Transposed CSV</option>
+		</param>
+		<param name="keep" type="boolean" checked="true" truevalue="True" falsevalue="False"  label="Keep metadata"/>
+	</inputs>
+	<outputs>
+		<data format="tabular" name="output" label="${tool.name} on ${on_string}"/>
+	</outputs>
+        <tests>
+           <test>
+              <param name="input" value="input" />
+              <param name="format" value="hapmap_numeric" /> 
+              <output name="output" file="output"  compare="sim_size" >
+              </output>
+           </test>
+        </tests>
+	<help>
+	
+.. class:: infomark 
+
+**ConvertGenotypingFormats**
+
+.. class:: infomark
+
+**Provided by EiB platform and GOBii**
+
+.. class:: infomark
+
+**Galaxy Integration**  Alexis Dereeper
+
+.. class:: infomark
+
+**Support** For any questions about this tool, please send an e-mail to alexis.dereeper@ird.fr
+ 
+-----
+
+**What it does**
+
+This tool converts various genotyping formats between each other.
+
+-----
+
+**Input:**
+
+
+- Example Hapmap File:
+
+::
+
+        rs#	alleles	chrom	pos	strand	assembly#	center	protLSID	assayLSID	panelLSID	QCcode	MARS-WEMA_270039	MARS-WEMA_270040	MARS-WEMA_270041
+        S0_41135	C/T	0	41135	+	NA	NA	NA	NA	NA	NA	Y	N	C
+
+
+**Output:**
+
+- Example VCF File:
+
+::
+
+        #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	MARS-WEMA_270039	MARS-WEMA_270040	MARS-WEMA_270041
+        0	41135	0_41135	C	T	10000	PASS	.	GT	0/1	./.	0/0
+
+
+	</help>
+</tool>

@@ -1,0 +1,30 @@
+<tool id="getARM" name="Get A R M" version="1.0">
+  <description>get an Additive Relationshio Matrix using a pedigree</description>
+  <command interpreter="Rscript --vanilla">getARM.R
+       #if str($inputfile1).strip() != "":
+          --inputfile1="$inputfile1"
+       #end if
+       #if str($outputfile1).strip() != "":
+          --outputfile1="$outputfile1"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="inputfile1" format="data" type="data" help="The filename of the &#x2018;first&#x2019; tab-separated matrix." label="[required] Inputfile1">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="rdata" name="outputfile1" label="A.rdata"/>
+  </outputs>
+  <help>
+**Description**
+
+Get an Additive Relationship Matrix using a pedigree.  An example
+function that can be made into a Galaxy tool.  Reads a csv file
+with three columns: Side, Dam, label and generates an ARM, which
+can be saved in a csv file.
+</help>
+</tool>

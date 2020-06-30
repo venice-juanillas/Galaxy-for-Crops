@@ -1,0 +1,17 @@
+<tool id="tassel-compute-mlm" name="Compute MLM" version="1.0.0">
+	<command interpreter="perl">
+		run_pipeline.pl -fork1 -flapjack -geno $flapjackGeno -map $flapjackMap -filterAlign -filterAlignMinFreq 0.05 -fork2 -r $trait -fork3 -r $popStruct -excludeLastTrait -combine5 -input1 -input2 -input3 -intersect -glm -export $glm_output -runfork1 -runfork2 -runfork3
+	</command>
+
+	<inputs>
+		<param name="flapjackGeno" type="data" format="tabular" label="Genotype file"/>
+		<param name="flapjackMap" type="data" format="tabular" label="Genotype file"/>
+		<param name="trait" type="data" format="tabular" label="Phenotype file"/>
+		<param name="popStruct" type="data" format="tabular" label="Population structure file"/>
+	</inputs>
+	
+	<outputs>
+		<data name="glm_output" format="auto"/>
+	</outputs>
+
+</tool>

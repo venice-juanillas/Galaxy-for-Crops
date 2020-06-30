@@ -1,0 +1,510 @@
+
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Highcharts Example</title>
+
+		<style type="text/css">
+
+		</style>
+	</head>
+	<body>
+
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
+<script src="http://code.highcharts.com/modules/data.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="http://code.highcharts.com/modules/heatmap.js"></script>
+<script src="http://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+<script type="text/javascript" src="http://highslide.com/highslide/highslide-full.min.js"></script>
+<script type="text/javascript" src="http://sniplay.southgreen.fr/javascript/highslide.config.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="http://www.highcharts.com/media/com_demo/highslide.css" />
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/18.2.3/css/dx.common.css" />
+    <link rel="dx-theme" data-theme="generic.light" href="https://cdn3.devexpress.com/jslib/18.2.3/css/dx.light.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+<script>window.angular || document.write(decodeURIComponent('%3Cscript src="js/angular.min.js"%3E%3C/script%3E'))</script>
+    <script src="https://cdn3.devexpress.com/jslib/18.2.3/js/dx.all.js"></script>
+
+
+	
+	<style>
+    .custom-height-slider {
+    height: 75px;
+}
+
+.dx-field > .dx-rangeslider {
+    flex: 1;
+}
+</style>
+    <script>
+
+$(function(){
+    
+    
+    var handlerRangeSlider = $("#handler-range-slider1").dxRangeSlider({
+        min: 0.285,
+        max: 12.495,
+        start: 0.285,
+        end: 12.495,
+	step: 0.1221,
+        onValueChanged: function(data){
+            startValue.option("value", data.start);
+            endValue.option("value", data.end);
+        }
+    }).dxRangeSlider("instance");
+    
+    var startValue = $("#start-value1").dxNumberBox({
+        value: 0.285,
+        min: 0.285,
+        max: 12.495,
+	step: 0.1221,
+        showSpinButtons: true,
+        onValueChanged: function(data) {
+		document.getElementById("min1").value = data.value;
+		handlerRangeSlider.option("start", data.value);
+        }
+    }).dxNumberBox("instance");
+    
+    var endValue = $("#end-value1").dxNumberBox({
+        value: 12.495,
+        min: 0.285,
+        max: 12.495,
+	step: 0.1221,
+        showSpinButtons: true,
+        onValueChanged: function(data) {
+		document.getElementById("max1").value = data.value;
+		handlerRangeSlider.option("end", data.value);
+        }
+    }).dxNumberBox("instance");
+});
+
+$(function(){
+    
+    
+    var handlerRangeSlider = $("#handler-range-slider2").dxRangeSlider({
+        min: 49.5,
+        max: 101.5,
+        start: 49.5,
+        end: 101.5,
+	step: 0.52,
+        onValueChanged: function(data){
+            startValue.option("value", data.start);
+            endValue.option("value", data.end);
+        }
+    }).dxRangeSlider("instance");
+    
+    var startValue = $("#start-value2").dxNumberBox({
+        value: 49.5,
+        min: 49.5,
+        max: 101.5,
+	step: 0.52,
+        showSpinButtons: true,
+        onValueChanged: function(data) {
+		document.getElementById("min2").value = data.value;
+		handlerRangeSlider.option("start", data.value);
+        }
+    }).dxNumberBox("instance");
+    
+    var endValue = $("#end-value2").dxNumberBox({
+        value: 101.5,
+        min: 49.5,
+        max: 101.5,
+	step: 0.52,
+        showSpinButtons: true,
+        onValueChanged: function(data) {
+		document.getElementById("max2").value = data.value;
+		handlerRangeSlider.option("end", data.value);
+        }
+    }).dxNumberBox("instance");
+});
+
+$(function(){
+    
+    
+    var handlerRangeSlider = $("#handler-range-slider3").dxRangeSlider({
+        min: 0.22,
+        max: 1.42,
+        start: 0.22,
+        end: 1.42,
+	step: 0.012,
+        onValueChanged: function(data){
+            startValue.option("value", data.start);
+            endValue.option("value", data.end);
+        }
+    }).dxRangeSlider("instance");
+    
+    var startValue = $("#start-value3").dxNumberBox({
+        value: 0.22,
+        min: 0.22,
+        max: 1.42,
+	step: 0.012,
+        showSpinButtons: true,
+        onValueChanged: function(data) {
+		document.getElementById("min3").value = data.value;
+		handlerRangeSlider.option("start", data.value);
+        }
+    }).dxNumberBox("instance");
+    
+    var endValue = $("#end-value3").dxNumberBox({
+        value: 1.42,
+        min: 0.22,
+        max: 1.42,
+	step: 0.012,
+        showSpinButtons: true,
+        onValueChanged: function(data) {
+		document.getElementById("max3").value = data.value;
+		handlerRangeSlider.option("end", data.value);
+        }
+    }).dxNumberBox("instance");
+});
+</script>
+
+
+<!--
+<div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+        <div class="form">
+            <div class="dx-fieldset">
+
+                <div class="dx-field custom-height-slider">
+                    <div class="dx-field-value">
+                        <div dx-range-slider="rangeSlider.withTooltip">
+                        </div>
+                    </div>
+                </div>
+                
+        </div>
+    </div>
+-->
+
+<div id="container1" style="min-width: 310px; height: 800px; max-width: 800px; margin: 0 auto"></div>
+
+<div id="liste"></div>
+
+<script type="text/javascript">
+
+
+$(function () {
+
+		var jsonfile = window.location.origin+"/static/json/data.8361697670.json";
+
+		var min_x = document.getElementById("min1").value;
+		var max_x = document.getElementById("max1").value;
+		var min_y = document.getElementById("min2").value;
+		var max_y = document.getElementById("max2").value;
+		var min_z = document.getElementById("min3").value;
+		var max_z = document.getElementById("max3").value;
+		$.getJSON(jsonfile, function (data) {
+		
+
+		var string = JSON.stringify(data);
+		var chart;
+                var names = [];
+		var jsonData = [];
+		for(var i = 0; i < data.length; i++){
+				var myseries = {};
+				myseries.name=data[i].name;
+				var points = [];
+				for(var j = 0; j < data[i].data.length; j++){
+					if (data[i].data[j].x >= min_x && data[i].data[j].x <= max_x && data[i].data[j].y >= min_y && data[i].data[j].y <= max_y && data[i].data[j].z >= min_z && data[i].data[j].z <= max_z){
+						
+						var point = {};
+						point.name=data[i].data[j].name;
+						names.push(data[i].data[j].name);
+						point.x=data[i].data[j].x;
+						point.y=data[i].data[j].y;
+						point.z=data[i].data[j].z;
+						points.push(point);
+					}
+				}
+				myseries.data = points;
+				jsonData.push(myseries);
+			}
+
+		
+		document.getElementById("liste").innerHTML = "List of point names: <br/><textarea name='list_samples' rows=4 cols=50>"+names+"</textarea>";
+							
+		$(document).ready(function() {
+			chart = new Highcharts.Chart({
+				chart: {
+					renderTo: 'container1',
+					type: 'scatter',
+					
+					options3d: {enabled: true,alpha: 10,beta: 30,depth: 250,viewDistance: 5,}
+				},
+				title: 
+				{
+					text: ''
+				},
+				subtitle: 
+				{
+					text: ''
+				},
+				yAxis: { title: {text: 'AD_blue'},},
+				xAxis: { title: {text: 'GY_blue'},},
+				zAxis: {title: {text: 'EPP_blue'},},
+				
+				 plotOptions: {
+                                        series:{
+                                           turboThreshold:20000//larger threshold or set to 0 to disable
+                                        },
+                                        scatter: {
+                                                
+                                                tooltip: {headerFormat: '<b></b>',pointFormat: '<b>{point.name}'},
+                                                marker: {
+                                                        radius:3,
+                                                }
+                                        }
+                                },
+				series: jsonData
+			});
+			
+			
+
+
+
+		
+    $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+        e = chart.pointer.normalize(e);
+
+        var posX = e.pageX,
+            posY = e.pageY,
+            alpha = chart.options.chart.options3d.alpha,
+            beta = chart.options.chart.options3d.beta,
+            newAlpha,
+            newBeta,
+            sensitivity = 5; // lower is more sensitive
+
+        $(document).bind({
+            'mousemove.hc touchdrag.hc': function (e) {
+                // Run beta
+                newBeta = beta + (posX - e.pageX) / sensitivity;
+                chart.options.chart.options3d.beta = newBeta;
+
+                // Run alpha
+                newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                chart.options.chart.options3d.alpha = newAlpha;
+
+                chart.redraw(false);
+            },
+            'mouseup touchend': function () {
+                $(document).unbind('.hc');
+            }
+        });
+    });
+	
+		});
+
+	});
+
+	});
+
+
+function reload(){
+    
+$(function () {
+
+		var jsonfile = window.location.origin+"/static/json/data.8361697670.json";
+
+		var min_x = document.getElementById("min1").value;
+		var max_x = document.getElementById("max1").value;
+		var min_y = document.getElementById("min2").value;
+		var max_y = document.getElementById("max2").value;
+		var min_z = document.getElementById("min3").value;
+		var max_z = document.getElementById("max3").value;
+		$.getJSON(jsonfile, function (data) {
+		
+
+		var string = JSON.stringify(data);
+		var chart;
+                var names = [];
+		var jsonData = [];
+		for(var i = 0; i < data.length; i++){
+				var myseries = {};
+				myseries.name=data[i].name;
+				var points = [];
+				for(var j = 0; j < data[i].data.length; j++){
+					if (data[i].data[j].x >= min_x && data[i].data[j].x <= max_x && data[i].data[j].y >= min_y && data[i].data[j].y <= max_y && data[i].data[j].z >= min_z && data[i].data[j].z <= max_z){
+						
+						var point = {};
+						point.name=data[i].data[j].name;
+						names.push(data[i].data[j].name);
+						point.x=data[i].data[j].x;
+						point.y=data[i].data[j].y;
+						point.z=data[i].data[j].z;
+						points.push(point);
+					}
+				}
+				myseries.data = points;
+				jsonData.push(myseries);
+			}
+
+		
+		document.getElementById("liste").innerHTML = "List of point names: <br/><textarea name='list_samples' rows=4 cols=50>"+names+"</textarea>";
+							
+		$(document).ready(function() {
+			chart = new Highcharts.Chart({
+				chart: {
+					renderTo: 'container1',
+					type: 'scatter',
+					
+					options3d: {enabled: true,alpha: 10,beta: 30,depth: 250,viewDistance: 5,}
+				},
+				title: 
+				{
+					text: ''
+				},
+				subtitle: 
+				{
+					text: ''
+				},
+				yAxis: { title: {text: 'AD_blue'},},
+				xAxis: { title: {text: 'GY_blue'},},
+				zAxis: {title: {text: 'EPP_blue'},},
+				
+				 plotOptions: {
+                                        series:{
+                                           turboThreshold:20000//larger threshold or set to 0 to disable
+                                        },
+                                        scatter: {
+                                                
+                                                tooltip: {headerFormat: '<b></b>',pointFormat: '<b>{point.name}'},
+                                                marker: {
+                                                        radius:3,
+                                                }
+                                        }
+                                },
+				series: jsonData
+			});
+			
+			
+
+
+
+		
+    $(chart.container).bind('mousedown.hc touchstart.hc', function (e) {
+        e = chart.pointer.normalize(e);
+
+        var posX = e.pageX,
+            posY = e.pageY,
+            alpha = chart.options.chart.options3d.alpha,
+            beta = chart.options.chart.options3d.beta,
+            newAlpha,
+            newBeta,
+            sensitivity = 5; // lower is more sensitive
+
+        $(document).bind({
+            'mousemove.hc touchdrag.hc': function (e) {
+                // Run beta
+                newBeta = beta + (posX - e.pageX) / sensitivity;
+                chart.options.chart.options3d.beta = newBeta;
+
+                // Run alpha
+                newAlpha = alpha + (e.pageY - posY) / sensitivity;
+                chart.options.chart.options3d.alpha = newAlpha;
+
+                chart.redraw(false);
+            },
+            'mouseup touchend': function () {
+                $(document).unbind('.hc');
+            }
+        });
+    });
+	
+		});
+
+	});
+
+	});
+
+	//chart.redraw();
+
+	
+}
+</script>
+<br/><br/><b>Filters</b>: &nbsp;&nbsp; <button name="update" onclick="reload();">Reload plot</button><br/>
+
+
+	<table><tr>
+<td width="300px">
+ <div class="dx-fieldset1">
+<b>GY_blue</b><br/>
+                <div class="dx-field1">
+                    <div id="handler-range-slider1"></div>
+                </div>
+                <div class="dx-field1">
+				
+                    <div class="dx-field-label1">Min</div>
+                    <div class="dx-field-value1">
+                        <div id="start-value1"></div>
+                    </div>
+                </div>
+                <div class="dx-field1">
+                    <div class="dx-field-label1">Max</div>
+                    <div class="dx-field-value1">
+                        <div id="end-value1"></div>
+                    </div>
+                </div>
+            </div>
+	<input type="hidden" size=5 name="min1" id="min1" value="0.285"><input type="hidden" size=5 name="max1" id="max1" value="12.495">
+</td>
+<td width="30px"></td>
+
+<td width="300px">
+ <div class="dx-fieldset2">
+<b>AD_blue</b><br/>
+                <div class="dx-field2">
+                    <div id="handler-range-slider2"></div>
+                </div>
+                <div class="dx-field2">
+				
+                    <div class="dx-field-label2">Min</div>
+                    <div class="dx-field-value2">
+                        <div id="start-value2"></div>
+                    </div>
+                </div>
+                <div class="dx-field2">
+                    <div class="dx-field-label2">Max</div>
+                    <div class="dx-field-value2">
+                        <div id="end-value2"></div>
+                    </div>
+                </div>
+            </div>
+	<input type="hidden" size=5 name="min2" id="min2" value="49.5"><input type="hidden" size=5 name="max2" id="max2" value="101.5">
+</td>
+<td width="30px"></td>
+
+<td width="300px">
+ <div class="dx-fieldset3">
+<b>EPP_blue</b><br/>
+                <div class="dx-field3">
+                    <div id="handler-range-slider3"></div>
+                </div>
+                <div class="dx-field3">
+				
+                    <div class="dx-field-label3">Min</div>
+                    <div class="dx-field-value3">
+                        <div id="start-value3"></div>
+                    </div>
+                </div>
+                <div class="dx-field3">
+                    <div class="dx-field-label3">Max</div>
+                    <div class="dx-field-value3">
+                        <div id="end-value3"></div>
+                    </div>
+                </div>
+            </div>
+	<input type="hidden" size=5 name="min3" id="min3" value="0.22"><input type="hidden" size=5 name="max3" id="max3" value="1.42">
+</td>
+<td width="30px"></td>
+</tr></table></body></html>

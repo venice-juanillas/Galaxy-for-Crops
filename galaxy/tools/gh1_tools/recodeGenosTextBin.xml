@@ -1,0 +1,45 @@
+<tool id="recodeGenosTextBin" name="Recode Genos Text Bin" version="1.0">
+  <description>recodeGenosTextBin</description>
+  <command interpreter="Rscript --vanilla">recodeGenosTextBin.R
+       #if str($genosFile).strip() != "":
+          --genosFile="$genosFile"
+       #end if
+       #if str($IDsFile).strip() != "":
+          --IDsFile="$IDsFile"
+       #end if
+       #if str($mapFile).strip() != "":
+          --mapFile="$mapFile"
+       #end if
+       #if str($fileOut1).strip() != "":
+          --fileOut1="$fileOut1"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="genosFile" format="data" type="data" help="The name of the Binary file with genotypic information." label="[required] Genos File">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="IDsFile" format="data" type="data" help="The name of text file with the IDs of individuals." label="[required] I Ds File">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="mapFile" format="data" type="data" help="The name of a text file with marker information." label="[required] Map File">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="bigbed" name="fileOut1" label="genosInt.bigbed"/>
+  </outputs>
+  <help>
+**Description**
+
+This function recodes a binary file with allele codes to 0,1,2 and
+NA format.
+
+
+**Details**
+
+&lt;URL: https://www.bioinformatics.org/sms/iupac.html&gt;
+</help>
+</tool>

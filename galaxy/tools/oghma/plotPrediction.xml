@@ -1,0 +1,36 @@
+<tool id="plotPrediction" name="plot prediction" version="1.0.0">
+  <description>shows scatterplot of a prediction vs true phenotype</description>
+  <command interpreter="Rscript">
+	  plotPrediction.R $config
+  </command>
+  
+  <inputs>
+	<param name="phenotype" type="data"
+		label="true phenotype" 
+	/>
+		  
+	<param name="predictedPhenotype" type="data"
+			label="predicted phenotype" 
+			/>
+			
+  </inputs>
+  
+  <configfiles>
+    <configfile name="config">
+## Desc: this file is sourced in encode wrapper script
+##  as means to pass all galaxy params to R
+"${predictedPhenotype}" -> predicted
+"${phenotype}" -> phenotype
+"${r2}" -> out
+
+    </configfile>
+</configfiles>
+  
+<outputs>
+	<data format="pdf" name = "r2" />
+</outputs>
+  
+  <help>
+	  draw R2 of prediction vs true phenotype
+  </help>
+  </tool>

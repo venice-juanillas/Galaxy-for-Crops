@@ -1,0 +1,78 @@
+<tool id="sampleLD_1" name="Sample-based genome-wide LD" version="0.1.0" >
+  <description>Estimate linkage disequilibrium decay with distance</description>
+
+  <stdio>
+   <regex match="WARNING"
+        source="stderr"
+        level="warning"
+        description="file type warning"/>
+  </stdio>
+
+  <command><![CDATA[
+        rm -rf $__tool_directory__/tmpSampleLD 2> /dev/null &&
+        mkdir $__tool_directory__/tmpSampleLD &&
+        #if $includePopulation.populationIndex
+        	## This is a hack to remove the EOL byte (0x0A) that GALAXY adds after uploading the .bed file
+        	perl -pi -e 'chomp if eof' $inputFile_bed &&
+        	ln -sfn $inputFile_bed $__tool_directory__/tmpSampleLD/input.bed &&
+        	ln -sfn $inputFile_bim $__tool_directory__/tmpSampleLD/input.bim &&
+        	ln -sfn $inputFile_fam $__tool_directory__/tmpSampleLD/input.fam &&
+        	ln -sfn $includePopulation.populationIndexFile $__tool_directory__/tmpSampleLD/popIndex.txt &&
+        	$__tool_directory__/sampleLD -i $__tool_directory__/tmpSampleLD/input -s $numberOfPairs -p $__tool_directory__/tmpSampleLD/popIndex.txt &&
+        	mv $__tool_directory__/tmpSampleLD/input_LD.tsv $outputFile  &&
+        #else
+        	## This is a hack to remove the EOL byte (0x0A) that GALAXY adds after uploading the .bed file
+        	perl -pi -e 'chomp if eof' $inputFile_bed &&
+        	ln -sfn $inputFile_bed $__tool_directory__/tmpSampleLD/input.bed &&
+        	ln -sfn $inputFile_bim $__tool_directory__/tmpSampleLD/input.bim &&
+        	ln -sfn $inputFile_fam $__tool_directory__/tmpSampleLD/input.fam &&
+        	$__tool_directory__/sampleLD -i $__tool_directory__/tmpSampleLD/input -s $numberOfPairs &&
+        	mv $__tool_directory__/tmpSampleLD/input_LD.tsv $outputFile  &&
+        #end if
+       
+		rm -rf $__tool_directory__/tmpSampleLD
+        
+  ]]></command>
+    
+  <inputs>
+	<param format="bed" name="inputFile_bed" type="data" label="Binary genotype (.bed) source file"/>
+	<param format="tabular" name="inputFile_bim" type="data" label="Genetic map (.bim) source file"/>
+	<param format="tabular" name="inputFile_fam" type="data" label="Family (.fam) source file"/>
+    <conditional name="includePopulation">
+    	<param name="populationIndex" type="boolean" label="Population index" />
+		<when value="true">
+			<param format="tabular" name="populationIndexFile" type="data" label="Population index file"/>
+		</when>
+		<when value="false">
+		</when>
+    </conditional>
+    <param name="numberOfPairs" type="integer" label="Number of SNP pairs to pick" value="10"/>
+  </inputs>
+
+  <outputs>
+ 	<data format="tabular" name="outputFile" />
+ </outputs>
+
+  <tests>
+    <test>
+      <param name="inputFile_bed" value="sample.bed"/>
+      <param name="inputFile_bim" value="sample.bim"/>
+      <param name="inputFile_fam" value="sample.fam"/>
+      <param name="includePopulation.populationIndex" value="false"/>
+      <param name="numberOfPairs" value="200"/>
+      <output name="outputFile" file="sample_LD.tsv" lines_diff="200">
+        <assert_contents>
+                <has_text_matching expression="^ChrID"/>
+        </assert_contents>
+      </output>
+   </test>
+  </tests>
+
+
+	<help>
+		Sample a set number of SNP pairs and get estimates of linkage disequilibrium decay with distance. The number of SNPs sampled (twice the number of pairs) cannot exceed the total number in the provided file.
+	</help>
+	<citations>
+		<citation type="doi"> 10.1101/220871 </citation>
+	</citations>
+</tool>

@@ -1,0 +1,24 @@
+variantSetId	variantSetName	studyDbId	studyName
+1	sim_codominant_ds_01	1	sim_codominant_exp_01
+2	sim_codominant_ds_02	1	sim_codominant_exp_01
+3	sim_codominant_ds_01	2	sim_codominant_exp_01
+4	devtest	3	devtest
+5	Hack_1_KASP_India_2ltr_DS	4	Hack_1_KASP_India
+6	Josh_cobb_mini_dataset	5	Josh_cobb_mini_dataset
+7	Wheat_F1_test-E01-D01	7	Wheat_F1_test-E01
+8	Hack_2_KASP_India_2ltr_DS	6	Hack_2_KASP_India
+9	CIMMYT Wheat - M51STIBWSN	8	CIMMYT Wheat - Multiplication trial of the 51ST IBWSN for MAS
+10	Josh_cobb_mini_dataset_test	9	Josh_cobb_mini_dataset_test
+11	Josh_cobb_mini_dataset_test_extra_codom_data_IR04A428	10	Josh_cobb_mini_dataset_test_extra_codom_data_IR04A428
+12	Wheat_F1_test-E01-D02-missing-top-last-genotype	7	Wheat_F1_test-E01
+13	Josh_cobb_mini_dataset_test_extra_codom_data_IR04A428_2	11	Josh_cobb_mini_dataset_test_extra_codom_data_IR04A428_2
+14	forward-breeding-DS-7.29.2019	12	KASP-FB_7.29.2019
+15	JoshCobbData	13	JoshCobbData
+16	JoshCobbData_cleaned	13	JoshCobbData
+17	Cleaned_F1	14	Cleaned_F1
+18	CIMMYT Wheat - M51STIBWSN_2	8	CIMMYT Wheat - Multiplication trial of the 51ST IBWSN for MAS
+19	CIMMYT Wheat - M51STIBWSN_3	8	CIMMYT Wheat - Multiplication trial of the 51ST IBWSN for MAS
+20	Wheat_F1_test-E01-D03-missing-all-last-genotype	7	Wheat_F1_test-E01
+21	Wheat_F1_test-E01-D04-missing-all-penul-genotype	7	Wheat_F1_test-E01
+22	Umesh_cons_call	15	Umesh_cons_call
+23	Umesh_cons_call_2	16	Umesh_cons_call_2

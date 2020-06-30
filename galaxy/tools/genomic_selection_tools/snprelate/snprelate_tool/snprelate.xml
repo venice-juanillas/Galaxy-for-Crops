@@ -1,0 +1,82 @@
+<tool id="SNPRelate" name="SNPRelate GRM" version="0.1.0">
+  <description>calculator</description>
+  <command detect_errors="exit_code"><![CDATA[
+/home/galaxy/data/R/R-3.5.1/bin/Rscript --vanilla $__tool_directory__/SNPRelate_GMatrix_calculator.R 
+
+--tool_directory $__tool_directory__
+
+--genotypes_file '$galaxy_genotypes_file'
+
+--autosome_only $galaxy_autosome_only
+
+--remove_monosnp $galaxy_remove_monosnp
+
+#if $galaxy_maf == "":
+  --maf NaN
+#else:
+  --maf $galaxy_maf
+#end if
+
+#if $galaxy_missing_rate == "":
+  --missing_rate NaN
+#else:
+  --missing_rate $galaxy_missing_rate
+#end if
+
+--method '$galaxy_method' 
+
+--sample_id_output_file $galaxy_sample_id_output_file
+
+--grm_output_file $galaxy_grm_output_file
+
+]]></command>
+  <inputs>
+    <param name="galaxy_genotypes_file" 
+           type="data" 
+           format="tab" 
+           label="Input Genotypes File" 
+           help="(required) The TAB file containing the data matrix of the genotypes" />
+    <param name="galaxy_autosome_only"
+           type="boolean"
+           checked="true"
+           truevalue="true"
+           falsevalue="false"
+           label="Autosome only"
+           help="(required) If Yes, use autosomal SNPs only" />
+    <param name="galaxy_remove_monosnp"
+           type="boolean"
+           checked="true"
+           truevalue="true"
+           falsevalue="false"
+           label="Removal of monoSNPs"
+           help="(required) If Yes, remove monomorphic SNPs" />
+    <param name="galaxy_maf"
+           type="text"
+           value=""
+           label="MAF"
+           help="(optional, numeric) To use the SNPs with a value greater than or equal to MAF only; if not, no MAF threshold" />
+    <param name="galaxy_missing_rate"
+           type="text"
+           value=""
+           label="Missing Rate"
+           help="(optional, numeric) To use the SNPs with a value less than or equal missing rate only; if not, no missing threshold" />
+    <param name="galaxy_method"
+           type="select"
+           label="Method"
+           help="(required, string) To choose a method to calculate the Genetic Relationship Matrix (GRM)">
+      <option value="Eigenstrat"
+              selected="true">Eigenstrat</option>
+      <option value="EIGMIX">EIGMIX</option>
+    </param>
+  </inputs>
+  <outputs>
+    <data name="galaxy_sample_id_output_file"
+          label="Sample IDs"
+    	  format="tab" />	
+    <data name="galaxy_grm_output_file"
+          label="GRM"
+    	  format="tab" />	
+  </outputs>
+  <help>
+  </help>
+</tool>

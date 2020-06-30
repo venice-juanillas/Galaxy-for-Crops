@@ -1,0 +1,87 @@
+<tool id="simpletracker" name="SimpleTracker" version="0.1.0">
+  <description>
+Generates sample IDs and plate layout for sample barcoding and collection
+</description>
+  <command><![CDATA[
+	python $__tool_directory__/SimpleTracker.py -i $input -o output -e $exp_name -t $__tool_directory__/intertek.xls -d $direction -c $checks -m generate &&
+	cp output.plate_barcodes.txt $output_barcodes &&
+	cp output.sample_file.txt $output_sample_file &&
+	cp output.verify_db.txt $output_verify_db &&
+	cp output_intertek.xls $output_intertek_xls
+  ]]></command>
+
+  <inputs>
+    <param format="tabular" name="input" type="data" label="Input file"/>
+    <param name="exp_name" type="text" label="Plate name prefix" value="Plate-"/>
+    <param name="direction" type="select" label="Direction of plate layout">
+              <option value="vertical">Vertical</option>
+              <option value="horizontal">Horizontal</option>
+    </param>
+    <param name="checks" type="text" label="Position of checks in plate ex. A01,H12 (comma separated, no spaces, zero-padded)" value="H11,H12" />
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output_barcodes" label="Plate barcodes" />
+    <data format="tabular" name="output_sample_file" label="Sample file" />
+    <data format="tabular" name="output_verify_db" label="Verify DB" />
+    <data format="xls" name="output_intertek_xls" label="Intertek form" />
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="input" value="in.txt"/>
+      <param name="exp_name" value="new_exp-Plate-"/>
+      <param name="direction" value="horizontal"/>
+      <param name="checks" value="H11,H12"/>
+      <output name="output_barcodes">
+            <assert_contents>
+                   <has_line line="plate_uuid&#009;plate_barcode&#009;plate_name" />
+                   <has_n_columns n="3" />
+            </assert_contents>
+      </output>
+      <output name="output_sample_file">
+            <assert_contents>
+                   <has_text_matching expression="^sequence" />
+            </assert_contents>
+      </output>
+      <output name="output_verify_db">
+            <assert_contents>
+                   <has_text_matching expression="^barcodes" />
+                   <has_n_columns n="6" />
+            </assert_contents>
+      </output>
+      <output name="output_intertek_xls">
+            <assert_contents>
+                   <has_text_matching expression="arrival of the samples" />
+            </assert_contents>
+      </output>
+    </test>
+  </tests>
+
+  <stdio>
+    <regex match="exception"
+           source="stdout"
+           level="fatal"
+           description="Exception occured, check stdout"/>
+    <regex match="error"
+           source="stdout"
+           level="fatal"
+           description="Error occured, check stdout"/>
+  </stdio>
+
+
+  <help>
+
+**What it does**
+
+This tool parses a tab-delimited text file for *germplasm_name* and *number_of_plants* columns to generate a list of samples with UUIDs and plate layout.
+
+**It has 4 different outputs:**
+	1. Filled Intertek submission form
+	2. Verify database to act as check and guide during sampling procedure
+	3. Sample file with UUID, UUID (in number), plate name, and well position
+	4. Plate barcode file
+
+The generated sample file will take all other columns included in the input file.
+</help>
+
+</tool>

@@ -1,0 +1,60 @@
+<tool id="tassel-compute-glm-1" name="Compute GLM" version="1.0.0" force_history_refresh="True">
+	<description> using Perl</description>
+	<command interpreter="perl">
+		#if $geno_type.geno_source=="hapmap"
+		run_pipeline.pl -fork1 -h $geno_type.hapmapGeno -filterAlign -filterAlignMinFreq $filterMinFreq -fork2 -r $trait -fork3 -q $popStruct -combine4 -input1 -input2 -input3 -intersect -glm -export $glm_output1,$glm_output2 -runfork1 -runfork2 -runfork3 > $glm_log
+		#else
+		run_pipeline.pl -fork1 -flapjack -geno $geno_type.flapjackGeno -map $geno_type.flapjackMap -filterAlign -filterAlignMinFreq $filterMinFreq -fork2 -r $trait -fork3 -q $popStruct -combine4 -input1 -input2 -input3 -intersect -glm -export $glm_output -runfork1 -runfork2 -runfork3 > $glm_log	
+		#end if
+		
+	</command>
+
+	<inputs>
+		<conditional name="geno_type">
+			<param name="geno_source" type="select" label="Genotype Data Format type">
+				<option value="flapjack">Flapjack Format</option>
+				<option value="hapmap" selected="true">Hapmap Format</option>
+			</param>
+
+			<when value="flapjack">
+				<param name="flapjackGeno" type="data" format="tabular" label="Genotype file"/>
+				<param name="flapjackMap" type="data" format="tabular" label="Map file"/>
+			</when>
+	
+			<when value="hapmap">
+				<param name="hapmapGeno" type="data" format="tabular" label="Genotype file"/>
+			</when>
+		</conditional>
+
+
+		<param name="trait" type="data" format="tabular" label="Phenotype file"/>
+		<param name="popStruct" type="data" format="tabular" label="Population structure file"/>
+		<param name="filterMinFreq" type="text" size="10" label="Filter SNPs with Minimum Frequency"/>
+		<param name="glmPermutation" type="text" size="10" label="Number of Permutations"/>
+		<param name="glmMaxP" type="text" size="10" label="Maximum P-value"/>
+	</inputs>
+	
+	<outputs>
+		<data name="glm_output1" type="dataset_collection" label="GLM Genotypes"/>
+<!--
+			<discover_datasets pattern="(?P&lt;TASSELOUT1&gt;.+)\.dat\.txt" ext="txt" visible="true" /> 
+		</data>
+		<data name="glm_output2" label="GLM Statistics">
+			<discover_datasets pattern="(?P&lt;TASSELOUT2&gt;.+)\.dat\.txt" ext="txt" visible="true" />
+		</data>
+-->
+		<data name="glm_log" format="txt" label="GLM Log"/>
+	</outputs>
+
+	<tests>
+		
+
+	</tests>
+		
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+
+</tool>

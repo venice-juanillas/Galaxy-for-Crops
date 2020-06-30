@@ -1,0 +1,45 @@
+<tool id="intreegreat" name="InTreeGreat" version="1.0.0">
+    
+    <!-- [REQUIRED] Tool description displayed after the tool name -->
+    <description> Display Newick tree</description>
+    
+    <!-- [OPTIONAL] 3rd party tools, binaries, modules... required for the tool to work -->
+    <requirements>
+        <requirement type="binary">perl</requirement>
+    </requirements>
+    
+    <!-- [STRONGLY RECOMMANDED] Exit code rules -->
+    <stdio>
+        <!-- [HELP] If no exit code rule is defined, the tool will stop if anything is written to STDERR -->
+        <exit_code range="1:" level="fatal" />
+    </stdio>
+    
+    <!-- [REQUIRED] The command to execute -->
+    <command interpreter="perl">
+	InTreeGreat.sh $filein $fileout $groups
+    </command>
+     
+    <!-- [REQUIRED] Input files and tool parameters -->
+    <inputs>
+	<param name="filein" type="data" format="nhx" optional="false" label="Newick input" />
+	<param name="groups" type="data" format="txt" optional="true" label="Groups for colorization" help="Must be semicolon-separated columns: individual;pop"/>
+    </inputs>
+    
+    <!-- [REQUIRED] Output files -->
+    <outputs>
+	<data name="fileout" format="html" label="Newick viewer" />
+    </outputs>
+    
+    <!-- [OPTIONAL] Tests to be run manually by the Galaxy admin -->
+    <tests>
+        <!-- [HELP] Test files have to be in the ~/test-data directory -->
+        <test>
+        </test>
+    </tests>
+    
+    <!-- [OPTIONAL] Help displayed in Galaxy -->
+    <help>
+
+    </help>
+
+</tool>

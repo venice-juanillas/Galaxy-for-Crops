@@ -1,0 +1,94 @@
+<tool id="blat.34-1" name="Find-seq" version="v.01">
+  <description>Align your sequences to new draft rice genomes</description>
+   <command><![CDATA[
+	#if str($reference.source) != "indexed":
+		mkdir index_dir && 
+		ln -s  $reference.own_file index_dir/genome.fa && 
+		/usr/bin/samtools faidx index_dir/genome.fa &&
+		blat index_dir/genome.fa  '$query' -maxIntron='$maxIntron' -tileSize='$tile' -out=$outformat '$output' &&
+		rm -rf index_dir
+	#else:
+		blat '$reference.index.fields.path'  '$query' -maxIntron='$maxIntron' -tileSize='$tile' -out=$outformat '$output'
+	#end if
+	 ]]>
+   </command>
+  
+   <inputs>
+    <param format="data" name="query" type="data">
+      <label>Query FASTA file</label>
+    </param>
+
+    <conditional name="reference">
+		<param name="source" type="select" label="Will you select a reference genome from your history or use a built-in index?" help="Built-ins were indexed using default options. See `Indexes` section of help below">
+			<option value="indexed">Use a built-in genome index</option>
+			<option value="history">Use a genome from the history and build index</option>
+		</param>
+		<when value="indexed">
+			<param name="index" type="select" label="Select reference genome" help="If your genome of interest is not listed, contact the Galaxy team">
+				<options from_data_table="all_fasta">
+					<filter type="sort_by" column="2"/>
+					<validator type="no_options" message="No indexes are available for the selected input dataset"/>
+				</options> 
+				<!-- <options from_file="all_fasta.loc">
+					<column name="name" index="2"/>
+					<column name="value" index="3"/>
+				</options> -->
+			</param>
+		</when>
+		<when value="history">
+			<param name="own_file" type="data" format="fasta" label="Select reference genome" />
+		</when>
+	</conditional>
+
+    <param name="tile" size="10" type="text" value="11" label="size of match that triggers an alignment(between 8 - 12 allowed)">
+    </param>
+
+    <param name="maxIntron" size="20" type="text" value="5000" label="maximum intron size allowed">
+    </param>
+
+    <param name="outformat" type="select" value="psl">
+      <label>Format for alignment output</label>
+      <option value="psl">Default blat tabular format,no sequence</option>
+      <option value="pslx">blat tabular format with sequence</option>
+      <option value="blast">Similar to NCBI BLAST format</option>
+      <option value="blast8">NCBI BLAST tabular format</option>
+      <option value="blast9">NCBI BLAST tabular format with comments</option>
+    </param>
+  </inputs>
+ 
+
+  <outputs>
+    <data format="tabular" name="output" label="Alignment of ${query.name}" />
+  </outputs>
+
+<!--
+  <tests>
+	<test>
+		<conditional name="reference">
+			<param name="source" value="indexed" />
+			<param name="index" value="/home/galaxy/galaxy-prod/database/refGenomes/irgsp/Nipponbare/IRGSP-1.0_genome.fasta" />	
+		</conditional>
+		<param name="tile" value="11"/>
+		<param name="maxIntron" value="5000" />
+		<param name="outformat" value="psl" />
+		<output name="output" file=" " />
+	</test>
+  </tests>
+-->
+  <help>
+
+.. class:: infomark
+
+**Find-seq - what it does**
+
+Find-seq is a specialized alignment tool to find the location of your sequences of interest in the most recent Nipponbare build, and the 3 published draft rice genomes (IR64, DJ123:Schatz et al 2014; Kasalath:Sakai et al 2014)
+
+It uses blat_ as alignment engine. The default parameters of blat should work fine for rice genomes. 
+
+.. _blat: http://users.soe.ucsc.edu/~kent/
+
+After identifying the  scaffold/contig region aligning to your query sequence, you could extract the subsequence from the draft genome using the Get-subseq tool.
+
+    
+   </help>
+</tool>

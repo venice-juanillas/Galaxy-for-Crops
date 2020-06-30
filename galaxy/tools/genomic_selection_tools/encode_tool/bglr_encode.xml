@@ -1,0 +1,207 @@
+<tool id="bglr:encode" name="Encode" version="1.0.1">
+	<description>genotypes to numeric</description>
+	<command><![CDATA[
+		perl $__tool_directory__/bglr_encode.pl '$data_type.format' '$genoFile' '$data_type.codeScheme' '$output'
+		]]>
+	</command>
+  
+	<inputs>
+		<param name="genoFile" type="data" format="tabular" label="Genotype data file" help="Genotype data file must be a tab-delimited file" />
+		<conditional name="data_type">
+			<param name ="format" type="select" label="Data type" help="See help below for more information." >
+				<option value="dominant"> Dominant Format </option>
+				<option value="iupac"> IUPAC</option>
+				<option value="2letter"> Two-letter nucleotide</option>
+			</param>
+			<when value="dominant">		
+				<param name="codeScheme" type="select" label="Select coding scheme to use" help="Coding scheme always follows this format: (minor homozygous, major homozygous)" >
+					<option value="0,2"> (0,2) </option>
+					<option value="-1,1"> (-1,1) </option>		
+				</param>
+			</when>
+			<when value="iupac">
+				<param name="codeScheme" type="select" label="Select coding scheme to use" help="Coding scheme always follows this format: (minor homozygous,heterozygous, major homozygous,missing allele)" >
+					<option value="0,1,2,NA"> (0,1,2,NA) </option>	
+				</param>
+			</when>
+			<when value="2letter">
+				<param name="codeScheme" type="select" label="Select coding scheme to use" help="Coding scheme always follows this format: (minor homozygous,heterozygous, major homozygous,missing allele)" >
+					<option value="0,1,2,NA"> (0,1,2,NA) </option>	
+					<option value="-1,0,1,NA"> (-1,0,1,NA) </option>	
+				</param>
+			</when>
+			
+		</conditional>
+	</inputs>
+
+	<outputs>
+		<data name="output" format="tabular" label="Encoded data in hapmap format"/>
+	</outputs>
+
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+	
+	<help>
+<![CDATA[
+
+.. class:: infomark 
+
+Encode genotypes to numeric
+
+-----
+
+This tool transforms genotype data to numeric by using a desired numerical scheme. It takes a tab delimited GOBII-hapmap format as input.
+
+-----
+
+Datatypes:
+
+	+ Dominant datatype - alleles are coded as 0 or 1.
+	+ IUPAC datatype - alleles appear as:: 
+		
+		 Allele Code - Base
+		 A - Adenine
+		 C - Cytosine
+		 G - Guanine
+		 T - Thymine
+		 R - A or G
+		 Y - C or T
+		 S - G or C
+		 W - A or T
+		 K - G or T
+		 M - A or C
+		 N - any base
+		 . or - gap
+		
+		For more information: http://www.bioinformatics.org/sms2/iupac.html
+
+	+ Two-letter nucleotide datatype - alleles are coded as two-letter (eg. if allele is "A", it appears as "AA"; if heterogygous "A/T", written as "AT")
+		
+
+-----
+
+**Example**
+
+Consider a two letter nucleotide hapmap using the numerical scheme: 0,1,2 NA
+
+	+ 0  - minor homozygous
+	+ 1  - heterozygous
+	+ 2  - major homozygous
+	+ NA - missing
+
+Using this Input file:
+
+- GOBII Hapmap format::
+
+	#										dnarun_barcode			
+	#										project_name	test_load_hmp5	test_load_hmp5	test_load_hmp5
+	#										project_pi_contact	Ramil Mauleon	Ramil Mauleon	Ramil Mauleon
+	#										project_genotyping_purpose			
+	#										project_date_sampled			
+	#										project_division			
+	#										project_study_name			
+	#										experiment_name	test_load_hmp5_exp	test_load_hmp5_exp	test_load_hmp5_exp
+	#										vendor_protocol_name	BGI_Shenzhen,_China_Illumina_Infinium	BGI_Shenzhen,_China_Illumina_Infinium	BGI_Shenzhen,_China_Illumina_Infinium
+	#										vendor_name	BGI Shenzhen, China	BGI Shenzhen, China	BGI Shenzhen, China
+	#										protocol_name	Illumina_Infinium	Illumina_Infinium	Illumina_Infinium
+	#										dataset_name	test_load_hmp5_ds	test_load_hmp5_ds	test_load_hmp5_ds
+	#										germplasm_name	germplasm_name1	germplasm_name2	germplasm_name3
+	#										germplasm_external_code	10001	10002	10003
+	#										germplasm_species			
+	#										germplasm_type			
+	#										germplasm_id			
+	#										germplasm_seed_source_id			
+	#										germplasm_subsp			
+	#										germplasm_heterotic_group			
+	#										germplasm_par1			
+	#										germplasm_par2			
+	#										germplasm_par3			
+	#										germplasm_par4			
+	#										germplasm_pedigree			
+	#										dnasample_name	IRIS_313-11806-2	IRIS_313-11644-2	IRIS_313-11515-2
+	#										dnasample_platename			
+	#										dnasample_num	1	2	3
+	#										dnasample_well_row			
+	#										dnasample_well_col			
+	#										dnasample_trial_name			
+	#										dnasample_sample_group			
+	#										dnasample_sample_group_cycle			
+	#										dnasample_sample_type			
+	#										dnasample_sample_parent			
+	#										dnasample_ref_sample			
+	rs#	alleles	chrom	pos	strand	assembly#	center	protLSID	assayLSID	panelLSID	QCcode	IRIS_313-11806	IRIS_313-11644	IRIS_313-11515
+	270512992	A/G	9	40442	+	NA	NA	NA	NA	NA	NA	AA	GG	GG
+	270515323	C/T	9	42773	+	NA	NA	NA	NA	NA	NA	CC	CC	CC
+	270515818	G/A	9	43268	+	NA	NA	NA	NA	NA	NA	GC	GG	GG
+	270516493	G/A	9	43943	+	NA	NA	NA	NA	NA	NA	GG	GG	GG
+	270517705	A/G	9	45155	+	NA	NA	NA	NA	NA	NA	AA	AA	AA
+	270521099	A/G	9	48549	+	NA	NA	NA	NA	NA	NA	AA	AA	AA
+	270521753	G/A	9	49203	+	NA	NA	NA	NA	NA	NA	GG	NN	GG
+	270523562	A/T	9	51012	+	NA	NA	NA	NA	NA	NA	AA	AT	NN
+	270538155	T/C	9	65605	+	NA	NA	NA	NA	NA	NA	TT	TT	NN
+	270538734	C/T	9	66184	+	NA	NA	NA	NA	NA	NA	CC	CT	CC
+	270538772	C/T	9	66222	+	NA	NA	NA	NA	NA	NA	TT	TT	TT
+
+Output:
+
+- GOBII Hapmap format::
+
+	#										dnarun_barcode			
+	#										project_name	test_load_hmp5	test_load_hmp5	test_load_hmp5
+	#										project_pi_contact	Ramil Mauleon	Ramil Mauleon	Ramil Mauleon
+	#										project_genotyping_purpose			
+	#										project_date_sampled			
+	#										project_division			
+	#										project_study_name			
+	#										experiment_name	test_load_hmp5_exp	test_load_hmp5_exp	test_load_hmp5_exp
+	#										vendor_protocol_name	BGI_Shenzhen,_China_Illumina_Infinium	BGI_Shenzhen,_China_Illumina_Infinium	BGI_Shenzhen,_China_Illumina_Infinium
+	#										vendor_name	BGI Shenzhen, China	BGI Shenzhen, China	BGI Shenzhen, China
+	#										protocol_name	Illumina_Infinium	Illumina_Infinium	Illumina_Infinium
+	#										dataset_name	test_load_hmp5_ds	test_load_hmp5_ds	test_load_hmp5_ds
+	#										germplasm_name	germplasm_name1	germplasm_name2	germplasm_name3
+	#										germplasm_external_code	10001	10002	10003
+	#										germplasm_species			
+	#										germplasm_type			
+	#										germplasm_id			
+	#										germplasm_seed_source_id			
+	#										germplasm_subsp			
+	#										germplasm_heterotic_group			
+	#										germplasm_par1			
+	#										germplasm_par2			
+	#										germplasm_par3			
+	#										germplasm_par4			
+	#										germplasm_pedigree			
+	#										dnasample_name	IRIS_313-11806-2	IRIS_313-11644-2	IRIS_313-11515-2
+	#										dnasample_platename			
+	#										dnasample_num	1	2	3
+	#										dnasample_well_row			
+	#										dnasample_well_col			
+	#										dnasample_trial_name			
+	#										dnasample_sample_group			
+	#										dnasample_sample_group_cycle			
+	#										dnasample_sample_type			
+	#										dnasample_sample_parent			
+	#										dnasample_ref_sample			
+	rs#	alleles	chrom	pos	strand	assembly#	center	protLSID	assayLSID	panelLSID	QCcode	IRIS_313-11806	IRIS_313-11644	IRIS_313-11515
+	270512992	A/G	9	40442	+	NA	NA	NA	NA	NA	NA	0	2	2
+	270515323	C/T	9	42773	+	NA	NA	NA	NA	NA	NA	0	0	0
+	270515818	G/A	9	43268	+	NA	NA	NA	NA	NA	NA	1	0	0
+	270516493	G/A	9	43943	+	NA	NA	NA	NA	NA	NA	0	0	0
+	270517705	A/G	9	45155	+	NA	NA	NA	NA	NA	NA	0	0	0
+	270521099	A/G	9	48549	+	NA	NA	NA	NA	NA	NA	0	0	0
+	270521753	G/A	9	49203	+	NA	NA	NA	NA	NA	NA	0	NA	0
+	270523562	A/T	9	51012	+	NA	NA	NA	NA	NA	NA	0	1	NA
+	270538155	T/C	9	65605	+	NA	NA	NA	NA	NA	NA	0	0	NA
+	270538734	C/T	9	66184	+	NA	NA	NA	NA	NA	NA	0	1	0
+	270538772	C/T	9	66222	+	NA	NA	NA	NA	NA	NA	2	2	2
+
+
+]]>
+	</help>
+
+</tool>
+
+

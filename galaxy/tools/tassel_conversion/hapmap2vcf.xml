@@ -1,0 +1,60 @@
+<tool id="tassel-hapmap2vcf" name="Convert Hapmap to VCF" version="1.0.0">
+	<description> genotype format </description>
+	<command><![CDATA[
+		#set id = $genoFile.dataset_id
+		mkdir -p  $__tool_directory__/out$id/ &&
+		perl $__tool_directory__/run_pipeline.pl -fork1 -h $genoFile -export $__tool_directory__/out$id/output.vcf -exportType VCF -runfork1 &&
+		mv $__tool_directory__/out$id/output.vcf $out &&
+		rm -rf  $__tool_directory__/out$id/
+	]]>
+	</command>
+	
+	<inputs>
+		<param name="genoFile" type="data" format="tabular" label="Hapmap Genotype File"/>
+	</inputs>
+
+	<outputs>
+		<data name="out" format="vcf"  label="VCF File: ${genoFile.name}"/>
+	</outputs>
+        <stdio>
+                <exit_code range="2"   level="fatal"   description="Out of Memory" />
+                <exit_code range="3:5" level="warning" description="Low disk space" />
+                <exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+        </stdio>
+
+        <help>
+.. class:: infomark
+
+**Convert Hapmap Files to VCF**
+
+-----
+
+**Description**
+
+This tool converts Hapmap text files to VCF.
+
+-----
+
+**Hapmap files**
+
+- .hmp.txt: Hapmap is a text based file format for storing sequence data. All the information for a series of SNPs as well as the germplasm lines are stored in one file.
+
+**Variant Call Format (VCF)**
+
+- .vcf (1000 Genomes Project text Variant Call Format) : Variant information + sample ID + genotype call text file. Loaded with --vcf, and produced by '--recode vcf' (or vcf-fid/vcf-iid). Do not use PLINK for general-purpose VCF handling: all information in VCF files which cannot be represented by the PLINK 1 binary format is ignored.
+
+This tool uses TASSEL5 for conversion.
+
+	</help>
+        <citations>
+        <!-- Example of annotating a citation using a BibTex entry. -->
+                <citation type="bibtex">@ARTICLE{Bradbury07tassel-software,
+                author = {Bradbury PJ, Zhang Z, Kroon DE, Casstevens TM, Ramdoss Y, Buckler ES},
+                title = {TASSEL: Software for association mapping of complex traits in diverse samples},
+                journal = {Bioinformatics},
+                year = {2007},
+                volume = {23},
+                pages = {2633-2635}
+                }</citation>
+        </citations>
+</tool>

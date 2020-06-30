@@ -1,0 +1,74 @@
+<tool id="sampleCDmean" name="Sample C Dmean" version="1.0">
+  <description>- Select a representative sample of a population of interest</description>
+  <command interpreter="Rscript --vanilla">sampleCDmean.R
+       #if str($relmat).strip() != "":
+          --relmat="$relmat"
+       #end if
+       #if str($targetId).strip() != "":
+          --targetId="$targetId"
+       #end if
+       #if str($candId).strip() != "":
+          --candId="$candId"
+       #end if
+       #if str($nchoose).strip() != "":
+          --nchoose="$nchoose"
+       #end if
+       #if str($herit).strip() != "":
+          --herit="$herit"
+       #end if
+       #if str($ntry).strip() != "":
+          --ntry="$ntry"
+       #end if
+       #if str($nrep).strip() != "":
+          --nrep="$nrep"
+       #end if
+       #if str($outputfile1).strip() != "":
+          --outputfile1="$outputfile1"
+       #end if
+       #if str($trace).strip() != "":
+          --trace="$trace"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="relmat" format="data" type="data" help="This is a .csv file of relationship matrix containing all the&#10;individuals in the population of interest and possibly&#10;additional individuals" label="[required] Relmat">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="targetId" format="data" type="data" help="This is a .csv file of the IDs of the population of interest,&#10;it may be all the individuals in the relationship matrix or a&#10;sub-population. The file should consist of a single column&#10;with a header." label="[required] Target Id">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="candId" format="data" type="data" help="This is a .csv file of the IDs of the the individuals&#10;avaliable for sampling, it may be all the individuals in the&#10;population of interest or a subset of the indiviudals, for&#10;example the individuals where seeds are avalible. The file&#10;should consist of a single column with a header." label="[required] Cand Id">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="nchoose" type="float" value="" help="the subsample size, it should be less than the number of&#10;individuals input in candID" label="[required] The number of individuals to sample">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="herit" type="float" value="" help="For the trait of interest, what proportion of the total&#10;variance is additive genetic variance" min="0.01" max="0.99" label="[required] The heritability of the trait">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="ntry" type="float" value="" help="How many iterations of the exchange algorithm" min="10" max="5000" label="[required] The number of iterations of the optimisation algorithm">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="nrep" type="float" value="" help="How many times the entire optimization process is repeated&#10;with a new starting sample" min="1" max="200" label="[required] The number of replicates of the optimization procedure">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="csv" name="outputfile1" label="subsampleIds.csv"/>
+    <data format="csv" name="trace" label="traceofCDmeans.csv"/>
+  </outputs>
+  <help>
+**Description**
+
+This tool gets a representative sample from a popuation of
+interest based on a relationship matrix. The input files that are
+required are a relationship matrix csv file, csv files with the
+ids of the population of interest and the individuals avaliable
+for sampling. The user must also specify the desired sample size,
+the heritability of the trait, the number of iterations of the
+optimization algoritm and the number of replicates of the
+optimization process.
+</help>
+</tool>

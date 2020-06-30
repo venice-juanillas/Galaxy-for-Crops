@@ -1,0 +1,87 @@
+<tool id="plink:bed-to-vcf" name="Convert bed/bim/fam" version="1.09">
+	<description> to VCF</description>
+	<requirements>
+		<requirement type="package" version="1.09"> plink </requirement>
+	</requirements>
+	 <stdio>
+                 <exit_code range="2"   level="fatal"   description="Out of Memory" />
+                <exit_code range="3:5" level="warning" description="Low disk space" />
+                <exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+        </stdio>
+	<command>
+	<![CDATA[
+		#set id = $vcfFile.dataset_id
+		mkdir -p $__tool_directory__/out$id/ &&
+		cp $bedFile $__tool_directory__/out$id/input.bed &&
+		cp $bimFile $__tool_directory__/out$id/input.bim &&
+		cp $famFile $__tool_directory__/out$id/input.fam &&
+		plink --bfile  $__tool_directory__/out$id/input --recode vcf bgz --keep-allele-order --out $__tool_directory__/out$id/output &&
+		cp $__tool_directory__/out$id/output.vcf.gz $vcfFile &&
+		rm -rf  $__tool_directory__/out$id/	
+	]]>
+	</command>
+	<inputs>
+		<param name="bedFile" type="data" format="pbed" label="Genotype Data: .bed file" />
+		<param name="bimFile" type="data" format="tabular" label="Genotype Data: bim file" />
+		<param name="famFile" type="data" format="tabular" label="Genotype Data: fam file" />
+	</inputs>
+
+	<outputs>
+		<data name="vcfFile" format="vcf" label="VCF File"/>
+	</outputs>
+
+	<tests>
+		<test>
+			<param name="bedFile" value="test.bed" />
+			<param name="bimFile" value="test.bim" />
+			<param name="famFile" value="test.fam" />
+			<output name="vcfFile" file="test.vcf" />
+		</test>
+	</tests>
+	<help>
+.. class:: infomark
+
+**Convert bim/fam/bed to VCF using Plink.**
+
+-----
+
+**What this tool does**
+
+This tool converts binary Plink files to VCF for further analysis.
+
+-----
+
+**Plink Binary files**
+
+- .bed (PLINK binary biallelic genotype table) : Primary representation of genotype calls at biallelic variants
+
+- .bim (PLINK extended MAP file) : Extended variant information file accompanying a .bed binary genotype table.
+
+- .fam (PLINK sample information file) : Sample information file accompanying a .bed binary genotype table.
+
+
+**Variant Call Format (VCF)**
+
+- .vcf (1000 Genomes Project text Variant Call Format) : Variant information + sample ID + genotype call text file. Loaded with --vcf, and produced by '--recode vcf' (or vcf-fid/vcf-iid). Do not use PLINK for general-purpose VCF handling: all information in VCF files which cannot be represented by the PLINK 1 binary format is ignored. 
+
+This tool uses Plink v1.9
+
+- Package : PLINK v1.9
+- Authors : Shaun Purcell, Christopher Chang
+- URL     : www.cog-genomics.org/plink/1.9/
+
+        </help>
+
+        <citations>
+        <!-- Example of annotating a citation using a BibTex entry. -->
+                <citation type="bibtex">@ARTICLE{Chang15second-generationplink,
+                author = {Chang CC, Chow CC, Tellier LCAM, Vattikuti S, Purcell SM, Lee JJ},
+                title = {Second-generation PLINK: rising to the challenge of larger and richer datasets},
+                journal = {GigaScience},
+                year = {2015},
+                volume = {4}
+                }</citation>
+        </citations>
+
+</tool>
+

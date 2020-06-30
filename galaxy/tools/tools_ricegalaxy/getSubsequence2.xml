@@ -1,0 +1,97 @@
+<tool id="getsubseq2" name="Get-subseq" version="0.1.0">
+  <description>Extract sequence for your gene IDs (entire or region) from rice genome or multiFASTA file</description>
+    <requirements>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+ 
+		#if str($reference.source) == "history":
+			mkdir index_dir &&
+			ln -s $idList index_dir/tab &&
+			cut -f $col1 index_dir/tab > index_dir/genecol &&
+                	ln -s  $reference.own_fasta index_dir/tmp_genome.fa &&
+                	samtools faidx index_dir/tmp_genome.fa &&
+                	samtools faidx --continue --region-file index_dir/genecol index_dir/tmp_genome.fa --output '$outFasta' &&
+                	rm -rf index_dir
+		#else:
+			mkdir index_dir &&
+			ln -s $idList index_dir/tab &&
+			cut -f $col1 index_dir/tab > index_dir/genecol &&
+		        samtools faidx --continue --region-file index_dir/genecol '$reference.index.fields.path' --output '$outFasta' &&
+		        rm -rf index_dir
+        	#end if
+
+
+    ]]></command>
+
+    <inputs>
+		<param name="idList" label="Select (gene) ID/region list (tabular format)"  format="tabular" type="data" help="Your gene ID list SHOULD BE (1) tabular data type and (2) present in your target sequence(s), else the tool fails!" />
+		<param name="col1" label="gene ID column" type="data_column"  data_ref="idList" help="Select column number where your gene ID/region(s) are (if your list is a multicolumn table)."/>
+
+        <conditional name="reference">
+                <param name="source" type="select" label="Will you select a multiFASTA sequence from history or use a built-in rice genome database?" help="Built-in genomes and genes for representative rice variety groups are included.">
+                        <option value="idxcon">Use a built-in genome (chromosome/scaffold scale)</option>
+                        <option value="idxgen">Use a built-in gene database</option>
+                        <option value="history">Use a multiFASTA from the history</option>
+                </param>
+                <when value="idxcon">
+                        <param name="index" type="select" label="Select reference genome" help="If your genome of interest is not listed, contact Rice Galaxy team!">
+                                <options from_data_table="all_fasta">
+                                        <filter type="sort_by" column="2"/>
+                                        <validator type="no_options" message="No indexes are available for the selected input dataset"/>
+                                </options>
+                        </param>
+                </when>
+                <when value="idxgen">
+                        <param name="index" type="select" label="Select reference database" help="If your genome of interest is not listed, contact  Rice Galaxy team!">
+                                <options from_data_table="srma_indexes">
+                                        <filter type="sort_by" column="2"/>
+                                        <validator type="no_options" message="No indexes are available for the selected input dataset"/>
+                                </options>
+                        </param>
+                </when>
+                <when value="history">
+                        <param name="own_fasta" type="data" format="fasta" label="Select reference genome (multi-fasta)" />
+                </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data name="outFasta" format="fasta" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="own_fasta" value="9_fasta.fa"/>
+            <param name="idList" value="3_ID.txt"/>
+            <output name="outFasta" file="3Fasta.txt"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**Get_subseq - what it does**
+
+This tool extracts a subsequence of interest from important rice reference genomes (N22 - aus, IR64 - indica, Azucena - TrJ, Nipponbare - TeJ). 
+
+One use case is: you would align a query sequence to these genomes using the Find-seq tool, then extract the subsequence of choice from the alignment output using this tool.
+
+Another case is that you specify a gene ID list file. You can also specify which region for a gene ID to extract.::
+
+           An example Nipponbare gene ID list (one ID per line)
+             LOC_Os01g...
+             LOC_Os04g...
+           Another example Nipponbare rice chromosome IDs with the region indicated (one ID-region per line, following Samtools faidx format format!)
+             Chr1:1-500
+             Chr5:1:2000-4000
+
+The scaffold / chromosome /sequence name spelling is important. Pls make sure you use the correct sequence name to extract (scaffold_nn or chr0n ...).
+
+Samtools-0.19_ is used to extract subsequences from the multiFASTA/genome file.
+
+.. _Samtools-0.19: http://samtools.sourceforge.net/samtools.shtml
+
+    ]]></help>
+</tool>
+
+
+

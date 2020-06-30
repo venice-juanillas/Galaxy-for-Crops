@@ -1,0 +1,190 @@
+<tool id="Impute2" name="Impute2" version="2.3.2">
+  <description>imputation</description>
+  <command><![CDATA[
+$__tool_directory__/impute2
+
+-m $galaxy_map_file
+
+#if $galaxy_option_conditional.galaxy_option_select == "pre-phasing": 
+  -prephase_g
+  -g $galaxy_option_conditional.galaxy_gens_file
+#end if
+
+#if $galaxy_option_conditional.galaxy_option_select == "imputation":
+  #if $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_option_select_reference_haplotypes_files_number == "one":
+    -h $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_haps_file_1
+    -l $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_legend_file_1
+  #end if
+
+  #if $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_option_select_reference_haplotypes_files_number == "two":
+    -h $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_haps_file_1 $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_haps_file_2
+    -l $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_legend_file_1 $galaxy_option_conditional.galaxy_option_conditional_reference_haplotypes_files_number.galaxy_legend_file_2
+  #end if
+
+  #if $galaxy_option_conditional.galaxy_option_conditional_genotypes_or_known_haplotypes.galaxy_option_select_genotypes_or_known_haplotypes == "genotypes":
+    -g $galaxy_option_conditional.galaxy_option_conditional_genotypes_or_known_haplotypes.galaxy_gens_file
+  #end if
+
+  #if $galaxy_option_conditional.galaxy_option_conditional_genotypes_or_known_haplotypes.galaxy_option_select_genotypes_or_known_haplotypes == "known_haplotypes":
+    -use_prephased_g
+    -known_haps_g $galaxy_option_conditional.galaxy_option_conditional_genotypes_or_known_haplotypes.galaxy_known_haps_file
+    -phase  
+  #end if
+
+  #if $galaxy_option_conditional.galaxy_option_conditional_strand_file.galaxy_option_select_strand_file == "one":
+    -strand_g $galaxy_option_conditional.galaxy_option_conditional_strand_file.galaxy_strand_file
+  #end if
+#end if
+
+-int $galaxy_lower_boundary_genomic_interval $galaxy_upper_boundary_genomic_interval 
+
+-Ne $galaxy_effective_size_population
+
+-o $galaxy_output_data
+
+]]></command>
+  <inputs>
+    <param name="galaxy_map_file" 
+           type="data" 
+           format="map"
+           optional="false" 
+           label="Map File" 
+           help="Fine-scale recombination map for the region to be analyzed. This file should have three columns: physical position (in base pairs), recombination rate between current position and next position in map (in cM/Mb), and genetic map position (in cM). The file should also have a header line with an unbroken character string for each column (e.g., position COMBINED_rate(cM/Mb) Genetic_Map(cM))" />
+    <conditional name="galaxy_option_conditional">
+      <param name="galaxy_option_select" 
+             type="select" 
+             label="Select Imputation or Pre-phasing">
+        <option value="imputation"
+                selected="true">Imputation</option>
+        <option value="pre-phasing">Pre-phasing</option>
+      </param>
+      <when value="imputation">
+        <conditional name="galaxy_option_conditional_reference_haplotypes_files_number">
+          <param name="galaxy_option_select_reference_haplotypes_files_number"
+                 type="select" 
+                 label="Select One or Two Reference Haplotypes File(s)">
+            <option value="one"
+                    selected="true">One Reference Haplotypes File</option>
+            <option value="two">Two Reference Haplotypes Files</option>
+          </param>
+          <when value="one">
+            <param name="galaxy_haps_file_1"
+                   type="data"
+                   format="haps"
+                   optional="false"
+                   label="Reference Haplotypes File #1"
+                   help="File of known haplotypes, with one row per SNP and one column per haplotype. All alleles must be coded as 0 or 1, and the reference haplotypes file must be provided with a corresponding legend file" />
+            <param name="galaxy_legend_file_1"
+                   type="data"
+                   format="legend"
+                   optional="false"
+                   label="Legend File #1"
+                   help="Legend file with information about the SNPs in the reference haplotypes file. This file should have four columns: rsID, physical position (in base pairs), allele 0, and allele 1. The last two columns specify the alleles underlying the 0/1 coding in the corresponding reference haplotypes file; these alleles can take values in {A,C,G,T}. The legend file should also have a header line with an unbroken character string for each column (e.g., rsID position a0 a1)" />
+          </when>
+          <when value="two">
+            <param name="galaxy_haps_file_1"
+                   type="data"
+                   format="haps"
+                   optional="false"
+                   label="Reference Haplotypes File #1"
+                   help="File of known haplotypes, with one row per SNP and one column per haplotype. All alleles must be coded as 0 or 1, and the reference haplotypes file must be provided with a corresponding legend file" />
+            <param name="galaxy_legend_file_1"
+                   type="data"
+                   format="legend"
+                   optional="false"
+                   label="Legend File #1"
+                   help="Legend file with information about the SNPs in the reference haplotypes file. This file should have four columns: rsID, physical position (in base pairs), allele 0, and allele 1. The last two columns specify the alleles underlying the 0/1 coding in the corresponding reference haplotypes file; these alleles can take values in {A,C,G,T}. The legend file should also have a header line with an unbroken character string for each column (e.g., rsID position a0 a1)" />
+            <param name="galaxy_haps_file_2"
+                   type="data"
+                   format="haps"
+                   optional="false"
+                   label="Reference Haplotypes File #2"
+                   help="In IMPUTE2, it is possible to specify two reference haplotypes files. In this case, the file with more SNPs should be provided first and the file with fewer SNPs should be provided second" />
+            <param name="galaxy_legend_file_2"
+                   type="data"
+                   format="legend"
+                   optional="false"
+                   label="Legend File #2"
+                   help="When using two reference haplotypes files with IMPUTE2, you must supply the corresponding legend files in the same order i.e., the file with more SNPs comes first" />
+          </when>
+        </conditional>
+        <conditional name="galaxy_option_conditional_genotypes_or_known_haplotypes">
+          <param name="galaxy_option_select_genotypes_or_known_haplotypes"
+                 type="select" 
+                 label="Select Genotypes File or Known Haplotypes File">
+            <option value="genotypes"
+                    selected="true">Genotypes File</option>
+            <option value="known_haplotypes">Known Haplotypes File</option>
+          </param>
+          <when value="genotypes">
+            <param name="galaxy_gens_file"
+                   type="data"
+                   format="gens"
+                   optional="false"
+                   label="Genotypes File"
+                   help="File containing genotypes for a study cohort that you want to impute or phase. The format of this file is described on our file format webpage and is the same as the output format from our genotype calling program CHIAMO" />
+          </when>
+          <when value="known_haplotypes">
+            <param name="galaxy_known_haps_file"
+                   type="data"
+                   format="haps"
+                   optional="false"
+                   label="Known Haplotypes File"
+                   help="File containing known haplotypes for the study cohort. The format is the same as the output format from IMPUTE2's -phase option: five header columns (as in the genotypes file) followed by two columns (haplotypes) per individual. Allowed values in the haplotype columns are 0, 1, and ?" />
+          </when>
+        </conditional>
+        <conditional name="galaxy_option_conditional_strand_file">
+          <param name="galaxy_option_select_strand_file"
+                 type="select" 
+                 label="Select None or One Strand Alignment File">
+            <option value=""
+                    selected="true">None</option>
+            <option value="one">One Strand Alignment File</option>
+          </param>
+          <when value="one">
+            <param name="galaxy_strand_file"
+                   type="data"
+                   format="strand"
+                   optional="false"
+                   label="Strand Alignment File"
+                   help="File showing the strand orientation of the SNP allele codings in the genotypes file, relative to a fixed reference point. Each SNP occupies one line, and the file should have two columns: (i) the base pair position of the SNP and (ii) the strand orientation ('+' or '-') of the alleles in the genotype file; the columns should be separated by a single space" />
+          </when>
+        </conditional>
+      </when>
+      <when value="pre-phasing">
+        <param name="galaxy_gens_file"
+               type="data"
+               format="gens"
+               optional="false"
+               label="Genotypes File"
+               help="File containing genotypes for a study cohort that you want to impute or phase. The format of this file is described on our file format webpage and is the same as the output format from our genotype calling program CHIAMO" />
+      </when>
+    </conditional>
+    <param name="galaxy_lower_boundary_genomic_interval" 
+           type="integer" 
+           optional="false"
+           value="20400000" 
+           label="Lower Boundary of the Genomic Interval" 
+           help="" />
+    <param name="galaxy_upper_boundary_genomic_interval" 
+           type="integer" 
+           optional="false"
+           value="20500000" 
+           label="Upper Boundary of the Genomic Interval" 
+           help="Genomic interval to use for inference, as specified by lower and upper boundaries in base pair position. The boundaries can be expressed either in long form (e.g., -int 5420000 10420000) or in exponential notation (e.g., -int 5.42e6 10.42e6). This option is particularly useful for restricting test jobs to small regions or splitting whole-chromosome analyses into manageable chunks, as discussed in the section on analyzing whole chromosomes" />
+    <param name="galaxy_effective_size_population" 
+           type="integer" 
+           optional="false"
+           value="20000" 
+           label="Effective Size of the Population" 
+           help="Effective size of the population (commonly denoted as Ne in the population genetics literature) from which your dataset was sampled. This parameter scales the recombination rates that IMPUTE2 uses to guide its model of linkage disequilibrium patterns. When most imputation runs were conducted with reference panels from HapMap Phase 2, we suggested values of 11418 for imputation from HapMap CEU, 17469 for YRI, and 14269 for CHB+JPT. Modern imputation analyses typically involve reference panels with greater ancestral diversity, which can make it hard to determine the ideal Ne value for a particular study. Fortunately, we have found that imputation accuracy is highly robust to different Ne values; within each of several human populations, we have obtained nearly identical accuracy levels for values between 10000 and 25000. We suggest setting Ne to 20000 in the majority of modern imputation analyses" />
+  </inputs>
+  <outputs>
+    <data name="galaxy_output_data"
+          type="data"
+          format="haps"
+          label="Impute2 Output Data" />	
+  </outputs>
+  <help>
+  </help>
+</tool>

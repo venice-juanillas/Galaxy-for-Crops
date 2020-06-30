@@ -1,0 +1,39 @@
+<tool id="plink_ld_prune" name="Prune SNPs" version="0.1.0">
+  <description>on LD threshold (plink)</description>
+  <requirements>
+    <requirement type="package" version="1.9">plink</requirement>
+  </requirements>
+
+  <command><![CDATA[
+    rm -rf $__tool_directory__/output.pruned.* 2>/dev/null &&
+    $__tool_directory__/plink_ld_prune.sh ${input} $__tool_directory__/output ${par1} ${par2} ${par3} &&
+    ln -sfn $__tool_directory__/output.pruned.vcf ${output} 2>/dev/null
+  ]]></command>
+  
+  
+  <inputs>
+    <param format="vcf" name="input" type="data" label="Input VCF file"/>
+    <param name="par1" type="text" label="window size in snps or add kb" value="1000kb"/>
+    <param name="par2" type="text" label="step size" value="5"/>
+    <param name="par3" type="text" label="r^2 threshold" value="0.25"/>
+  </inputs>
+  
+  <outputs>
+    <data format="vcf" name="output" label="vcf output"/>
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="input" value="input.vcf"/>
+      <param name="par1" value="1000kb"/>
+      <param name="par2" value="5"/>
+      <param name="par3" value="0.25"/>
+      <output name="output" file="output.pruned.vcf"/>
+    </test>
+  </tests>
+
+  <help>
+    Prune SNPs on LD threshold (plink)
+  </help>
+
+</tool>

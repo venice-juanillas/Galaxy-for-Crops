@@ -1,0 +1,17 @@
+<tool id="subset_hapmap" name="Subset SNPMatrix" version="1.0.0">
+	<command>
+		<![CDATA[
+			#cut -f '$marker_col' '$input' >> '$output'
+		]]>	
+	</command>
+
+	<inputs>
+		<param name="input" type="data" format="txt,tabular" label="SNP Matrix"/>
+		<param name="marker_col" type="data_column" data_ref="input" multiple="true" label="Marker names" refresh_on_change="true"/>
+	</inputs>
+
+	<outputs>
+		<data name="output" format="tabular"/>
+	</outputs>
+	
+</tool>

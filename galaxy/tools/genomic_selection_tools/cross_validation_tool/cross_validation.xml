@@ -1,0 +1,169 @@
+<tool id="Cross_Validation" name="Cross validation" version="1.2.0">
+  <description>within and across groups</description>
+  <requirements>
+     <requirement type="package" version="1.0.8">r-bglr</requirement> 
+     <requirement type="package" version="1.20.2">r-getopt</requirement>
+  </requirements>
+  <command interpreter="/home/galaxy/data/R/R-3.5.1/bin/Rscript --vanilla"><![CDATA[
+$__tool_directory__/cross_validation_wrapper.R 
+
+--tool_directory $__tool_directory__
+
+--genotypes_file '$galaxy_genotypes_file'
+
+--phenotypes_file '$galaxy_phenotypes_file'
+
+--sample_vector_column_index $galaxy_sample_vector_column_index
+
+--first_phenotype_vector_column_index $galaxy_first_phenotype_vector_column_index
+
+--number_of_phenotypes $galaxy_number_of_phenotypes
+
+--group_memberships_file '$galaxy_group_memberships_file'
+
+--main_option '$galaxy_main_option_conditional.galaxy_main_option'
+
+--number_of_kfolds '$galaxy_number_of_kfolds' 
+
+--number_of_iterations '$galaxy_number_of_iterations' 
+
+--number_of_CV_iterations '$galaxy_number_of_CV_iterations' 
+
+--CV_burnIn '$galaxy_CV_burnIn'
+
+--models '$galaxy_models' 
+
+--png_file_path $galaxy_png
+
+--pdf_file_path $galaxy_pdf
+
+--csv_file_path $galaxy_csv
+
+>>$logfile 2>&1
+]]></command>
+  <inputs>
+    <param name="galaxy_genotypes_file" 
+           type="data" 
+           format="tabular" 
+           label="Input Genotypes File" 
+           help="(required) The TAB file containing the data matrix of the genotypes" />
+    <param name="galaxy_phenotypes_file" 
+           type="data" 
+           format="tabular" 
+           label="Input Phenotypes File" 
+           help="(required) The TAB file containing the data matrix of the phenotypes" />
+   <param name="galaxy_sample_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_phenotypes_file" 
+           use_header_names="true" 
+           label="Sample Name Column" 
+           help="(required)"
+           value="1" />
+   <param name="galaxy_first_phenotype_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_phenotypes_file" 
+           use_header_names="true" 
+           label="First Phenotype Column" 
+           help="(required)"
+           value="2" />
+    <param name="galaxy_number_of_phenotypes" 
+           type="integer" 
+           value="3" 
+           label="Number of Phenotypes" 
+           help="(required, integer)" />
+    <param name="galaxy_group_memberships_file" 
+           type="data" 
+           format="tabular" 
+           label="Group Memberships File" 
+           help="(required) The TAB file containing the data vector of the group memberships" />
+    <conditional name="galaxy_main_option_conditional">
+      <param name="galaxy_main_option"
+             type="select"
+             label="Main Option"
+             help="(required, string) Admits within groups or across groups">
+        <option value="within_groups"
+                selected="true">within groups</option>
+        <option value="across_groups">across groups</option>
+      </param>
+    </conditional>
+    <param name="galaxy_number_of_kfolds" 
+           type="integer" 
+           value="5" 
+           label="Number of Folds to Perform Cross-Validation with" 
+           help="(required, integer)" />
+    <param name="galaxy_number_of_iterations" 
+           type="integer" 
+           value="1" 
+           label="Number of Iterations of Fractional Cross-Validation" 
+           help="(required, integer)" />
+    <param name="galaxy_number_of_CV_iterations" 
+           type="integer" 
+           value="1500" 
+           label="Number of Iterations of Gibbs Sampling to perform using the Bayesian models" 
+           help="(required, integer)" />
+    <param name="galaxy_CV_burnIn" 
+           type="integer" 
+           value="500" 
+           label="Number of CV.nIter to Discard before using the remainder to establish the prior distribution for Bayesian methods" 
+           help="(required, integer)" />
+    <param name="galaxy_models" type="select" display="checkboxes" multiple="true" label="Model(s)">
+      <option value="BayesA" selected="true">BayesA</option>
+      <option value="BayesB" selected="true">BayesB</option>
+      <option value="BayesC" selected="true">BayesC</option>
+      <option value="BL" selected="true">BL</option>
+      <option value="BRR" selected="true">BRR</option>
+    </param>
+  </inputs>
+  <outputs>
+    <data name="galaxy_png" format="png" label="Cross-validation PNG Output"/>
+    <data name="galaxy_pdf" format="pdf" label="Cross-validation PDF Output" />
+    <data name="galaxy_csv" format="csv" label="Cross-validation CSV Output"/>	
+    <data name="logfile" format="txt" label="Logfile"/>
+  </outputs>
+  <tests>
+     <test>
+        <param name="galaxy_phenotypes_file" value="pheno_input.txt" />
+        <param name="galaxy_genotypes_file" value="geno_input.txt"/>
+        <param name="galaxy_sample_vector_column_index" value="2" />
+        <param name="galaxy_first_phenotype_vector_column_index" value="5" />
+        <param name="galaxy_number_of_phenotypes" value="1" />
+        <param name="galaxy_group_memberships_file" value="grouping" />
+        <output name="galaxy_csv" file="output.txt"  compare="sim_size" >
+        </output>
+     </test>
+   </tests>
+
+  <help>
+.. class:: infomark
+
+**Cross-validation** (within and across groups)
+
+.. class:: infomark 
+
+**Provided by EiB platform and GOBii**
+
+.. class:: infomark
+
+**Authors** Angel Villahoz-Baleta (Cornell Univ)
+
+.. class:: infomark
+
+**Galaxy Integration contributors**  Kelly Robbins (Cornell Univ), Paulino Perez, Angel Villahoz-Baleta (Cornell Univ), Star Yanxin Gao (Cornell Univ)
+
+.. class:: infomark
+
+**Support** For any questions about this tool, please send an e-mail to krr73@cornell.edu
+
+-----
+
+**What it does**
+
+This tool calculates GEBV (Genomic breeding value estimator) within and across groups of samples. User needs to provide a grouping file for grouping analyses.
+
+BGLR: Bayesian generalized linear regression. R package version. http://R-Forge.R-project.org/projects/bglr/
+
+  </help>
+<citations>
+         <citation type="doi">10.1534/genetics.114.164442</citation> 
+  </citations> 
+</tool>

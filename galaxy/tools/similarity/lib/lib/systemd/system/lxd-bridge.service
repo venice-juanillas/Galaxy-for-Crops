@@ -1,0 +1,10 @@
+[Unit]
+Description=LXD - network bridge
+Documentation=man:lxd(1)
+Before=lxd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/lxd/lxd-bridge.start
+ExecStop=/usr/lib/lxd/lxd-bridge stop

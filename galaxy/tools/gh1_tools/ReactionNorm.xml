@@ -1,0 +1,118 @@
+<tool id="ReactionNorm" name="Reaction Norm" version="1.0">
+  <description>ReactionNorm: Fit Reaction Norm Models for Genomic Selection</description>
+  <command interpreter="Rscript --vanilla">ReactionNorm.R
+       #if str($wE).strip() != "":
+          --wE="$wE"
+       #end if
+       #if str($wL).strip() != "":
+          --wL="$wL"
+       #end if
+       #if str($wW).strip() != "":
+          --wW="$wW"
+       #end if
+       #if str($wG).strip() != "":
+          --wG="$wG"
+       #end if
+       #if str($wGE).strip() != "":
+          --wGE="$wGE"
+       #end if
+       #if str($wGW).strip() != "":
+          --wGW="$wGW"
+       #end if
+       #if str($data).strip() != "":
+          --data="$data"
+       #end if
+       #if str($numC).strip() != "":
+          --numC="$numC"
+       #end if
+       #if str($kinship).strip() != "":
+          --kinship="$kinship"
+       #end if
+       #if str($omega).strip() != "":
+          --omega="$omega"
+       #end if
+       #if str($nIter).strip() != "":
+          --nIter="$nIter"
+       #end if
+       #if str($burnIn).strip() != "":
+          --burnIn="$burnIn"
+       #end if
+       #if str($thinI).strip() != "":
+          --thinI="$thinI"
+       #end if
+       #if str($report).strip() != "":
+          --report="$report"
+       #end if
+       #if str($plotfile).strip() != "":
+          --plotfile="$plotfile"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="wE" type="boolean" help="logical flag to include environmental effects." checked="false" label="[required] W E">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="wL" type="boolean" help="logical flag to include line effects." checked="false" label="[required] W L">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="wW" type="boolean" help="logical flag to include environmental covariable effects." checked="false" label="[required] W W">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="wG" type="boolean" help="logical flag to include genetic effects." checked="false" label="[required] W G">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="wGE" type="boolean" help="logical flag to include GxE interaction effects." checked="false" label="[required] W G E">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="wGW" type="boolean" help="logical flag to include GxW interaction effects." checked="false" label="[required] W G W">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="data" format="data" type="data" help="a string with the path for the input data." label="[required] Data">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="numC" type="integer" value="" help="a length one integer vector with the number of covariables." label="[required] Num C">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="kinship" format="data" type="data" help="a string with the path for the kinship matrix." label="[required] Kinship">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="omega" format="data" type="data" help="string with the path for the omega matrix." label="[required] Omega">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="nIter" type="integer" value="" help="the number of iterations for the Gibbs sampler." label="[required] N Iter">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="burnIn" type="integer" value="" help="the number of burn in iterations for the Gibbs sampler." label="[required] Burn In">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="thinI" type="integer" value="" help="the thin interval for the Gibbs sampler." label="[required] Thin I">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="txt" name="report" label="digest.txt"/>
+    <data format="png" name="plotfile" label="plot.png"/>
+  </outputs>
+  <help>
+**Description**
+
+Fits reaction norm models for genomic selection and with genotype
+by environment interaction. Writen with infrastructure from
+RGalaxy i.e., with the aim to compose a tool to be used in Galaxy.
+This was a evolving work from the Biometric/Bioinformatics
+Hackathon in IRRI, Los Banos, Philippines.
+
+Fits the Reaction Norm Models for Genomic Selection.  Takes three
+data sets (a table, kinship matrix and environmental covariances).
+Obtains variance componets, accuracy and a plot.
+
+
+**Details**
+
+Basically
+
+An example to be used in galaxy pipeline of R codes.
+</help>
+</tool>

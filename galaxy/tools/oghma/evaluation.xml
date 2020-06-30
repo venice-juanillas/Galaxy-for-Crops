@@ -1,0 +1,64 @@
+<tool id="evaluation" name="evaluation" version="1.0.0">
+  <description>evaluate results of classifiers prediction</description>
+  <command interpreter="Rscript">
+	  evaluation.R $config &gt; ${output1}
+  </command>
+  
+  <inputs>
+	<param name="genotype" type="data"
+		label="genotype data" 
+	/>
+	
+	<param name="prediction" type="data"
+		label="results of prediction" 
+	/>
+		  
+	<param name="phenotype" type="data"
+			label="phenotype file" 
+	/>
+	
+	<param name="r2" type="integer" value="1"
+			label="compute r-squared distance" help=" whether or not to compute the r-squared distance. 1 means the tool will compute it, any other argument means it will not be computed " 
+	/>
+	
+	<param name="cor" type="integer" value="1"
+			label="compute correlation" help=" whether or not to compute the correlation between predictions and ture values. 1 means the tool will compute it, any other argument means it will not be computed " 
+	/>
+	
+	<param name="folds" type="data"
+			label="folds" help=" path to a folds file containing folds indexes in a R list called /folds/ such as produced by the folds tools in OGHMA suite. " 
+	/>
+	
+	<param name="evaluationPath" type="text"
+			label="path to the output folds" help= " a path to a FOLDER where the results (depending on the chosen mode) will be writen" 
+	/>
+		<param name="filePrefix" type="text" value="evaluated"
+			label="prefix of output files" help= "prefix to give to all files generate by evaluation" 
+			/>
+  </inputs>
+  
+  
+ <configfiles>
+    <configfile name="config">
+## Desc: this file is sourced in encode wrapper script
+##  as means to pass all galaxy params to R
+"${genotype}" -> genotype
+"${phenotype}" -> phenotype
+"${prediction}" -> prediction
+"${r2}" -> r2
+"${cor}" -> cor
+"${folds}" -> folds
+"${evaluationPath}" -> out
+"${filePrefix}" -> name
+
+    </configfile>
+</configfiles>
+  
+<outputs>
+	<data format="tabular" name = "output1" label="classifier prediction" />
+</outputs>  
+
+  <help>
+	  evaluate the predictions of classifiers. For now correlation between true valeus and predictions, and r-squared distance are implemeted
+  </help>
+  </tool>

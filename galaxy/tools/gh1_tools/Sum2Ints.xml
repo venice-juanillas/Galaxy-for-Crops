@@ -1,0 +1,41 @@
+<tool id="Sum2Ints" name="Sum2 Ints" version="1.0">
+  <description>Toy example of RGalaxy to add two integer numbers</description>
+  <command interpreter="Rscript --vanilla">Sum2Ints.R
+       #if str($int1).strip() != "":
+          --int1="$int1"
+       #end if
+       #if str($int2).strip() != "":
+          --int2="$int2"
+       #end if
+       #if str($outV).strip() != "":
+          --outV="$outV"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="int1" type="integer" value="" help="" label="[required] Int1">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="int2" type="integer" value="" help="" label="[required] Int2">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="txt" name="outV" label="sum.txt"/>
+  </outputs>
+  <help>
+**Description**
+
+Performs the sum of two number to used in galaxy pipeline.  An
+example function that can be made into a Galaxy tool. Takes two
+numbers, adds them, and returns a file containing the result.
+
+
+**Details**
+
+Basically this function is just an example to be used in galaxy
+pipeline.  copy/paste from the RGalaxy package vignette.
+</help>
+</tool>

@@ -1,0 +1,19 @@
+<tool id="get_tokens_from_gobii" name="GOBII Extractor" version="0.0.1">
+	<description>Get tokens</description>
+	<command><![CDATA[
+		##python3 /usr/bin/GOBii_extract_for_Galaxy.py -m Variantset -U http://hackathon.gobii.org:8081/gobii-dev/ -x WQs8Ep0/khNNmNM19SWpteyI6+3Y3d7dP0r1uHvkAU8= -o $__tool_directory__/test-data/gdm.loc
+		##&& python3 /usr/bin/GOBii_extract_for_Galaxy.py -m Extract -U http://hackathon.gobii.org:8081/gobii-dev/ -x WQs8Ep0/khNNmNM19SWpteyI6+3Y3d7dP0r1uHvkAU8= -v $dataset -o $output
+		sh $__tool_directory__/run_extract.sh $url $uname $pword $__tool_directory__/test-data/gdm.loc $output 1
+	]]>
+	</command>
+	<inputs>
+		<param name="url" type="text" size="10" value="http://hackathon.gobii.org:8081/gobii-dev/" label="URL:"/>
+		<param name="uname" type="text" size="10" value="vjuanillas" label="Username"/>
+		<param name="pword" type="text" size="10" value="Sc0tl4nd" label="Password" refresh_on_change="true" help="Must mask password.">
+		</param>
+	</inputs>
+	<outputs>
+		<data name="output" format="txt" label="GOBII output"/>
+	</outputs>
+	
+</tool> 

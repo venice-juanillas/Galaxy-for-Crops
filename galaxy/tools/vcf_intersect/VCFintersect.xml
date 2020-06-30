@@ -1,0 +1,58 @@
+<tool id="vcf_intersect" name="VCF intersect" version="1.0">
+        <description>- VCF intersection</description>
+    <!-- Required for the tool to work -->
+        <!-- Wrapper compatible with Plink v1.90b3k -->
+    <requirements>
+        <requirement type="package" version="0.2.5">tabix</requirement>
+	<requirement type="package" version="1.6">bcftools</requirement>	
+	<requirement type="package" version="2015.10.28">pbgzip</requirement>
+    </requirements>
+        <stdio>
+        <!-- [HELP] If no exit code rule is defined, the tool will stop if anything is written to STDERR -->
+        <exit_code range="1:" level="fatal" />
+    </stdio>
+    <command  interpreter="perl">./VCFintersect.sh $vcf1 $vcf2 $unique_vcf1 $unique_vcf2 $common_vcf1 $common_vcf2
+        </command>
+        <inputs>
+                <param name="vcf1" type="data" label="VCF1" help="First VCF to compare."/>
+                <param name="vcf2" type="data" label="VCF2" help="Second VCF to compare."/>
+        </inputs>
+        <outputs>
+		<data format="vcf" name="unique_vcf1" label="Unique in VCF1" />
+		<data format="vcf" name="unique_vcf2" label="Unique in VCF2" />
+		<data format="vcf" name="common_vcf1" label="Common in VCF1" />
+		<data format="vcf" name="common_vcf2" label="Common in VCF2" />
+        </outputs>
+        <help>
+==========
+ Overview
+==========
+
+**BCFTOOLS isec**
+
+BCFTOOLS 
+Petr Danecek, Shane McCarthy and John Marshall are maintaining and further developing bcftools. 
+
+.. _BCFTOOLS: http://www.htslib.org/doc/bcftools-1.0.html
+  
+**Input formats**
+
+VCF files
+ 
+-----
+
+.. class:: infomark
+
+**Galaxy integration** Alexis Dereeper (IRD).
+
+.. class:: infomark
+
+**Support** For any questions about Galaxy integration, please send an e-mail to southgreen@cirad.fr
+
+.. class:: infomark
+
+**Program encapsulated in Galaxy by South Green**
+
+	</help>
+</tool>
+ 

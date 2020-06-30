@@ -1,0 +1,41 @@
+<tool id="folds" name="folds" version="1.0.0">
+  <description>create folds for classifiers evaluation through cross-validation</description>
+  <command interpreter="Rscript">
+	  folds.R $config &gt; ${output1}
+  </command>
+  
+  <inputs>
+	<param name="genotype" type="data"
+		  label="encoded data" help="encoded must be a .rds file" 
+	/>
+		  
+	<param name="n" type="integer" value ="7"
+			  label="number of cross-validation" help=" must be an integer. You may want its value be at least 5" 
+	/>
+	
+	<param name="foldsFile" type="text"
+			label="path to the output directory" help= " a valid path is expected " 
+	/>
+  </inputs>
+  
+  <configfiles>
+    <configfile name="config">
+## Desc: this file is sourced in encode wrapper script
+##  as means to pass all galaxy params to R
+"${genotype}" -> genotype
+"${n}" -> n
+"${foldsFile}" -> out
+
+    </configfile>
+</configfiles>
+  
+<outputs>
+	<data format="tabular" name = "output1" label="folds" />
+</outputs>
+  
+  <help>
+	  Takes the genotypes and use it to determine the different folds for further cross-valisations
+	  return a rda file that contains a list of indexes of the genotype, each element of the list is a fold
+	  the list is made to be used by other tools of the OGHMA suite.
+  </help>
+  </tool>

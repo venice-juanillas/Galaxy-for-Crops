@@ -1,0 +1,10 @@
+[Unit]
+Description=Deferred execution scheduler
+Documentation=man:atd(8)
+
+[Service]
+ExecStart=/usr/sbin/atd -f
+IgnoreSIGPIPE=false
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+    If the value of 'URL_method' is 'get', the request will consist of the value of 'URL' coming back in
+    the initial response.  If value of 'URL_method' is 'post', any additional params coming back in the
+    initial response ( in addition to 'URL' ) will be encoded and appended to URL and a post will be performed.
+-->
+<tool name="Gigwa" id="gigwa" tool_type="data_source">
+    <description>: SNP filtering</description>
+    <command interpreter="python">data_source.py $output $__app__.config.output_size_limit</command>
+    <inputs action="http://gigwav2.southgreen.fr/gigwaV2/" check_values="false" method="get">
+        <display>go to Gigwa $GALAXY_URL</display>
+        <param name="GALAXY_URL" type="baseurl" value="/tool_runner" />
+        <param name="tool_id" type="hidden" value="gigwa" />
+        <param name="sendToGalaxy" type="hidden" value="1" />
+        <param name="output" type="hidden" value="fasta" />
+        <param name="comment" type="hidden" value="" />
+    </inputs>
+    <uihints minwidth="800"/>    
+    <request_param_translation>
+        <request_param galaxy_name="URL" remote_name="URL" missing="" />
+        <request_param galaxy_name="comment" remote_name="comment" missing="" />
+    </request_param_translation>
+    <outputs>
+        <data name="output" format="auto" label="Variants from ${tool.name} datasource" />
+    </outputs>
+    <options sanitize="False" refresh="True"/>
+</tool>

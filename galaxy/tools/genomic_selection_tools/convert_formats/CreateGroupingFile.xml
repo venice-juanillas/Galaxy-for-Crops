@@ -1,0 +1,34 @@
+<tool id="CreateGroupingFile" name="Create Grouping File" version="1.0">
+	<description> to be compatible with cross-validation</description>
+	<requirements>
+		<requirement type="binary">perl</requirement>
+	</requirements>
+	<command interpreter="bash">./CreateGroupingFile.sh $geno $pheno $outgeno $outpheno $grouping
+    </command>
+	<inputs>
+		<param format="tab" name="pheno" type="data" label="Input phenotyping file" help="Phenotyping file must be obtained from Sample matching tool"/>
+		<param format="tab" name="geno" type="data" label="Input genotyping file" help="Genotyping file must be obtained from Sample matching tool"/>
+	</inputs>
+	<outputs>
+		<data format="tab" name="outgeno" label="Out genotyping matrix"/>
+		<data format="tab" name="outpheno" label="Out phenotype"/>
+		<data format="tab" name="grouping" label="Grouping file"/>
+	</outputs>
+	<help>
+	
+
+.. class:: infomark
+
+**CreateGroupingFile**
+
+-----
+
+This tool converts the output from Sample Matching tool into a compatible input files for cross-validation prediction tool.
+
+-----
+
+**Author:** Alexis Dereeper
+
+
+	</help>
+</tool>

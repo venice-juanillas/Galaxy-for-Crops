@@ -1,0 +1,20 @@
+<tool id="transpose" name="Transpose Matrix" version="1.0.0" force_history_refresh="True">
+	<description>from Genotype Data </description>
+	<command>
+	<![CDATA[
+		
+	]]>
+	</command>
+	<inputs>
+		<param name="infile" type="data" format="tabular" label="Tabular File to transpose" />		
+	</inputs>
+	<outputs>
+		<data name="outfile" format="tabular" label="Transposed data" />
+	</outputs>
+
+	<help>
+
+	</help>
+</tool>
+
+

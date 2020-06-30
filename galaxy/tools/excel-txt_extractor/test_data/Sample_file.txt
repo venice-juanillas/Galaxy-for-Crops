@@ -1,0 +1,3 @@
+dnarun_name	germplasm_name	germplasm_pedigree	germplasm_type	germplasm_par1	germplasm_par1_type	germplasm_par2	germplasm_par2_type	dnasample_sample_group	dnasample_sample_group_cycle
+A2017WMC123	IR 131971	BRRI DHAN 58*2/IR 102698-1-47-57-102-1	BC1F1	IR 102698-1-47-57-102-1	DP	BRRI DHAN 58	RP	A2017WMC123	
+A2017WMC124	IR 131972	BRRI DHAN60*2/IR 123577:2-3-2	BC1F1	IR 123577:2-3-2	DP	BRRI DHAN60	RP	A2017WMC124	

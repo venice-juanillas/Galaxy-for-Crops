@@ -1,0 +1,51 @@
+<tool id="circosjs" name="CircosJS" version="0.0.1">
+    <description>
+     CircosJS Client to build interactive graphs in a circular layout
+ </description>   
+ <requirements>
+ </requirements>
+ <stdio>
+    <exit_code range="1:" />
+</stdio>
+
+
+<command>
+    <![CDATA[
+     perl $__tool_directory__/circosjs.pl --output $output --chromosome $chromosomefile
+
+    #for $a in $tracks
+    --tracks ${a.data}
+    --name ${a.name}
+    --select ${a.select}
+    #end for
+    ]]>
+</command>
+
+<inputs>
+    <param type="data" name="chromosomefile" help="" value=" " label="Values for Chromosome Length" optional="true"/>
+    <repeat name="tracks" title="track" help="Track goes here">
+        <param type="text" name="name" value="" label="Track name"/>
+        <param type="select" name="select" value=" " label="Track type">
+          <option value="Highlight">Highlight</option>
+          <option value="Line">Line</option> 
+          <option value="Scatter">Scatter</option>
+          <option value="Chords">Chords</option>
+          <option value="HeatMap">HeatMap</option>
+          <option value="Histogram">Histogram</option>
+          <option value="Stack">Stack</option>
+          <option value="Text">Text</option>
+      </param>
+      <param type="data" name="data" value="" label="Track data" />
+  </repeat>
+</inputs>
+
+<outputs>
+	<data format="html" name="output" />
+</outputs>
+<help>
+    <![CDATA[
+
+    ]]>
+
+</help>
+</tool>

@@ -1,0 +1,103 @@
+<tool id="Beagle" name="Beagle" version="4.1">
+  <description>imputation</description>
+  <command interpreter="java -jar"><![CDATA[
+beagle.08Jun17.d8b.jar 
+
+#if $galaxy_option_conditional.galaxy_option_select == "genotype_data": 
+  gt=$galaxy_option_conditional.galaxy_gt_file
+#end if
+
+#if $galaxy_option_conditional.galaxy_option_select == "reference_use": 
+  gt=$galaxy_option_conditional.galaxy_gt_file
+  ref=$galaxy_option_conditional.galaxy_reference_file
+#end if
+
+#if $galaxy_option_conditional.galaxy_option_select == "phasing_estimation": 
+  #if $galaxy_option_conditional.galaxy_input_file_conditional.galaxy_input_file_select == "gl": 
+    gl=$galaxy_option_conditional.galaxy_input_file_conditional.galaxy_gl_file
+  #end if
+
+  #if $galaxy_option_conditional.galaxy_input_file_conditional.galaxy_input_file_select == "gtgl": 
+    gtgl=$galaxy_option_conditional.galaxy_input_file_conditional.galaxy_gtgl_file
+  #end if
+#end if
+
+niterations=$galaxy_number_of_phasing_iterations
+
+out=out
+
+]]></command>
+  <inputs>
+    <conditional name="galaxy_option_conditional">
+      <param name="galaxy_option_select" 
+             type="select" 
+             label="Select genotype data or reference use or phasing estimation">
+        <option value="genotype_data"
+                selected="true">Genotype Data</option>
+        <option value="reference_use">Reference Use</option>
+        <option value="phasing_estimation">Phasing Estimation</option>
+      </param>
+      <when value="genotype_data">
+        <param name="galaxy_gt_file" 
+               type="data" 
+               format="vcf" 
+               label="Input GT (Genotype) File" 
+               help="The VCF file containing a GT (genotype) format field for each marker. If a genotype contains the phased allele separator, '|', then Beagle will preserve the phase of the genotype during the analysis. If you use this file, all the genotypes in the output file will be phased and non-missing. " />
+      </when>
+      <when value="reference_use">
+        <param name="galaxy_gt_file" 
+               type="data" 
+               format="vcf" 
+               label="Input GT (Genotype) File" 
+               help="The VCF file containing a GT (genotype) format field for each marker. If a genotype contains the phased allele separator, '|', then Beagle will preserve the phase of the genotype during the analysis. If you use this file, all the genotypes in the output file will be phased and non-missing. " />
+        <param name="galaxy_reference_file" 
+               type="data" 
+               format="vcf" 
+               label="Reference File" 
+               help="The VCF file containing phased reference genotypes. " />
+      </when>
+      <when value="phasing_estimation">
+        <conditional name="galaxy_input_file_conditional">
+          <param name="galaxy_input_file_select" 
+                 type="select" 
+                 label="Select genotype likelihood (GL or PL) or genotype/genotype likelihood (GT, GL or PL)">
+            <option value="gl"
+                    selected="true">Genotype Likelihood</option>
+            <option value="gtgl">Genotype/Genotype Likelihood</option>
+          </param>
+          <when value="gl">
+            <param name="galaxy_gl_file" 
+                   type="data" 
+                   format="vcf" 
+                   label="Input GL or PL (Genotype Likelihood) File" 
+                   help="The VCF file containing a GL or PL (genotype likelihood) format field for each marker. Any data in the GT format field will be ignored. If both GL and PL format fields are for a marker, the GL format will be used. " />
+          </when>
+          <when value="gtgl">
+            <param name="galaxy_gtgl_file" 
+                   type="data" 
+                   format="vcf" 
+                   label="Input GT, GL or PL File" 
+                   help="The VCF file containing a GT, GL or PL format field for each marker. If a genotype is non-missing, Beagle will ignore the genotype likelihood. If both GL and PL format fields are present for a marker, the GL field will be used. " />
+          </when>
+        </conditional>
+      </when>
+    </conditional>
+    <param name="galaxy_number_of_phasing_iterations" 
+           type="integer" 
+           value="5" 
+           label="Number of Iterations" 
+           help="The phasing iterations are preceded by 10 burn-in iterations which carry out the Beagle version 4.0 phasing algorithm. If you want to phase your data with the Beagle 4.0 phasing algorithm, use 0. Accuracy and compute time increase with the number of iterations. " />
+  </inputs>
+  <outputs>
+    <data name="galaxy_vcf_bgzip"
+          label="VCF Output Data"
+          auto_format="True"
+          from_work_dir="out.vcf.gz" />	
+    <data name="galaxy_log"
+          label="Beagle Log"
+          format="txt"
+          from_work_dir="out.log" />	
+  </outputs>
+  <help>
+  </help>
+</tool>

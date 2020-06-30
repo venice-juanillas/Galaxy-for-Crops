@@ -1,0 +1,27 @@
+<tool id="FSFHap" name="FSFHap" version="0.1.0">
+  <description>imputation</description>
+  <command><![CDATA[
+/opt/TASSEL5/run_pipeline.pl -h $galaxy_hapmap_file -FSFHapImputationPlugin -pedigrees $galaxy_pedigrees_file -endPLugin -export output.hmp.txt
+]]></command>
+  <inputs>
+    <param name="galaxy_hapmap_file"
+           type="data" 
+           format="txt"
+           label="Input Hapmap File" 
+           help="The Hapmap file" />
+    <param name="galaxy_pedigrees_file"
+           type="data" 
+           format="txt"
+           label="Input Pedigrees File" 
+           help="The pedigrees file" />
+  </inputs>
+  <outputs>
+    <data name="galaxy_output_data"
+          type="data" 
+          format="txt"
+          label="Hapmap Output Data"
+          from_work_dir="output.hmp.txt" />	
+  </outputs>
+  <help>
+  </help>
+</tool>

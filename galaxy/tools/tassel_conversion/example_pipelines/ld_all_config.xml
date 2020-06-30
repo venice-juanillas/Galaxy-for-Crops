@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TasselPipeline>
+    <fork1>
+        <h>TASSELTutorialData/data/mdp_genotype.hmp.txt</h>
+        <ld>
+            <ldType>All</ldType>
+        </ld>
+        <ldd>
+            png
+            <ldplotsize>500</ldplotsize>
+            <o>output_ld.png</o>
+        </ldd>
+    </fork1>
+    <runfork1/>
+</TasselPipeline>

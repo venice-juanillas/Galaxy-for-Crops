@@ -1,0 +1,35 @@
+<tool id="getVarietyName-s3tool" name="Get Unique Variety ID's" version="1.0.0">
+	<description>From Amazon S3 Bucket </description>
+	<command>
+	<![CDATA[
+		aws s3api list-objects --bucket $bucketname --output text --prefix 9311 --query Contents[].[Key] | grep -i "vcf.gz$" | cut -d '/' -f 2 | cut -d '.' -f 1 > $output
+	]]>
+	</command>
+	<inputs>
+		<param name="bucketname" type="text" size="10" value="3kricegenome" label="bucketname"/>
+	</inputs>
+	<outputs>
+		<data name="output" format="txt" />
+	</outputs>
+	<tests>
+		<test>
+			<output name="output" file="s3_output.txt"/>
+		</test>
+	</tests>
+
+	<help>
+
+.. class:: infomark
+
+**Get Unique Variety ID's**
+
+-----
+
+**What this tool does**
+
+Execute to get the list of Variety ID's stored in AWS S3 bucket.
+
+</help>
+
+
+</tool>

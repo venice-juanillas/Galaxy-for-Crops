@@ -1,0 +1,35 @@
+<tool id="parseBlat.xml" name="Blat Alignment Filter" version="v.01">
+  <description> Stringent filtering of alignment results (psl v3, from blat)</description>
+   <command>
+   <![CDATA[
+	 perl $__tool_directory__/parseBlat.pl $psl $output $pctID $mismatch 
+   ]]>
+  </command>
+  <inputs>
+    <param format="data" name="psl" type="data" label="Alignment result to filter (psl format)"/>
+    <param name="pctID" size="10" type="text" value="0.8" label="Fraction of length of query sequence that matches target sequence (usually 0.5 - 1.0)" />
+    <param name="mismatch" size="10" type="text" value="3" label="maximum number of mismatch(es) allowed (integer)"/>
+  </inputs>
+
+  <outputs>
+    <data format="tabular" name="output" label="Filtered alignment: ${pctID.value} of query and mismatch ${mismatch.value} of ${psl.name}" />
+  </outputs>
+
+
+  <tests>
+  </tests>
+  <help>
+**blat-alignment-filter - what it does**
+
+blat-alignment-filter parses alignment output of blat and find-seq (supports only blat psl format  output), allowing for selection of alignments that pass specified criteria (# max mismatches, how much of query length is aligned).
+
+
+It uses awk_ to filter the alignment results.
+
+.. _awk: http://www.gnu.org/software/gawk/manual/gawk.html
+
+Using Find-seq alignment, you could now identify the  scaffold/contig region aligning to your query sequence, then extract the subsequence from the draft genome using the Get-subseq tool.
+
+
+   </help>
+</tool>

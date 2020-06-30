@@ -1,0 +1,59 @@
+Intertek_SNP_ID	Trait / Gene 	Favorable	Unfavorable
+snpOS0007a	Blast	-	TGATGGTTTC
+snpOS0007b	Blast	-	CGATGGTTTC
+snpOS0009	Blast	-	TTCGAGCCGTTTCATCCCTAMTTGCRC
+snpOS0031	Grain quality	-	GAA
+snpOS0004	Bacterial leaf blight-Xa7	A	C
+snpOS0005	Bacterial leaf blight-Xa7	A	G
+snpOS0036	Quality	A	G
+snpOS0052	Xa4	A	C
+snpOS0066	BPH3	A	G
+snpOS0067	BPH3	A	T
+snpOS0071	DTY1.1	A	G
+snpOS0072	DTY1.1	A	G
+snpOS0077	DTY2.1	A	G
+snpOS0078	DTY2.1	A	C
+snpOS0079	DTY2.1	A	G
+snpOS0088	DTY3.1	A	T
+snpOS0094	DTY12.1	A	G
+snpOS0095	DTY12.1	A	G
+snpOS0096	DTY12.1	A	C
+snpOS0054	xa5	AG	TC
+snpOS0006	Blast	C	A
+snpOS0012	Blast	C	A
+snpOS0019	Brown planthopper-BPH17	C	T
+snpOS0026	Grain quality	C	G
+snpOS0061	Xa21	C	G
+snpOS0073	DTY1.1	C	T
+snpOS0075	DTY2.1	C	T
+snpOS0076	DTY2.1	C	A
+snpOS0081	DTY2.1	C	T
+snpOS0087	DTY3.1	C	T
+snpOS0089	DTY3.1	C	G
+snpOS0320	Rf4	C	T
+snpOS0002	Bacterial leaf blight-xa13	G	A
+snpOS0014	Blast	G	A
+snpOS0024	Grain quality	G	A
+snpOS0039	Quality	G	T
+snpOS0053	Xa4	G	A
+snpOS0055	Xa7	G	A
+snpOS0074	DTY1.1	G	T
+snpOS0085	DTY3.1	G	A
+snpOS0092	DTY12.1	G	C
+snpOS0328	Rf3	G	A
+snpOS0050	RTSV1	GTGCT	ATGTT
+snpOS0015	Blast	T	C
+snpOS0033	Quality	T	G
+snpOS0040	Submergence	T	C
+snpOS0048	Bacterial leaf blight-Xa23	T	C
+snpOS0051	Xa4	T	G
+snpOS0057	Xa7	T	G
+snpOS0065	BPH3	T	C
+snpOS0068	BPH17	T	G
+snpOS0080	DTY2.1	T	C
+snpOS0086	DTY3.1	T	G
+snpOS0091	DTY12.1	T	C
+snpOS0093	DTY12.1	T	G
+snpOS0335	S5	TA	-
+snpOS0022	Grain quality	TATAT	AAAAGATTATGGC
+snpOS0334	WA-CMS	TGTAG	-

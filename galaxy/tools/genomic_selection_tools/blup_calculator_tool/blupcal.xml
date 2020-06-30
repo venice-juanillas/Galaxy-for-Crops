@@ -1,0 +1,185 @@
+<tool id="blup_and_blue" name="BLUP/BLUE" version="1.11.0">
+  <description>calculator</description>
+  <requirements> 
+     <requirement type="package" version="1.20.0">r-getopt</requirement> 
+     <requirement type="package" version="0.1.10">r-lme4qtl</requirement> 
+  </requirements>
+  <command interpreter="Rscript --vanilla"><![CDATA[
+blupcal_wrapper.R 
+
+--tool_directory $__tool_directory__
+--tabular_file $galaxy_tabular_file
+--replication_vector_column_index $galaxy_replication_vector_column_index
+--genotype_vector_column_index $galaxy_genotype_vector_column_index
+--y_vector_column_index $galaxy_y_vector_column_index
+--design $galaxy_design_conditional.galaxy_design
+#if $galaxy_design_conditional.galaxy_design == "lattice":
+  --block_vector_column_index $galaxy_design_conditional.galaxy_block_vector_column_index
+#else:
+  --block_vector_column_index NULL 
+#end if
+--summarize_by $galaxy_summarize_by
+--summarize_by_vector_column_index $galaxy_summarize_by_vector_column_index
+--group_variable_1 $galaxy_group_variable_1
+--group_variable_1_vector_column_index $galaxy_group_variable_1_vector_column_index
+--group_variable_2 $galaxy_group_variable_2
+--group_variable_2_vector_column_index $galaxy_group_variable_2_vector_column_index
+--output_file_path $galaxy_output_file_path
+--png_plots_file_path $galaxy_png_plots_file
+--png_histograms_file_path $galaxy_png_histograms_file
+--pdf_plots_file_path $galaxy_pdf_plots_file
+--pdf_histograms_file_path $galaxy_pdf_histograms_file
+]]></command>
+  <inputs>
+    <param name="galaxy_tabular_file" 
+           type="data" 
+           format="tab" 
+           label="Encoded Data"
+           help="(required) Must be the TAB as both column delimiter and file type" />
+    <conditional name="galaxy_design_conditional">
+      <param name="galaxy_design" 
+             type="select" 
+             label="Design"
+             help="(required) Must choose one of the two design options available: Lattice or RCBD">
+        <option value="lattice">Lattice</option>
+        <option value="rcbd" 
+                selected="true">RCBD</option>
+      </param>
+      <when value="lattice">
+        <param name="galaxy_block_vector_column_index" 
+               type="data_column" 
+               data_ref="galaxy_tabular_file" 
+               use_header_names="true" 
+               label="Block within Replication" 
+               help="(required) Must be the block-vector column name"
+               value="4" />
+      </when>
+      <when value="rcbd">
+      </when>
+    </conditional>
+    <param name="galaxy_replication_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_tabular_file" 
+           use_header_names="true" 
+           label="Replication Column" 
+           help="(required) Must be the replication-vector column name"
+           value="1" />
+    <param name="galaxy_genotype_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_tabular_file" 
+           use_header_names="true" 
+           label="Genotype Column" 
+           help="(required) Must be the genotype-vector column name"
+           value="2" /> 
+    <param name="galaxy_y_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_tabular_file" 
+           use_header_names="true" 
+           label="Y Column" 
+           help="(required) Must be the y-vector column name"
+           value="3" />
+    <param name="galaxy_summarize_by" 
+           type="boolean"
+           checked="false" 
+           truevalue="true" 
+           falsevalue="false" 
+           label="Summarize By"
+           help="(optional) It can be summarized by a column chosen" />
+    <param name="galaxy_summarize_by_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_tabular_file" 
+           use_header_names="true" 
+           label="Summarize By Column" 
+           help="Must be the summarized-vector column name" 
+           value="5" />
+    <param name="galaxy_group_variable_1"
+           type="boolean" 
+           checked="false" 
+           truevalue="true" 
+           falsevalue="false" 
+           label="Variable 1, Factor"
+           help="(optional) It can choose any column as the group variable 1" />
+    <param name="galaxy_group_variable_1_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_tabular_file" 
+           use_header_names="true" 
+           label="Variable 1, Factor Column" 
+           help="Must be the group-variable-1-vector column name"
+           value="6" />
+    <param name="galaxy_group_variable_2"
+           type="boolean" 
+           checked="false" 
+           truevalue="true" 
+           falsevalue="false" 
+           label="Variable 2, Factor" 
+           help="(optional) It can choose any column as the group variable 2" />
+    <param name="galaxy_group_variable_2_vector_column_index" 
+           type="data_column" 
+           data_ref="galaxy_tabular_file" 
+           use_header_names="true" 
+           label="Variable 2, Factor Column" 
+           help="Must be the group-variable-2-vector column name"
+           value="7" />
+  </inputs>
+  <outputs>
+    <data name="galaxy_pdf_histograms_file" 
+          format="pdf" 
+          label="BLUP Histogram in PDF" />
+    <data name="galaxy_pdf_plots_file" 
+          format="pdf" 
+          label="BLUP Plot in PDF" />
+    <data name="galaxy_png_histograms_file" 
+          format="png" 
+          label="BLUP Histogram in PNG" />
+    <data name="galaxy_png_plots_file" 
+          format="png" 
+          label="BLUP Plot in PNG" />
+    <data name="galaxy_output_file_path" 
+          format="tab" 
+          label="BLUP output data" />
+  </outputs>
+  <help>
+**What it does**
+
+This function calculates BLUP, BLUE and means for Y variable based on the model specified by the user.
+
+The required variables for RCBD are Genotype and Replication and for lattice required variables are Genotype, Replication (main block) and Block within Replication (sub block or block). User can add additional two X variables (eg. Location, Season etc) in the model and are treated as factor ( even supplied as numerical variable).
+If you want to calculate BLUP / BLUE by a grouping variable (eg. Management), then this will calculate BLUP / BLUE for each level of the variable.
+
+**Model**
+
+for RCBD design
+
+without additional factors (variable 1 and variable 2)
+
+*Y =  Genotype + Replication + error*   RCBD
+
+*Y = Genotype + Replication + Block within Replication + error*  Lattice
+
+
+With variable 1
+
+*Y =  Variable 1 + Genotype + Variable 1 : Genotype + Replication + error*   RCBD
+
+*Y = Variable 1 + Genotype + Replication + Variable 1 : Genotype + Block within Replication + error*  Lattice
+
+
+With variable 1 and variable 2
+
+*Y =  Variable 2 + Variable 1 + Genotype + Variable 1 : Genotype + Variable 1: Variable 2 + Variable 1:Variable 2: Genotype + Replication + error*   RCBD
+*Y =  Variable 2 + Variable 1 + Genotype + Variable 1 : Genotype + Variable 1: Variable 2 + Variable 1:Variable 2: Genotype + Replication +  Block within Replication + error*   RCBD
+
+**Model details**
+
+- Genotype is treated as Fixed for BLUE calculation and random for BLUP calculation.
+- Replication, Block within Replication are treated as random both BLUP and BLUE calculations.
+- Variable 1, Genotype : Variable 1  are treated as random both BLUP and BLUE calculations.
+- Variable 2, Genotype : Variable 2, Variable 1 : Variable 2, Genotype : Variable 1 : Variable 2  are treated as random effects for both BLUP and BLUE calculations.
+
+
+**Citation**
+Douglas Bates, Martin Maechler, Ben Bolker, Steve Walker (2015). Fitting Linear Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1), 1-48.
+
+**Author(s)**
+  </help>
+</tool>

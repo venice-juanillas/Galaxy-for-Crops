@@ -1,0 +1,6 @@
+#fjFile = PHENOTYPE			
+	Trait1	Trait1	Trait2
+	Experiment1	Experiment2	Experiment1
+Line1	50.0	High	Short
+Line2	2.3	High	Medium
+Line3	99.3	Low	Long

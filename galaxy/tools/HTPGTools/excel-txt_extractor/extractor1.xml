@@ -1,0 +1,54 @@
+<tool id="excel-txt_extractor" 
+      name="extract txt files from Excel workbook " 
+      version="1.0.0">
+
+        <requirements>
+                <requirement type="package" version="3.5.0">python</requirement>
+                <requirement type="package" version="1.1.0">xlrd</requirement>
+        </requirements>
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Wrong input dataset" />
+	</stdio>
+        <command interpreter="python">
+	   $__tool_directory__/excel-txt_extractor.py $excel_workbook $geno_sheet1 $sampleFile_sheet2 $FavAllele_sheet3
+	</command>
+	<inputs>
+		<param name="excel_workbook" type="data" format="xlsx"  help=" Select an excel file" />	
+	</inputs>
+
+	<outputs>
+		<data name="geno_sheet1" format="tabular" label="Genotype_Grid_file.txt"/>
+		<data name="sampleFile_sheet2" format="tabular" label="Sample_file.txt"/>
+		<data name="FavAllele_sheet3" format="tabular" label="SNP_summary_file.txt"/>
+	</outputs>
+        <tests>
+		<test>
+			<param name="excel_workbook" value="standard_input_file_format.xlsx" />
+			<output name="geno_sheet1" file="Genotype_Grid_file.txt" />
+			<output name="sampleFile_sheet2" file="Sample_file.txt" />
+			<output name="FavAllele_sheet3" file="SNP_summary_file.txt" />
+		</test>
+	</tests>
+	<help>
+	    What this tool does:
+
+	    	It  generates single txt files extracted from all worksheets in an excel file.
+
+	</help>
+ <citations>
+        <citation type="bibtex">
+@misc{githubgithub.com,
+  author = {Milcah, Kigoni},
+  year = {2018},
+  title = {m.kigoni@cgiar.org},
+  publisher = {GitHub},
+  journal = {Gihub repository},
+  url = {https://galaxyproject.org/support/},
+}</citation>
+    </citations>
+
+</tool>
+
+

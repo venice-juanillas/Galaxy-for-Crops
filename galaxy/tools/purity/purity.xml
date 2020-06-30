@@ -1,0 +1,50 @@
+<tool id="purity_1" name="Purity" version="0.1.0">
+  <description>marker selection from a HapMap file using Genetic Algorithm</description>
+  <command><![CDATA[
+	java -jar $__tool_directory__/purity_171218.jar $markers $population $threshold $input $output &&
+        cp ${output}.hmp.txt $output_hapmap
+  ]]></command>
+
+  <inputs>
+    <param format="tabular" name="input" type="data" label="Source file"/>
+    <param name="markers" type="integer" label="No. of markers to select" value="10"/>
+    <param name="population" type="integer" label="Number of solutions to consider" value="100"/>
+    <param name="threshold" type="float" label="Distance cut-off bet. duplicated genotype (0 = exact match)" value="0.05" />
+  </inputs>
+  <outputs>
+    <data format="tabular" name="output" />
+    <data format="tabular" name="output_hapmap" />
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="input" value="test.hmp.txt"/>
+      <param name="markers" value="10"/>
+      <param name="population" value="100"/>
+      <param name="threshold" value="0.05"/>
+      <output name="output" file="test.out.txt">
+            <assert_contents>
+                   <has_line line="Site&#009;Name&#009;Chromosome&#009;Position&#009;VARIANT" />
+            </assert_contents>
+      </output>
+      <output name="output_hapmap" file="test.out.hmp.txt">
+            <assert_contents>
+                   <has_text_matching expression="^rs" />
+            </assert_contents>
+      </output>
+    </test>
+  </tests>
+
+  <stdio>
+    <regex match="log4j:WARN"
+           source="stderr"
+           level="warning"
+           description="Logging error"/>
+  </stdio>
+
+
+  <help>
+Select a subset of informative markers from a HapMap file.
+  </help>
+
+</tool>

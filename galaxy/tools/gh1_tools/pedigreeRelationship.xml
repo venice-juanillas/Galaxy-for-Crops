@@ -1,0 +1,46 @@
+<tool id="pedigreeRelationship" name="Pedigree Relationship" version="1.0">
+  <description>- Estimate pedigree relationships between individuals</description>
+  <command interpreter="Rscript --vanilla">pedigreeRelationship.R
+       #if str($pathPed).strip() != "":
+          --pathPed="$pathPed"
+       #end if
+       #if str($pathIds).strip() != "":
+          --pathIds="$pathIds"
+       #end if
+       #if str($ordered).strip() != "":
+          --ordered="$ordered"
+       #end if
+       #if str($outputfile).strip() != "":
+          --outputfile="$outputfile"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="pathPed" format="data" type="data" help="This is a .csv file of the pedigree, it should contain three&#10;columns with the first column having the sample ids, the&#10;second column having the male parent ids, and the third&#10;column having the female parent ids. All generations should&#10;be included, including self-pollination generations." label="[required] Path Ped">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="pathIds" format="data" type="data" help="This is a .csv file containing the ids of the individuals of&#10;interest in a single column, starting on the second line&#10;(line 1 is for the header). The individuals of interest must&#10;appear in the pedigree file. The relationship matrix that&#10;will be output will show all pairwise relationships between&#10;the individuals contained in this file" label="[required] Path Ids">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="ordered" type="boolean" help="" checked="false" label="[required] Ordered">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="csv" name="outputfile" label="relmat.csv"/>
+  </outputs>
+  <help>
+**Description**
+
+This tool gets a pedigree realationship matrix for a set of
+individuals of interest. The inputs that are required are 1) a
+3-column pedigree relationship file that contains all generations
+of selfing and crossing preceeding the generation of the
+individuals of interest 2) a file containing the ids of the
+individuals of interest. The user must also specify if the
+pedigree is already ordered according to generation, if not the
+tool will order it.
+</help>
+</tool>

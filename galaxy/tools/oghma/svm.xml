@@ -1,0 +1,49 @@
+<tool id="svm" name="svm" version="1.0.0">
+  <description>predict phenotype using a SVM approach</description>
+  <command interpreter="Rscript">
+	  svm.R $config &gt; ${output1}
+  </command>
+  
+  <inputs>
+	<param name="genotype" type="data"
+		label="genotype data" help="a tabular datatype containing the encoded genotypes" 
+	/>
+		  
+	<param name="phenotype" type="data"
+			label="phenotype data" help=" a tabular datatype containing the phenotypes " 
+			/>
+	
+	<param name="eval" type="integer" value="0"
+			label="do evaluation" help=" whether to produce a model or to use folds to evaluate the tool. 1 means the tool will be evaluate (and a folds argument is required) any other value produces a model " 
+	/>
+	
+	<param name="folds" type="data" optional="true"
+			label="folds" help=" OPTIONAL ARGUMENT path to a folds file containing folds indexes in a R list called /folds/ such as produced by the folds tools in OGHMA suite. " 
+			/>
+		
+	<param name="model" type="text"
+			label="path to the output folds" help= " a path to a file where the results (depending on the chosen mode) will be writen" 
+	/>
+  </inputs>
+  
+  <configfiles>
+    <configfile name="config">
+## Desc: this file is sourced in encode wrapper script
+##  as means to pass all galaxy params to R
+"${genotype}" -> genotype
+"${phenotype}" -> phenotype
+"${eval}" -> doEvaluation
+"${folds}" -> folds
+"${model}" -> out
+
+    </configfile>
+</configfiles>
+  
+<outputs>
+	<data format="tabular" name = "output1" label="SVM output" />
+</outputs>
+  
+  <help>
+	  make the classification using the SVM method
+  </help>
+</tool>

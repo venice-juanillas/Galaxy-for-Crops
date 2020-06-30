@@ -1,0 +1,32 @@
+<tool id="GenerateMembershipFile" name="Generate membership file" version="1.0">
+	<description> in the same order as phenotype file</description>
+	<requirements>
+		<requirement type="binary">perl</requirement>
+	</requirements>
+	<command interpreter="bash">./GenerateMembershipFile.sh $groupfile $pheno $output
+    </command>
+	<inputs>
+		<param format="tab,tabular" name="pheno" type="data" label="Phenotype file"/>
+		<param format="txt" name="groupfile" type="data" label="Group file from sNMF or Admixture"/>
+	</inputs>
+	<outputs>
+		<data format="tab" name="output" label="${tool.name} on ${on_string}"/>
+	</outputs>
+	<help>
+	
+
+.. class:: infomark
+
+**GenerateMembershipFile**
+
+-----
+
+This tool reassigns groups into phenotype file using groups provided by sNMF or Admixture
+
+-----
+
+**Author:** Alexis Dereeper
+
+
+	</help>
+</tool>

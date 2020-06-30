@@ -1,0 +1,45 @@
+<tool id="encode" name="encode" version="1.0.0">
+  <description>encode genotypes for further machine learning analysis</description>
+  <command interpreter="Rscript">
+	  encode.R $config &gt; ${output1}
+  </command>
+  
+  <inputs>
+	<param name="genotype" type="data"
+		label="genotype data" help="genotype must be a .csv" 
+	/>
+		  
+	<param name="separator" type="text" value="/"
+			  label="separator of the heterozygous" help=" caracter used to separate heterozygous in the genotype" 
+	/>
+	
+	<param name="code" type="text" value="0,1,2"
+			label="coding schem" help=" method to encode the genotype as minor homozygous/heterozygous/major homozygous. Three numbers separated by comma are expected " 
+	/>
+	
+	<param name="encodedPath" type="text"
+			label="path to the output file" help= " a .csv extension is automatically added by OGHMA" 
+	/>
+  </inputs>
+  
+  
+    <configfiles>
+    <configfile name="config">
+## Desc: this file is sourced in encode wrapper script
+##  as means to pass all galaxy params to R
+"${genotype}" -> genotype
+"${separator}" -> sep
+"${code}" -> code
+"${encodedPath}" -> out
+
+    </configfile>
+</configfiles>
+  
+<outputs>
+	<data format="tabular" name="output1" label="encoded data" />
+</outputs>
+  
+  <help>
+	  Takes the genotype and encode them in the desired schem (usually 3 integer like 1/2/3) for  minor homozygous/heterozygous/major homozygous. The output is a .csv file that may be use by other tools in the OGHMA workflow.
+  </help>
+  </tool>

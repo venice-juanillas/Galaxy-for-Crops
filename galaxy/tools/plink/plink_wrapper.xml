@@ -1,0 +1,42 @@
+<tool id="plink_wrapper" name="Plink" version="0.0.1">
+	<descriptio> </description>
+	<command>
+	<![CDATA[
+		#set
+		mkdir -p $__tool_directory__/
+		#if str($input.inFormat) == 'inFormat':
+			$__tool_directory__/plink/plink --file 	
+		#else:
+
+		#end if
+	]]>
+	</command>
+	<inputs>
+		<conditional name="input">
+			<param name="inFormat" type="select" label="Select dataset type">
+				<option value="binary">Binary Files</option>
+				<option value="flat">Flat Fies</option>
+			</param>
+			<when value="binary">
+				<param name="bedFile" type="data" label="bed file" />
+				<param name="bimFile" type="data" label="bim file" />
+				<param name="famFile" type="data" label="fam file" />
+			</when>
+			<when value="flat">
+				<param name="pedFile" type="data" label="ped file" />
+				<param name="mapFile" type="data" label="map file" />
+			</when>
+		</conditional>
+	</inputs>
+
+	<outputs>
+	</outputs>
+
+	<stdio>
+	
+	</sdio>
+	<help>
+
+	</help>
+	
+</tool>

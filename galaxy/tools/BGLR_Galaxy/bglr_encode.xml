@@ -1,0 +1,53 @@
+<tool id="bglr:encode" name="Encode" version="1.0.0">
+	<description>genotypes to numeric</description>
+	<command><![CDATA[
+		perl $__tool_directory__/bglr_encodev2.pl '$data_type.format' '$genoFile' '$data_type.codeScheme' '$output'
+		]]>
+	</command>
+  
+	<inputs>
+		<param name="genoFile" type="data" format="csv,tabular" label="Genotype data file" help="Genotype data file must be a .csv or tab-delimited" />
+		<conditional name="data_type">
+			<param name ="format" type="select" label="Data type" help="Select whether genotype file is in dominant or IUPAC format." >
+				<option value="dominant"> Dominant Format </option>
+				<option value="iupac"> IUPAC</option>
+				<option value="2letter"> Two-letter nucleotide</option>
+			</param>
+			<when value="dominant">		
+				<param name="codeScheme" type="select" label="Select coding scheme to use" help="Coding scheme always follows this format: (minor homozygous, major homozygous)" >
+					<option value="0,2"> (0,2) </option>
+					<option value="-1,1"> (-1,1) </option>		
+				</param>
+			</when>
+			<when value="iupac">
+				<param name="codeScheme" type="select" label="Select coding scheme to use" help="Coding scheme always follows this format: (minor homozygous,heterozygous, major homozygous,missing allele)" >
+					<option value="0,1,2,NA"> (0,1,2,NA) </option>	
+				</param>
+			</when>
+			<when value="2letter">
+				<param name="codeScheme" type="select" label="Select coding scheme to use" help="Coding scheme always follows this format: (minor homozygous,heterozygous, major homozygous,missing allele)" >
+					<option value="0,1,2,NA"> (0,1,2,NA) </option>	
+					<option value="-1,0,1,NA"> (-1,0,1,NA) </option>	
+				</param>
+			</when>
+			
+		</conditional>
+	</inputs>
+
+	<outputs>
+		<data name="output" format="tabular" label="Encoded Data"/>
+	</outputs>
+
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+	
+	<help>
+
+	</help>
+
+</tool>
+
+

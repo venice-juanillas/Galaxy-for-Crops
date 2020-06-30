@@ -1,0 +1,51 @@
+#										germplasm_name	((CLRCW106/CLWN241)-B)-DH1	((CLWN216/CLWN241)-B)-DH118	((CLWN216/CLWN345)-B)-DH136	((CML552/CLWN241)-B)-DH105	((CLWN241/CLWN345)-B)-DH27	((CLRCW106/CLWN251)-B)-DH15	((CML552/CLWN345)-B)-DH13	((CLWN241/CLWN251)-B)-DH52
+#										germplasm_pedigree	((CLRCW106/CLWN241)-B)-DH1	((CLWN216/CLWN241)-B)-DH118	((CLWN216/CLWN345)-B)-DH136	((CML552/CLWN241)-B)-DH105	((CLWN241/CLWN345)-B)-DH27	((CLRCW106/CLWN251)-B)-DH15	((CML552/CLWN345)-B)-DH13	((CLWN241/CLWN251)-B)-DH52
+#										germplasm_type	DH	DH	DH	DH	DH	DH	DH	DH
+#										dnarun_barcode								
+#										project_name	CL17GSDY	CL17GSDY	CL17GSDY	CL17GSDY	CL17GSDY	CL17GSDY	CL17GSDY	CL17GSDY
+#										project_pi_contact	Xuecai Zhang	Xuecai Zhang	Xuecai Zhang	Xuecai Zhang	Xuecai Zhang	Xuecai Zhang	Xuecai Zhang	Xuecai Zhang
+#										project_genotyping_purpose	Genomic Selection	Genomic Selection	Genomic Selection	Genomic Selection	Genomic Selection	Genomic Selection	Genomic Selection	Genomic Selection
+#										project_date_sampled								
+#										project_division	GMP	GMP	GMP	GMP	GMP	GMP	GMP	GMP
+#										project_study_name								
+#										experiment_name	CL17GSDY-E01-rAmpSeq	CL17GSDY-E01-rAmpSeq	CL17GSDY-E01-rAmpSeq	CL17GSDY-E01-rAmpSeq	CL17GSDY-E01-rAmpSeq	CL17GSDY-E01-rAmpSeq	CL17GSDY-E01-rAmpSeq	CL17GSDY-E01-rAmpSeq
+#										vendor_protocol_name	"GDF,_Cornell_University_rAmpSeq"	"GDF,_Cornell_University_rAmpSeq"	"GDF,_Cornell_University_rAmpSeq"	"GDF,_Cornell_University_rAmpSeq"	"GDF,_Cornell_University_rAmpSeq"	"GDF,_Cornell_University_rAmpSeq"	"GDF,_Cornell_University_rAmpSeq"	"GDF,_Cornell_University_rAmpSeq"
+#										vendor_name	"GDF, Cornell University"	"GDF, Cornell University"	"GDF, Cornell University"	"GDF, Cornell University"	"GDF, Cornell University"	"GDF, Cornell University"	"GDF, Cornell University"	"GDF, Cornell University"
+#										protocol_name	rAmpSeq	rAmpSeq	rAmpSeq	rAmpSeq	rAmpSeq	rAmpSeq	rAmpSeq	rAmpSeq
+#										dataset_name	CL17GSDY-E01-rAmpSeq-D01	CL17GSDY-E01-rAmpSeq-D01	CL17GSDY-E01-rAmpSeq-D01	CL17GSDY-E01-rAmpSeq-D01	CL17GSDY-E01-rAmpSeq-D01	CL17GSDY-E01-rAmpSeq-D01	CL17GSDY-E01-rAmpSeq-D01	CL17GSDY-E01-rAmpSeq-D01
+#										germplasm_external_code	L1	L2	L3	L4	L5	L6	L8	L9
+#										germplasm_species	Zea mays subsp. mays	Zea mays subsp. mays	Zea mays subsp. mays	Zea mays subsp. mays	Zea mays subsp. mays	Zea mays subsp. mays	Zea mays subsp. mays	Zea mays subsp. mays
+#										germplasm_id								
+#										germplasm_seed_source_id	AF14B-5406-1	AF14B-5406-228	AF14B-5406-435	AF14B-5406-659	AF14B-5406-866	AF14B-5406-1025	AF14B-5406-1197	AF14B-5406-1371
+#										germplasm_subsp								
+#										germplasm_heterotic_group								
+#										germplasm_par1	CLRCW106	CLWN216	CLWN216	CML552	CLWN241	CLRCW106	CML552	CLWN241
+#										germplasm_par1_type								
+#										germplasm_par2	CLWN241	CLWN241	CLWN345	CLWN241	CLWN345	CLWN251	CLWN345	CLWN251
+#										germplasm_par2_type								
+#										germplasm_par3								
+#										germplasm_par3_type								
+#										germplasm_par4								
+#										germplasm_par4_type								
+#										dnasample_name	CL17GSDY000001	CL17GSDY000096	CL17GSDY000191	CL17GSDY000286	CL17GSDY000381	CL17GSDY000476	CL17GSDY000571	CL17GSDY000666
+#										dnasample_platename	CL17GSDYMEM1	CL17GSDYMEM2	CL17GSDYMEM3	CL17GSDYMEM4	CL17GSDYMEM5	CL17GSDYMEM6	CL17GSDYMEM7	CL17GSDYMEM8
+#										dnasample_num	138638	138734	138830	138926	139022	139118	139214	139310
+#										dnasample_well_row	A	A	A	A	A	A	A	A
+#										dnasample_well_col	1	1	1	1	1	1	1	1
+#										dnasample_trial_name								
+#										dnasample_sample_group								
+#										dnasample_sample_group_cycle								
+#										dnasample_sample_type								
+#										dnasample_sample_parent								
+#										dnasample_ref_sample								
+rs#	alleles	chrom	pos	strand	assembly#	center	protLSID	assayLSID	panelLSID	QCcode	CL17GSDY000001-CL17GSDYMEM1-A01	CL17GSDY000096-CL17GSDYMEM2-A01	CL17GSDY000191-CL17GSDYMEM3-A01	CL17GSDY000286-CL17GSDYMEM4-A01	CL17GSDY000381-CL17GSDYMEM5-A01	CL17GSDY000476-CL17GSDYMEM6-A01	CL17GSDY000571-CL17GSDYMEM7-A01	CL17GSDY000666-CL17GSDYMEM8-A01
+L9.99050EEE											1	0	1	0	0	1	0	0
+L9.6B395FB7											0	0	0	0	0	0	0	0
+L9.61D72FDF											1	1	1	1	1	1	1	0
+L9.45322ED4											0	0	0	0	0	0	0	0
+L9.E8BCD37D											0	0	0	0	0	0	0	0
+L9.E7C60970											0	1	1	1	0	1	1	0
+L9.A4C11AA4											1	0	1	0	1	0	0	0
+L9.9A79AA38											1	1	1	1	1	1	1	0
+L9.5D20A3BC											1	0	1	0	1	0	0	0
+L9.9D358A4F											1	1	1	1	1	1	1	0

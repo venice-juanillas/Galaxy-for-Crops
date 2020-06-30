@@ -1,0 +1,69 @@
+<tool id="hkmeans_clustering" name="Hybrid K-Means Clustering" version="0.1.0">
+    <requirements>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    	/home/galaxy/data/R/R-3.5.1/bin/Rscript --vanilla $__tool_directory__/hkmeans.R -f $inputFile -d $metric -a $algorithm -m $method -k $clusters -i $numIter -c $clusterFile -g $graphFile
+    ]]></command>
+    <inputs>
+	<param name="inputFile" type="data" format="tabular" label="Encoded Data [x]" help="(tab file) Dataset should be encoded using the Encode tool."/>
+	<param name="metric" type="select" label="Distance Metric [hc.metric]" help="the distance measure to be used" >
+		<option value="euclidean">Euclidean</option>
+		<option value="maximum">Maximum</option>
+		<option value="manhattan">Manhattan</option>
+		<option value="canberra">Canberra</option>
+		<option value="binary">Binary</option>
+		<option value="minkowski">Minkowski</option>
+	</param>
+	
+	<param name="method" type="select" label="Method [hc.metric]"  help="the agglomeration method to be used">
+		<option value="ward.D">ward.D</option>
+		<option value="ward.D2">ward.D2</option>
+		<option value="single">single</option>
+		<option value="complete">complete</option>
+		<option value="average">average</option>
+		<option value="mcquitty">mcquitty</option>
+		<option value="median">median</option>
+		<option value="centroid">centroid</option>
+	</param>
+	<param name="algorithm" type="select" label="Algorithm [km.algorithm]"  help="the algorithm to be used for kmeans" >
+                <option value="Hartigan-Wong">Hartigan-Wong</option>
+                <option value="Lloyd">Lloyd</option>
+                <option value="Forgy">Forgy</option>
+                <option value="MacQueen">MacQueen</option>
+	</param>
+	 <param name="clusters" type="integer" value="3" label="Number of clusters [k]"  help="(integer) the maximum number of iterations allowed for k-means" />
+	 <param name="numIter" type="integer" value="10" label="Iterations [iter]" help="(integer) the maximum number of iterations allowed for k-means"/>
+    </inputs>
+    <outputs>
+    	<data name="clusterFile" format="tabular" label="Cluster Membership File for ${inputFile.name}"/>
+    	<data name="graphFile" format="pdf" label="Cluster Plot for ${inputFile.name}" />
+    </outputs>
+    <help><![CDATA[
+.. class:: infomark
+Hybrid K-Means Clustering using factoextra()
+-----
+**What this tool does**
+This function provides a solution using an hybrid approach by combining the hierarchical clustering and the k-means methods.
+In R:
+hkmeans(x, k, hc.metric = "euclidean", hc.method = "ward.D2",iter.max = 10, km.algorithm = "Hartigan-Wong")
+-----
+**Input Files:**
+The matrix contains the samples in the columns and the markers in the rows.
+=======  ========= ========= ========= ========= =========
+Name      sample1   sample2   sample3   sample4   sample5
+=======  ========= ========= ========= ========= =========
+marker1      2         2         0         2         2
+marker2      2         2         0         1         0
+marker3      0         0         0         2         2
+marker4      0         2         1         1         1
+marker5      1         2         0         0         2
+marker6      2         1         0         1         2
+=======  ========= ========= ========= ========= =========
+-----
+**Output Files:**
+This tool outputs two files:
+1.) Membership File - a tabular file that 
+-----
+**Author:**
+]]></help>
+</tool>

@@ -1,0 +1,72 @@
+<tool id="gbs-hmp-filter" name="Hapmap filter">
+  <description>Filter per SNPs based on user-specified criteria</description>
+  <command>
+  <![CDATA[
+	perl $__tool_directory__/hmp_magic_snp_filter-noID.pl '$infile' '$out' '$missingTaxa' '$maf' '$hets' 
+  ]]>
+  </command>
+
+  <inputs>
+    <param format="tabular" name="infile" type="data" label="Hapmap data file">
+    </param>
+
+    <param name="missingTaxa" size="10" type="text" value="0.25">
+       <label>Max proportion of samples with missing SNP call</label>
+    </param>
+
+    <param name="maf" size="10" type="text" value="0.125">
+       <label>Minimum allele freq allowed (MAF)</label>
+    </param>
+    
+    <param name="hets" size="10" type="text" value="0.8">
+       <label>Maximum allowed heterozygosity</label>
+    </param>
+
+  </inputs>
+
+  <outputs>
+    <data format="tabular" name="out"/>
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="infile" value="input_test.hmp.txt"/>
+      <output name="out" file="output_test.hmp.txt" compare="sim_size">
+<assert_contents> 
+  <has_n_columns n="4313" />
+  <has_text_matching expression="1B_635128741" />
+</assert_contents>
+</output>
+    </test>
+  </tests>
+
+  <help>
+.. class:: infomark
+
+**Hapmap filter**
+
+.. class:: infomark
+
+**Provided by EiB platform and GOBii**
+
+.. class:: infomark 
+
+**Authors** Venice Margarette Juanillas (IRRI)
+
+.. class:: infomark
+
+**Galaxy Integration contributors** Venice Margarette Juanillas (IRRI)
+
+.. class:: infomark 
+
+**Support** For any questions about this tool, please send an e-mail to v.juanillas@irri.org
+
+-----
+
+**What it does**
+
+This tool allows user-specified filtering for SNPs in a big hapmap file according to proportion of samples with missing calls and MAF
+  </help>
+
+</tool>
+

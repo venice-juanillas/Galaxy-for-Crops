@@ -1,0 +1,59 @@
+<tool id="highcharts_scatter" name="Highcharts scatter plot" version="1.0.0">
+  <description> using columns of a tabular file</description>
+  <requirements> 
+    <requirement type="binary">perl</requirement> 
+  </requirements> 
+  <command interpreter="bash">
+./InteractiveScatter.sh $galaxy_tabular_file $out $column_x $column_y $column_z $column_id $column_cat $__root_dir__ 
+</command>
+  <inputs>
+    <param name="galaxy_tabular_file" type="data" format="csv,tabular" label="Tabular or CSV file" help="Must be tabular or CSV" />
+    <param name="column_x" type="data_column" data_ref="galaxy_tabular_file" use_header_names="true" label="Which column values to be used for X axis" help="" value="2" />
+	<param name="column_y" type="data_column" data_ref="galaxy_tabular_file" use_header_names="true" label="Which column values to be used for  Y axis" help="" value="3" />
+	<param name="column_z" type="data_column" data_ref="galaxy_tabular_file" use_header_names="true" label="Optional: Which column values to be used for  Z axis" help="If this field is provided it will generate a 3D plot" optional="true" value="none" />
+	<param name="column_id" type="data_column" data_ref="galaxy_tabular_file" use_header_names="true" label="Which column to be used for naming the points." help="Displayed when the user hovers over a data point. It may be useful to select unique or categorical identifiers here" value="1" />
+	<param name="column_cat" type="data_column" data_ref="galaxy_tabular_file" use_header_names="true"  optional="true" label="Optional: Colorization: Which column to be used for colorization." help="Points will be colorized according to the corresponding category" />
+  </inputs>
+  <outputs>
+    <data name="out" format="html" label="Interactive Scatter Plots" />
+  </outputs>
+  <tests>  
+           <test>  
+              <param name="galaxy_tabular_file" value="input" /> 
+              <param name="column_x" value="3" />
+              <param name="column_y" value="4"/>
+              <param name="column_z" value="5"/>
+              <param name="column_id" value="1" />
+              <param name="column_cat" value="2" />
+              <output name="out" file="output"  compare="sim_size" >  
+              </output>  
+           </test>  
+  </tests>  
+  <help>
+
+.. class:: infomark   
+
+**Highcharts scatter plot**  
+
+.. class:: infomark  
+
+**Provided by EiB platform and GOBii**  
+
+.. class:: infomark  
+
+**Galaxy Integration**  Alexis Dereeper  
+
+.. class:: infomark  
+
+**Support** For any questions about this tool, please send an e-mail to alexis.dereeper@ird.fr  
+   
+-----  
+
+**What it does**
+
+This tool draws Highcharts-based interactive plots using user-defined columns.
+https://www.highcharts.com/
+
+
+  </help>
+</tool>

@@ -1,0 +1,75 @@
+<tool id="makeHMPfromNPUTEoutput" 
+      name="makeHMPfromNPUTEoutput" 
+      version="1.0.0">
+    <description>Creat Hapmap file from NPUTE output matrix.</description>
+	<command interpreter="perl"><![CDATA[
+		$__tool_directory__/makeHMPfromNPUTEoutput.pl $inputHMP $inputCSV $outputGEN
+		]]>
+	</command>
+  
+	<inputs>
+		<param name="inputHMP" type="data" format="txt" label="Input hapmap file" help="The same file given as input for makeNPUTEinput tool. Hapmap file must be a tab delimited file with recommended fields." />
+		<param name="inputCSV" type="data" format="csv" label="NPUTE output matrix file" help="Imputed matrix file from NPUTE must be a comma(,) delimited file." />
+	</inputs>
+	<outputs>
+		<data name="outputGEN" format="txt" label="Imputed.hmp.txt"/>
+	</outputs>
+
+	<tests>
+		<test>
+        		<param name="inputHMP" type="data" format="txt" value="Hapmap.hmp.txt" />
+        		<param name="inputCSV" type="data" format="csv" value="NPUTE.imputed.csv" />
+	 		<output name="outputGEN" type="data" format="txt" value="NPUTE.imputed.hmp.txt"/>
+		</test>
+	</tests>
+	<stdio>
+		<exit_code range="2"   level="fatal"   description="Out of Memory" />
+		<exit_code range="3:5" level="warning" description="Low disk space" />
+		<exit_code range="6:"  level="fatal"   description="Bad input dataset" />
+	</stdio>
+    <help>
+        
+**makeHMPfromNPUTEoutput.pl** - Converts single nucleotide (IUPAC) HAPMAP file to NPUTE input matrix file.
+
+**Exammple File formats**
+
+**input.hmp.txt** ::
+
+	rs#	alleles	chrom	pos	strand	assembly#	center	protLSID	assayLSID	panelLSID	QCcode	GT1	GT2	GT3	GT4	GT5
+	S1_6370	T/C	1	6370	+	NA	NA	NA	NA	NA	NA	N	N	T	N	N
+	S1_8210	T/G	1	8210	+	NA	NA	NA	NA	NA	NA	T	N	N	N	N
+	S1_8376	A/G	1	8376	+	NA	NA	NA	NA	NA	NA	A	A	A	A	N
+	S1_9889	A/G/-	1	9889	+	NA	NA	NA	NA	NA	NA	N	N	N	A	N
+	S1_9899	T/C	1	9899	+	NA	NA	NA	NA	NA	NA	N	N	N	T	N
+	S1_9914	A/G	1	9914	+	NA	NA	NA	NA	NA	NA	N	N	N	A	N
+	S1_10045	G/C/-	1	10045	+	NA	NA	NA	NA	NA	NA	C	N	N	N	N
+
+----
+
+**Imputed.input.csv** ::
+
+	t,t,T,t,t
+	T,t,t,t,t
+	A,A,A,A,a
+	a,a,a,A,a
+	t,t,t,T,t
+	a,a,a,A,a
+	C,g,g,g,g
+	
+----
+
+**Imputed.output.hmp.txt** ::
+		
+		rs#     alleles chrom   pos     strand  assembly#       center  protLSID        assayLSID       panelLSID       QCcode  GT1	GT2	GT3	GT4	GT5            
+		S1_6370 T       1       6370    +       NA      NA      NA      NA      NA      NA      T       T       T       T       T                                                                    
+		S1_8210 T       1       8210    +       NA      NA      NA      NA      NA      NA      T       T       T       T       T                                                                    
+		S1_8376 A       1       8376    +       NA      NA      NA      NA      NA      NA      A       A       A       A       A                                                                    
+		S1_9889 A       1       9889    +       NA      NA      NA      NA      NA      NA      A       A       A       A       A
+		S1_9899 T       1       9899    +       NA      NA      NA      NA      NA      NA      T       T       T       T       T
+		S1_9914 A       1       9914    +       NA      NA      NA      NA      NA      NA      A       A       A       A       A
+		S1_10045        G/C     1       10045   +       NA      NA      NA      NA      NA      NA      C       G       G       G       G
+
+    </help>
+</tool>
+
+

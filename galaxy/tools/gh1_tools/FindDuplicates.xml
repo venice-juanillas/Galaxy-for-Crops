@@ -1,0 +1,62 @@
+<tool id="FindDuplicates" name="Find Duplicates" version="1.0">
+  <description>Find Duplicates in Genotypic Samples</description>
+  <command interpreter="Rscript --vanilla">FindDuplicates.R
+       #if str($beddata2plink).strip() != "":
+          --beddata2plink="$beddata2plink"
+       #end if
+       #if str($bimdata2plink).strip() != "":
+          --bimdata2plink="$bimdata2plink"
+       #end if
+       #if str($famdata2plink).strip() != "":
+          --famdata2plink="$famdata2plink"
+       #end if
+       #if str($thresholdParam).strip() != "":
+          --thresholdParam="$thresholdParam"
+       #end if
+       #if str($duplicatesList).strip() != "":
+          --duplicatesList="$duplicatesList"
+       #end if
+       #if str($histogramPlot).strip() != "":
+          --histogramPlot="$histogramPlot"
+       #end if
+       #if str($NJIBSPlot).strip() != "":
+          --NJIBSPlot="$NJIBSPlot"
+       #end if
+       #if str($HCIBSPlot).strip() != "":
+          --HCIBSPlot="$HCIBSPlot"
+       #end if
+
+2&gt;&amp;1
+
+</command>
+  <inputs>
+    <param optional="false" name="beddata2plink" format="data" type="data" help="a string with the path for the bed file." label="[required] Beddata2plink">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="bimdata2plink" format="data" type="data" help="a string with the path for the bim file." label="[required] Bimdata2plink">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="famdata2plink" format="data" type="data" help="a string with the path for the fam file." label="[required] Famdata2plink">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+    <param optional="false" name="thresholdParam" type="float" value="" help="the cutoff parameter to find duplicates." label="[required] Threshold Param">
+      <validator type="empty_field" message="This field is required."/>
+    </param>
+  </inputs>
+  <outputs>
+    <data format="csv" name="duplicatesList" label="duplicatesList.csv"/>
+    <data format="png" name="histogramPlot" label="histogramPlot.png"/>
+    <data format="png" name="NJIBSPlot" label="NJIBSPlot.png"/>
+    <data format="png" name="HCIBSPlot" label="HCIBSPlot.png"/>
+  </outputs>
+  <help>
+**Description**
+
+Find Duplicated Entries According to given Threshold
+
+
+**Details**
+
+An example to be used in galaxy pipeline of R codes.
+</help>
+</tool>

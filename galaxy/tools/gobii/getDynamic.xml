@@ -1,0 +1,23 @@
+<tool id="get_dynamic_options" name="Dynamic Options" version="0.0.1">
+	<description>list</description>
+	<command><![CDATA[
+		python3 $__tool_directory__/test.py > $output
+	]]>
+	</command>
+	<inputs>
+		<param name="input" type="data" label="Shape with uncolored surface field">
+			<validator type="expression" message="Shape must have an uncolored surface field.">value is not None and len(value.metadata.field_names) > 0</validator>
+		</param>
+		<param name="field_name" type="select" label="Field name" refresh_on_change="true">
+			<options>
+				<filter type="data_meta" ref="input" key="field_names"/>
+				<validator type="no_options" message="The selected shape has no uncolored surface fields." />
+			</options>
+		</param>
+		<param name="field_component_index" type="select" label="Field component index" help="Color will be applied to the selected field's component associated with this index." />
+	</inputs>
+	<outputs>
+		<data name="output" format="tabular" label="GOBII output"/>
+	</outputs>
+	
+</tool> 
